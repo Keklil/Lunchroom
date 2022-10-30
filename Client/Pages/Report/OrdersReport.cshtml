@@ -1,0 +1,82 @@
+﻿@page
+@using Microsoft.AspNetCore.Html
+@model Client.Pages.Report.OrdersReport
+
+@{
+    var tooltip = new HtmlString("Заказ не подтвержден");
+    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true"/>
+</head>
+<body>
+<div class="container">
+    <div class="p-2 p-md-3 mb-4 mt-4 text-white text-center rounded bg-dark">
+        <h1 class="display-6">Заказы — @Model.dateView</h1>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Обеденный набор</th>
+            <th scope="col">Опции</th>
+            <th scope="col">Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ReportDto is not null)
+        {
+            var i = 1;
+            foreach (var row in Model.ReportDto)
+            {
+                var trAdv = row.Payment ? "" : $"class=\"table-danger\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-title=\"{tooltip}\"";
+                <tr @Html.Raw(trAdv)>
+                    <th scope="row">@i.ToString()</th>
+                    <td>@row.UserName</td>
+                    <td>@row.LunchSetPrice</td>
+                    <td>@row.OptionsPrice</td>
+                    <td>@row.Summary.ToString()</td>
+                </tr>
+                i += 1;
+            }
+        }
+        <tr class="table-active">
+            <td colspan="3"></td>
+            <td class="text-right">Итого: </td>
+            <td class="text-left">@Model.OrdersSummaryPrice.ToString()</td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#modalReport">Сформировать отчет</button>
+
+    <div class="modal fade" id="modalReport" tabindex="-1" aria-labelledby="ModalReport" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    @foreach (var str in Model.ReportForSend)
+                    {
+                        <p>@str</p>
+                    }
+                    <p>Итого - @Model.OrdersSummaryPrice.ToString()</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/tooltipEnable.js" asp-append-version="true"></script>
+</body>
+</html>

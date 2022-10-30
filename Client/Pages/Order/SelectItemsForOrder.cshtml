@@ -1,0 +1,72 @@
+﻿@page
+@model Client.Pages.Order.SelectItemsForOrder
+
+@{
+    ViewData["Title"] = "Заказ обеда";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+</head>
+<body>
+<div class="container-fluid">
+  <form method="post">      
+    <div class="invalid-feedback mb-2" style="display:block;">
+      <span asp-validation-for="CheckedLunchSet"></span>
+    </div>
+    <div class="row gap-md-3 gap-lg-5">
+      <div class="card-deck col-md-6">
+        @foreach (var lunchSet in Model.Menu.LunchSets)
+        {
+          <div id="@lunchSet.Id.ToString()-card" class="card lunchset mb-4">
+            <div class="card-body" role="button">
+              <h5 class="card-title">
+                <input class="form-check-input d-none form-control" asp-for="CheckedLunchSet" id="@lunchSet.Id.ToString()" type="radio" value="@lunchSet.Id.ToString()">
+                <label class="form-check-label">
+                  @lunchSet.Price.ToString()₽
+                </label>
+              </h5>
+              @foreach (var lunchSetUnit in lunchSet.LunchSetList)
+              {
+                <p class="card-text">@lunchSetUnit</p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <div class="card-deck col-md-5">
+        @foreach (var option in Model.Menu.Options)
+        {
+          <div id="@option.Id.ToString()-card" class="card option mb-4">
+            <div class="card-body" role="button">
+              <p class="card-text">
+                <input class="form-check-input d-none" name="CheckedOption" type="checkbox" value="@option.Id.ToString()" id="@option.Id.ToString()">
+                <label class="form-check-label">
+                  @option.Name +@option.Price.ToString()₽
+                </label>
+              </p>
+            </div>
+          </div>
+        }
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-lg btn-primary mb-4" id="btnSubmit">К оплате заказа</button>
+        </div>
+      </div>
+    </div> 
+    
+  </form>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>

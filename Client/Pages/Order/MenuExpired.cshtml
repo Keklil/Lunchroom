@@ -1,0 +1,35 @@
+@page
+@model Client.Pages.Order.MenuExpired
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+</head>
+<body>
+
+<div>
+    <main class="container">
+        <div class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">Сегодня сбор заказов закончен. Ждем вас завтра!</h1>
+                    <p class="lead mt-2">Заявки принимаются до @Model.hour.ToString():@Model.minute.ToString().</p>
+                    <p>
+                        <a class="btn btn-lg btn-primary mt-4" asp-page="/Index" role="button">Вернуться на главную</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

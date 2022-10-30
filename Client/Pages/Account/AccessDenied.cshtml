@@ -1,0 +1,30 @@
+﻿@page
+@model Client.Pages.Account.AccessDenied
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true"/>
+</head>
+<body>
+<div>
+    <main class="container">
+        <div class="bg-light p-5 rounded mt-4">
+            <h1>Недостаточно прав для доступа</h1>
+            <a class="btn btn-lg btn-primary mt-4" asp-page="/Index" role="button">Вернуться на главную</a>
+        </div>
+    </main>
+</div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

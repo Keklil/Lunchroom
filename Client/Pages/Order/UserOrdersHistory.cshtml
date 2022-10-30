@@ -1,0 +1,53 @@
+﻿@page
+@model Client.Pages.Order.UserOrdersHistory
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+</head>
+<body>
+<div class="container">
+    @if (Model.UserOrders.Count > 0)
+    {
+        <form method="post">
+            <div class="mt-4 col-4 mx-auto">
+                <div class="card-deck ms-auto text-center">
+                    @foreach (var order in Model.UserOrders)
+                    {
+                        <div id="@order.Id.ToString()-card" class="card menu mb-4">
+                            <div class="card-body p-0" role="button">
+                                <button class="btn btn-lg w-100" id="@order.Id.ToString()" type="submit" value="@order.Id.ToString()" name="OrderId">
+                                          @order.Date.ToLocalTime().ToString("dd MMMM, HH:mm")
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>  
+    }
+    else
+    {
+        <div class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">Вы еще ничего не заказывали</h1>
+                    <p>
+                        <a class="btn btn-primary mt-4" asp-area="" asp-page="/Order/SelectItemsForOrder">Перейти к меню</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+</div> 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
