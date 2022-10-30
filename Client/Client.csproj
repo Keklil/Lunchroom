@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
+    <PackageReference Include="Westwind.AspNetCore.LiveReload" Version="0.3.7" />
   </ItemGroup>
 
 </Project>

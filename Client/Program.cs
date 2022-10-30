@@ -1,5 +1,6 @@
 using Client.Apis;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Westwind.AspNetCore.LiveReload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,20 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
         client.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
     });
 
+builder.Services.AddLiveReload(config =>
+{
+    // optional - use config instead
+    //config.LiveReloadEnabled = true;
+    //config.FolderToMonitor = Path.GetFullname(Path.Combine(Env.ContentRootPath,"..")) ;
+});
+
+// for ASP.NET Core 3.x and later, add Runtime Razor Compilation if using anything Razor
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddMvc().AddRazorRuntimeCompilation();
+
 var app = builder.Build();
+
+app.UseLiveReload();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
