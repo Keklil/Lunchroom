@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSession();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMemoryCache();
-builder.Services.AddRazorPages();
-builder.Services.AddMvc();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddMvc().AddRazorRuntimeCompilation();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(o => {
@@ -31,10 +31,6 @@ builder.Services.AddLiveReload(config =>
     //config.LiveReloadEnabled = true;
     //config.FolderToMonitor = Path.GetFullname(Path.Combine(Env.ContentRootPath,"..")) ;
 });
-
-// for ASP.NET Core 3.x and later, add Runtime Razor Compilation if using anything Razor
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-builder.Services.AddMvc().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
