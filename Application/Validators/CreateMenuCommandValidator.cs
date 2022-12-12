@@ -1,5 +1,5 @@
 ﻿using Application.Commands;
-using Entities.DataTransferObjects;
+using Domain.DataTransferObjects;
 using FluentValidation;
 
 namespace Application.Validators

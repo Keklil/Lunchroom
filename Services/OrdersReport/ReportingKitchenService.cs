@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using System.Threading.Tasks;
 using Contracts;
+using Contracts.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

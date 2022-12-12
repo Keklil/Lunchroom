@@ -2,10 +2,12 @@
 using System.Security.Claims;
 using System.Text;
 using Contracts;
+using Contracts.Repositories;
+using Contracts.Security;
 using Microsoft.IdentityModel.Tokens;
-using Entities.Exceptions;
-using Entities.Models;
-using Entities.SecurityModels;
+using Domain.Exceptions;
+using Domain.Models;
+using Domain.SecurityModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -16,6 +18,7 @@ public class AuthService : IAuthService
     private readonly IRepositoryManager _repository;
     private readonly IConfiguration _configuration;
     private readonly IMailSender _mailSender;
+    private readonly ITokenService _tokenService;
 
     private string subject = "Подтверждение почты";
     private string hostLink = "http://localhost:5097/EmailConfirmation?token=";
@@ -23,11 +26,13 @@ public class AuthService : IAuthService
     public AuthService(
         IRepositoryManager repository,
         IConfiguration configuration,
-        IMailSender mailSender)
+        IMailSender mailSender,
+        ITokenService tokenService)
     {
         _repository = repository;
         _configuration = configuration;
         _mailSender = mailSender;
+        _tokenService = tokenService;
 
         hostLink = _configuration.GetSection("LunchRoomDomainName").Value + "/EmailConfirmation?token=";
     }
@@ -50,12 +55,9 @@ public class AuthService : IAuthService
         }
         else
         {
-            var token = GenerateJwtToken(user);
+            var token = await _tokenService.Generate(user);
             return token;
         }
-        
-
-        return "";
     }
 
     public async Task SendConfirmationEmail(string email)
@@ -125,28 +127,7 @@ public class AuthService : IAuthService
 
         return email;
     }
-    
-    private string GenerateJwtToken(User user)
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim("UserID", user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
-            }),
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Issuer"],
-            Expires = DateTime.Now.AddDays(31),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    } 
-    
+
     private string GenerateJwtTokenForEmailConfirmation(string email)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

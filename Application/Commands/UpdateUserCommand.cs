@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities.DataTransferObjects;
-using Entities.Exceptions;
+using Contracts.Repositories;
+using Domain.DataTransferObjects.User;
+using Domain.Exceptions;
 using MediatR;
 
 namespace Application.Commands;

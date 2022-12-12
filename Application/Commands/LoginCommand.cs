@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Contracts;
-using Entities.DataTransferObjects;
-using Entities.Models;
+﻿using Contracts.Security;
+using Domain.DataTransferObjects.User;
 using MediatR;
 
 namespace Application.Commands;

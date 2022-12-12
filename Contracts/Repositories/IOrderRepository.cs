@@ -1,0 +1,17 @@
+﻿using Domain.DataTransferObjects;
+using Domain.DataTransferObjects.User;
+using Domain.Models;
+
+namespace Contracts.Repositories
+{
+    public interface IOrderRepository
+    {
+        Task<Order> GetOrderAsync(Guid orderId, bool trackChanges);
+        Task<List<Order>> GetOrdersByDateAsync(DateTime date);
+        Task<List<OrdersForUser>> GetOrdersByUserAsync(Guid userId);
+        Task<List<OrdersForUser>> GetTodayOrdersByUserAsync(Guid userId);
+        void CreateOrder(Order order);
+        void UpdateOrder(Order order);
+        void DeleteOrder(Order order);
+    }
+}

@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Entities.DataTransferObjects;
+using Domain.DataTransferObjects;
 using Contracts;
-using Entities.Exceptions;
+using Domain.Exceptions;
 
 namespace Application.Queries
 {

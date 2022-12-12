@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.Security;
 using MediatR;
 
 namespace Application.Commands;

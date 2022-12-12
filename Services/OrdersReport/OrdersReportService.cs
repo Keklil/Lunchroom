@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using Contracts;
-using Entities.DataTransferObjects;
-using Entities.Models;
+using Contracts.Repositories;
+using Domain.DataTransferObjects;
+using Domain.DataTransferObjects.Order;
+using Domain.Models;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Services.OrdersReport

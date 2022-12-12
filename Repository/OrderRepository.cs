@@ -1,6 +1,8 @@
 ﻿using Contracts;
-using Entities.DataTransferObjects;
-using Entities.Models;
+using Contracts.Repositories;
+using Domain.DataTransferObjects;
+using Domain.DataTransferObjects.User;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository

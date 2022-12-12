@@ -1,9 +1,11 @@
-﻿using Entities.DataTransferObjects;
-using MediatR;
+﻿using MediatR;
 using AutoMapper;
-using Entities.Models;
+using Domain.Models;
 using Contracts;
-using Entities.Exceptions;
+using Contracts.Repositories;
+using Domain.DataTransferObjects.Menu;
+using Domain.DataTransferObjects.Order;
+using Domain.Exceptions;
 
 namespace Application.Queries;
 

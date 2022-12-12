@@ -1,11 +1,10 @@
-﻿using Entities;
-using Entities.DataTransferObjects;
-using Services.MailService;
+﻿using Services.MailService;
 using System;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Domain.DataTransferObjects.Menu;
 using Xunit;
 using Xunit.Abstractions;
 

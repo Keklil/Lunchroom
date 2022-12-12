@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using Entities.Models;
-using Contracts;
-using Entities.DataTransferObjects;
-using Entities.Exceptions;
+using Contracts.Repositories;
+using Domain.DataTransferObjects.User;
+
 
 namespace Application.Queries
 {

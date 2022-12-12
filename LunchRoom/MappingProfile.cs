@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
-using Entities.Models;
-using Entities.DataTransferObjects;
+using Domain.DataTransferObjects.Menu;
+using Domain.DataTransferObjects.Order;
+using Domain.DataTransferObjects.User;
+using Domain.Models;
+
 namespace LunchRoom
 {
     public class MappingProfile : Profile

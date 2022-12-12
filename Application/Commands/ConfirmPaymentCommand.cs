@@ -1,5 +1,6 @@
 using Contracts;
-using Entities.DataTransferObjects;
+using Contracts.Repositories;
+using Domain.DataTransferObjects;
 using MediatR;
 using Repository;
 

@@ -14,7 +14,7 @@ namespace LunchRoom
             .Build();
             var builder = new DbContextOptionsBuilder<RepositoryContext>()
             .UseNpgsql(configuration.GetConnectionString("DbConnection"),
-                x => x.MigrationsAssembly("LunchRoom"));
+                x => x.MigrationsAssembly(nameof(Repository)));
             return new RepositoryContext(builder.Options);
         }
     }

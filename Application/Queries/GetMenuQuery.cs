@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using Entities.Models;
+using Domain.Models;
 using Contracts;
-using Entities.Exceptions;
-using Entities.DataTransferObjects;
+using Domain.Exceptions;
 using AutoMapper;
+using Contracts.Repositories;
+using Domain.DataTransferObjects.Menu;
 
 namespace Application.Queries
 {

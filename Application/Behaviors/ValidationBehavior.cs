@@ -1,4 +1,4 @@
-﻿using Entities.Exceptions;
+﻿using Domain.Exceptions;
 using FluentValidation;
 using MediatR;
 

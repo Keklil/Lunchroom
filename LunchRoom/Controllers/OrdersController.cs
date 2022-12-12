@@ -1,11 +1,11 @@
 ﻿using Application.Queries;
 using Application.Commands;
-using Entities.DataTransferObjects;
-using Contracts;
+using Domain.DataTransferObjects;
+using Domain.DataTransferObjects.Order;
+using Domain.DataTransferObjects.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.MailService;
 
 namespace LunchRoom.Controllers
 {

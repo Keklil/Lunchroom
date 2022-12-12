@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities.DataTransferObjects;
-using Entities.Models;
+using Contracts.Repositories;
+using Domain.DataTransferObjects.Order;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Commands

@@ -1,4 +1,4 @@
-﻿using Entities.DataTransferObjects;
+﻿using Domain.DataTransferObjects;
 
 namespace Contracts;
 

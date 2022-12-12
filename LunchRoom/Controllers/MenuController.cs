@@ -1,7 +1,7 @@
 ﻿using Application.Queries;
 using Application.Commands;
-using Entities.DataTransferObjects;
 using Contracts;
+using Domain.DataTransferObjects.Menu;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 using Contracts;
+using Contracts.Repositories;
 using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -44,7 +45,7 @@ namespace LunchRoom.Extensions
         {
             services.AddDbContext<RepositoryContext>(options => 
                 options.UseNpgsql(config.GetConnectionString("DbConnection"),
-                    x => x.MigrationsAssembly("LunchRoom")));
+                    x => x.MigrationsAssembly(nameof(Repository))));
         }
 
         public static void ConfigureValidator(this IServiceCollection services)
@@ -58,14 +59,14 @@ namespace LunchRoom.Extensions
             services.AddScoped<IMailIdleClient, MailIdleClient>();
             services.AddSingleton<InboxIdleService>();
             services.AddHostedService(
-                services => services.GetRequiredService<InboxIdleService>());
+                serviceProvider => serviceProvider.GetRequiredService<InboxIdleService>());
         }
 
         public static void ConfigureReportingKitchenService(this IServiceCollection services)
         {
             services.AddSingleton<ReportingKitchenService>();
             services.AddHostedService(
-                services => services.GetRequiredService<ReportingKitchenService>());
+                serviceProvider => serviceProvider.GetRequiredService<ReportingKitchenService>());
         }
         
 

@@ -1,6 +1,7 @@
 ﻿using Contracts;
-using Entities.Models;
-using Entities.SecurityModels;
+using Contracts.Repositories;
+using Domain.Models;
+using Domain.SecurityModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository;

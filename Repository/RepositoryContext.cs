@@ -1,5 +1,5 @@
-﻿using Entities.SecurityModels;
-using Entities.Models;
+﻿using Domain.SecurityModels;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository.EntitiyConfiguration;
@@ -20,6 +20,7 @@ namespace Repository
         public DbSet<Order>? Orders { get; set; }
         public DbSet<OrderOption>? OrdersOptions { get; set; }
         public DbSet<EmailValidation>? EmailValidations { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,7 @@
 ﻿using Contracts;
-using Entities.DataTransferObjects;
+using Domain.DataTransferObjects;
 using System.Text.RegularExpressions;
+using Domain.DataTransferObjects.Menu;
 
 namespace Services.MailService
 {
