@@ -15,6 +15,22 @@ public class TokenService : ITokenService
 
     public TokenService(IConfiguration configuration) => _configuration = configuration;
 
+    public async Task<string> GenerateReferral(Group group)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim("GroupId", group.Id.ToString())
+            }),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+    
     public async Task<string> Generate(string payload)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

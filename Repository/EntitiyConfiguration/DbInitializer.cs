@@ -38,7 +38,8 @@ public class DbInitializer
             {
                 if (!context.Users.Any())
                 {
-                    var adminUser = new User(adminEmail, true);
+                    var adminUser = new User(adminEmail, "asdfg123", true);
+                    adminUser.CheckEmail();
                     context.Users.Add(adminUser);
                 }
 

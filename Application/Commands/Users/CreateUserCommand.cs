@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Contracts.Repositories;
+using Contracts.Security;
 using Domain.DataTransferObjects;
 using Domain.DataTransferObjects.User;
 using Domain.Models;
@@ -8,32 +9,24 @@ using MediatR;
 
 namespace Application.Commands
 {
-	public sealed record CreateUserCommand(UserForCreationDto User) : IRequest<UserDto>;
+	public sealed record CreateUserCommand(UserRegisterDto User) : IRequest<UserDto>;
 
 	internal sealed class CreateCompanyHandler : IRequestHandler<CreateUserCommand, UserDto>
 	{
 		private readonly IRepositoryManager _repository;
-		private readonly IMapper _mapper;
+		private readonly IAuthService _authService;
 
-		public CreateCompanyHandler(IRepositoryManager repository, IMapper mapper)
+		public CreateCompanyHandler(IRepositoryManager repository, IAuthService authService)
 		{
 			_repository = repository;
-			_mapper = mapper;
+			_authService = authService;
 		}
 
 		public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
 		{
-			/*var userEntity = new User(request.User.Name,
-				request.User.Surname,
-				request.User.Surname,
-				request.User.Email);
-			
-			_repository.User.CreateUser(userEntity);
-			await _repository.SaveAsync();
+			var user = await _authService.RegisterUser(request.User);
 
-			var userToReturn = _mapper.Map<UserDto>(userEntity);*/
-
-			return null;
+			return user.Map();
 		}
 	}
 }

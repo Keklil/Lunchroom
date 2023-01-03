@@ -8,7 +8,8 @@ namespace Application.Validators
     {
         public CreateUserCommandValidator()
         {
-            RuleFor(x => x.User.Name).NotEmpty();
+            RuleFor(x => x.User.email).NotEmpty();
+            RuleFor(x => x.User.password).NotEmpty();
         }
     }
 }

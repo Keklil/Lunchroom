@@ -18,7 +18,7 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, string
     
     public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var token = await _authService.Auth(request.Login.email);
+        var token = await _authService.Auth(request.Login);
         
         return token;
     }

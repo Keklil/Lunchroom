@@ -22,8 +22,8 @@ namespace Repository.EntitiyConfiguration
 
             userConfiguration.Property(x => x.Patronymic);
 
-            //userConfiguration.Property(x => x.Email);
-
+            userConfiguration.HasMany(x => x.Groups)
+                .WithMany(x => x.Members);
         }
     }
 }

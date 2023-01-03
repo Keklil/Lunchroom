@@ -7,4 +7,8 @@
     <LangVersion>11</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MappingGenerator" Version="2022.9.50" />
+  </ItemGroup>
+
 </Project>

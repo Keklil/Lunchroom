@@ -13,7 +13,7 @@ namespace Repository
 
         }
 
-        public async Task<User> GetUserAsync(Guid userId, bool trackChanges)
+        public async Task<User?> GetUserAsync(Guid userId, bool trackChanges)
         {
             return await FindByCondition(x => x.Id.Equals(userId), trackChanges)
                 .SingleOrDefaultAsync();
@@ -34,13 +34,13 @@ namespace Repository
             Delete(user);
         }
 
-        public async Task<List<User>> GetListUsersByIds(List<Guid> ids)
+        public async Task<List<User>?> GetListUsersByIds(List<Guid> ids)
         {
             return await _repositoryContext.Users.Where(x => ids.Contains(x.Id))
                 .ToListAsync();
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await FindByCondition(x => x.Email == email, true)
                 .SingleOrDefaultAsync();

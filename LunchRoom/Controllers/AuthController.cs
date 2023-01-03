@@ -1,7 +1,9 @@
 ﻿using Application.Queries;
 using Application.Commands;
+using Application.Commands.Users;
 using Contracts;
 using Domain.DataTransferObjects.User;
+using LunchRoom.Controllers.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +29,26 @@ namespace LunchRoom.Controllers
             _publisher = publisher;
             _logger = logger;
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(typeof(AuthErrorResponse), 400)]
+        public async Task<ActionResult<UserDto>> RegisterAdmin([FromBody] UserRegisterDto login)
+        {
+            var admin = await _sender.Send(new CreateAdminCommand(login));
+
+            return admin;
+        }
+        
+        [HttpPost]
+        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(typeof(AuthErrorResponse), 400)]
+        public async Task<ActionResult<UserDto>> RegisterUser([FromBody] UserRegisterDto login)
+        {
+            var admin = await _sender.Send(new CreateUserCommand(login));
+
+            return admin;
+        }
         
         [HttpPost]
         public async Task<ActionResult<AuthResult>> Auth([FromBody] UserLogin login)
@@ -37,7 +59,7 @@ namespace LunchRoom.Controllers
             if (token is null)
                 result.Message = "Check mailbox";
             
-            return Ok(result);
+            return result;
         }
         
         [HttpPost]
