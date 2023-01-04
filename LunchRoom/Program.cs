@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.HttpOverrides;
 using LunchRoom.Extensions;
 using Contracts;
@@ -37,8 +38,11 @@ builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureReportingKitchenService();
 //builder.Services.ConfigureHangfire(builder.Configuration);
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 var app = builder.Build();
 
@@ -62,8 +66,7 @@ else
 {
     app.UseHsts();
 }
-app.UseOpenApi();
-app.UseSwaggerUi3();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -71,8 +74,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
 });
-
-//app.UseHangfireDashboard();
 
 app.UseAuthentication();
 app.UseAuthorization();

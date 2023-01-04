@@ -1,17 +1,23 @@
-﻿namespace LunchRoom.Controllers.Infrastructure;
+﻿using System.Text.Json.Serialization;
+
+namespace LunchRoom.Controllers.Infrastructure;
 
 public class AuthErrorResponse
 {
     /// <summary>
     /// Описание возникшей ошибки
     /// </summary>
-    string ExceptionMessage { get; set; }
+    public string ExceptionMessage { get; set; }
     
     /// <summary>
-    /// Код ошибки 
+    /// Код ошибки
     /// </summary>
-    /// <value> 1001 - Пользователь уже существует </value>
-    /// <value> 1002 - Пароль отсутвует или слишком простой </value>
-    /// <value> 1003 - Email отсутвует или имеет неверный формат </value>
-    private int Code { get; set; }
+   public AuthCodes Code { get; set; }
+    
+}
+
+public enum AuthCodes
+{
+    UserExists = 1001,
+    EmptyPassword = 1002
 }

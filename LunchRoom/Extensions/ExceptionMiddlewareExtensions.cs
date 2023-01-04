@@ -3,6 +3,8 @@ using Domain.ErrorModel;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
+using Domain.Exceptions.AuthExceptions;
+using LunchRoom.Controllers.Infrastructure;
 
 namespace LunchRoom.Extensions
 {
@@ -34,6 +36,10 @@ namespace LunchRoom.Extensions
                         {
                             await context.Response
                             .WriteAsync(JsonSerializer.Serialize(new { exception.Errors }));
+                        } else if (contextFeature.Error is UserExistsException existsException)
+                        {
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse {Code = AuthCodes.UserExists, ExceptionMessage = existsException.Message}));
                         }
                         else
                         {

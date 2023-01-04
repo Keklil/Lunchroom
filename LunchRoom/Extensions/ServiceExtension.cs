@@ -15,6 +15,7 @@ using Quartz;
 using Repository;
 using Services.MailService;
 using Services.OrdersReport;
+using ZymLabs.NSwag.FluentValidation;
 
 namespace LunchRoom.Extensions
 {
@@ -100,9 +101,9 @@ namespace LunchRoom.Extensions
         
         public static void ConfigureSwagger(this IServiceCollection services)
         {
-            services.AddOpenApiDocument(document =>
+            services.AddOpenApiDocument((settings, serviceProvider) =>
             {
-                document.AddSecurity("JWT", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
+                settings.AddSecurity("JWT", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.ApiKey,
                     Name = "Authorization",
@@ -110,10 +111,11 @@ namespace LunchRoom.Extensions
                     Description = "Type into the textbox: Bearer {your JWT token}."
                 });
  
-                document.OperationProcessors.Add(
+                settings.OperationProcessors.Add(
                     new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+
             });
-            
+
             /*
             services.AddSwaggerGen(options =>
             {

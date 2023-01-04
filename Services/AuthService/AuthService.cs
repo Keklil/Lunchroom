@@ -8,6 +8,7 @@ using Contracts.Security;
 using Domain.DataTransferObjects.User;
 using Microsoft.IdentityModel.Tokens;
 using Domain.Exceptions;
+using Domain.Exceptions.AuthExceptions;
 using Domain.Models;
 using Domain.SecurityModels;
 using Microsoft.AspNetCore.Http;
@@ -152,7 +153,7 @@ public class AuthService : IAuthService
         var userEntity = await _repository.User.GetUserByEmailAsync(user.email);
         if (userEntity is not null)
         {
-            return userEntity;
+            throw new UserExistsException();
         }
         else
         {
@@ -167,7 +168,7 @@ public class AuthService : IAuthService
         var userEntity = await _repository.User.GetUserByEmailAsync(user.email);
         if (userEntity is not null)
         {
-            return userEntity;
+            throw new UserExistsException();
         }
         else
         {

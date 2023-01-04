@@ -31,8 +31,8 @@ namespace LunchRoom.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(UserDto), 200)]
-        [ProducesResponseType(typeof(AuthErrorResponse), 400)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> RegisterAdmin([FromBody] UserRegisterDto login)
         {
             var admin = await _sender.Send(new CreateAdminCommand(login));
@@ -41,8 +41,8 @@ namespace LunchRoom.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(UserDto), 200)]
-        [ProducesResponseType(typeof(AuthErrorResponse), 400)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> RegisterUser([FromBody] UserRegisterDto login)
         {
             var admin = await _sender.Send(new CreateUserCommand(login));
