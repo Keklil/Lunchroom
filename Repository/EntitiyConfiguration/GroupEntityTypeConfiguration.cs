@@ -6,16 +6,19 @@ namespace Repository.EntitiyConfiguration
 {
     class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
     {
-        public void Configure(EntityTypeBuilder<Group> orderConfiguration)
+        public void Configure(EntityTypeBuilder<Group> groupConfiguration)
         {
-            orderConfiguration.HasKey(x => x.Id);
+            groupConfiguration.HasKey(x => x.Id);
 
-            orderConfiguration.Property(x => x.Id)
+            groupConfiguration.Property(x => x.Id)
                 .ValueGeneratedNever();
 
-            orderConfiguration.HasOne<User>(x => x.Admin)
+            groupConfiguration.HasOne<User>(x => x.Admin)
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            groupConfiguration.Property(x => x.Referral)
+                .HasColumnType("jsonb");
         }
     }
 }

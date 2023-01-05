@@ -8,29 +8,27 @@ using MediatR;
 
 namespace Application.Commands.Groups;
 
-public sealed record CreateGroupCommand(Guid AdminId, string OrganizationName, string Address) : IRequest<GroupDto?>;
+public sealed record CreateGroupCommand(Guid AdminId, string OrganizationName, string Address) : IRequest<GroupDto>;
 
-internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, GroupDto?>
+internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, GroupDto>
 {
     private readonly IRepositoryManager _repository;
-    private readonly IMapper _mapper;
     private readonly ILoggerManager _logger;
     private readonly ITokenService _tokenService;
 
-    public CreateGroupHandler(IRepositoryManager repository, IMapper mapper, ILoggerManager logger, ITokenService tokenService)
+    public CreateGroupHandler(IRepositoryManager repository, ILoggerManager logger, ITokenService tokenService)
     {
         _repository = repository;
-        _mapper = mapper;
         _logger = logger;
         _tokenService = tokenService;
     }
 
-    public async Task<GroupDto?> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
+    public async Task<GroupDto> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
         try
         {
             var admin = await _repository.User.GetUserAsync(request.AdminId, true);
-            if (admin.Role is not Role.Admin)
+            if (admin is null || admin.Role is not Role.Admin)
                 throw new AttemptCreateGroupByNonAdmin();
 
             var group = new Group(admin, request.OrganizationName, request.Address);

@@ -12,12 +12,11 @@ public class AuthErrorResponse
     /// <summary>
     /// Код ошибки
     /// </summary>
-   public AuthCodes Code { get; set; }
+    public ErrorCodes Code { get; set; }
     
+    public enum ErrorCodes
+    {
+        UserExists = 1001,
+    }
 }
 
-public enum AuthCodes
-{
-    UserExists = 1001,
-    WrongCredentials = 1002
-}

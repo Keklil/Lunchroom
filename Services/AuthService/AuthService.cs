@@ -159,6 +159,7 @@ public class AuthService : IAuthService
             var newUser = new User(user.email, user.password, true);
             _repository.User.CreateUser(newUser);
             await SendConfirmationEmail(user.email);
+            await _repository.SaveAsync();
             return newUser;
         }
     }
@@ -175,6 +176,7 @@ public class AuthService : IAuthService
             var newUser = new User(user.email, user.password, false);
             _repository.User.CreateUser(newUser);
             await SendConfirmationEmail(user.email);
+            await _repository.SaveAsync();
             return newUser;
         }
     }

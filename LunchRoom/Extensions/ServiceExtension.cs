@@ -108,7 +108,7 @@ namespace LunchRoom.Extensions
                     Type = OpenApiSecuritySchemeType.ApiKey,
                     Name = "Authorization",
                     In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
+                    Description = "Type into the textbox: Bearer {your JWT token}.",
                 });
  
                 settings.OperationProcessors.Add(

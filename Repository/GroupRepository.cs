@@ -17,6 +17,7 @@ namespace Repository
         public async Task<Group?> GetGroupAsync(Guid groupId, bool trackChanges)
         {
             return await FindByCondition(x => x.Id.Equals(groupId), trackChanges)
+                .Include(x => x.Members)
                 .SingleOrDefaultAsync();
         }
         public void CreateGroup(Group group)

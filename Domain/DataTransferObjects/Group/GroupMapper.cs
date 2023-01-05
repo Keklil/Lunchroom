@@ -11,15 +11,8 @@ public static class GroupMapper
             AdminId: source.Admin.Id, 
             OrganizationName: source.OrganizationName, 
             Address: source.Address, 
-            Members: source.Members.Select(sourceMember => new UserDto
-            {
-                Id = sourceMember.Id,
-                Surname = sourceMember.Surname,
-                Name = sourceMember.Name,
-                Patronymic = sourceMember.Patronymic,
-                Email = sourceMember.Email,
-                
-            })
+            Members: source.Members.Select(sourceMember => sourceMember.Id),
+            Referral: source.Referral
         );
     }
 }

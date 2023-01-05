@@ -1,6 +1,8 @@
 ﻿using Application.Commands.Groups;
 using Contracts;
 using Domain.DataTransferObjects.Group;
+using Domain.ErrorModel;
+using LunchRoom.Controllers.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,5 +34,14 @@ public class GroupController : ControllerBase
         var newGroup = await _sender.Send(new CreateGroupCommand(group.AdminId, group.OrganizationName, group.Address));
 
         return newGroup;
+    }
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GroupErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+    public async Task AddUser(Guid userId, Guid groupId)
+    {
+        await _sender.Send(new AddUserToGroupCommand(userId, groupId));
     }
 }

@@ -27,8 +27,9 @@ public class Group
         OrganizationName = organizationName;
         Address = address;
         Admin = admin;
+        _members.Add(admin);
 
-        Referral = new GroupReferral(Id);
+        Referral = new GroupReferral();
     }
 
     public void AddMember(User member)
