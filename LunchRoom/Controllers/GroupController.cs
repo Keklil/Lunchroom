@@ -26,9 +26,14 @@ public class GroupController : ControllerBase
         _logger = logger;
     }
     
+    /// <summary>
+    /// Создать группу.
+    /// </summary>
+    /// <param name="group"></param>
+    /// <remarks>При попытке создания группы пользователем, не являющимся администратором, вернет 400.</remarks>
     [HttpPost]
     [ProducesResponseType(typeof(GroupDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(GroupErrorResponse),StatusCodes.Status400BadRequest)]
     public async Task<GroupDto> Create([FromBody] GroupForCreationDto group)
     {
         var newGroup = await _sender.Send(new CreateGroupCommand(group.AdminId, group.OrganizationName, group.Address));
@@ -36,6 +41,13 @@ public class GroupController : ControllerBase
         return newGroup;
     }
     
+    /// <summary>
+    /// Добавить пользователя к группе.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupId"></param>
+    /// <remarks>Если пользователь или группа не найдены, вернет 404,
+    /// если пользователь уже состоит в группе, вернет 400.</remarks>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GroupErrorResponse), StatusCodes.Status400BadRequest)]

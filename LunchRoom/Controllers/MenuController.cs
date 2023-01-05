@@ -2,6 +2,7 @@
 using Application.Commands;
 using Contracts;
 using Domain.DataTransferObjects.Menu;
+using Domain.ErrorModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace LunchRoom.Controllers
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<MenuDto>> GetTodayMenu()
         {
             var dateSearch = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
@@ -42,7 +43,7 @@ namespace LunchRoom.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<MenuDto>> GetMenuByDate(DateTime date)
         {
             var dateSearch = DateTime.SpecifyKind(date, DateTimeKind.Utc);
@@ -52,6 +53,10 @@ namespace LunchRoom.Controllers
             return Ok(menu);
         }
         
+        /// <summary>
+        /// История всех загруженных меню
+        /// </summary>
+        /// <returns>Возвращает список идентификаторов и дат загрузки меню</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<MenuForList>>> GetAllMenus()

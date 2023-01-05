@@ -30,6 +30,11 @@ namespace LunchRoom.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Регистрация администратора.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(AuthErrorResponse), StatusCodes.Status400BadRequest)]
@@ -40,6 +45,11 @@ namespace LunchRoom.Controllers
             return admin;
         }
         
+        /// <summary>
+        /// Регистрация пользователя.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(AuthErrorResponse), StatusCodes.Status400BadRequest)]
@@ -54,8 +64,8 @@ namespace LunchRoom.Controllers
         /// Авторизация пользователя.
         /// </summary>
         /// <param name="login"></param>
-        /// <returns>Возрвращает токен авторизации, содержит пользовательский id, email, роль.
-        /// Возвращает null, если пользователь не существует, неверные данные авторизации.</returns>
+        /// <remarks>Возрвращает токен авторизации, содержит пользовательский id, email, роль.
+        /// Возвращает null, если пользователь не существует, неверные данные авторизации.</remarks>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> Auth([FromBody] UserLogin login)
@@ -65,6 +75,10 @@ namespace LunchRoom.Controllers
             return token;
         }
         
+        /// <summary>
+        /// Подтверждение почты пользователя.
+        /// </summary>
+        /// <param name="token"></param>
         [HttpPost]
         public async Task<ActionResult> ConfirmEmail(string token)
         {

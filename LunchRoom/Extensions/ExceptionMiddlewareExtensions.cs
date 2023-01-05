@@ -58,6 +58,15 @@ namespace LunchRoom.Extensions
                                     }));
                                 break;
                             
+                            case AttemptCreateGroupByNonAdminException attemptCreateGroupByNonAdminException:
+                                await context.Response
+                                    .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse()
+                                    {
+                                        Code = GroupErrorResponse.ErrorCodes.AttemptCreateGroupByNonAdmin,
+                                        ExceptionMessage = attemptCreateGroupByNonAdminException.Message
+                                    }));
+                                break;
+                            
                             default:
                                 await context.Response
                                     .WriteAsync(new ErrorDetails()

@@ -26,7 +26,7 @@ namespace Application.Queries
         {
             var menu = await _repository.Menu.GetMenuByDateAsync(request.date);
             if (menu is null)
-                throw new NotFoundException($"Menu not found for this date: {request.date.Date}");
+                throw new NotFoundException($"Меню не найдено для даты: {request.date.Date}");
             return _mapper.Map<MenuDto>(menu);
         }
     }

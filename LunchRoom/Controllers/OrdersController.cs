@@ -3,6 +3,7 @@ using Application.Commands;
 using Domain.DataTransferObjects;
 using Domain.DataTransferObjects.Order;
 using Domain.DataTransferObjects.User;
+using Domain.ErrorModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +33,10 @@ namespace LunchRoom.Controllers
 
             return Ok(order);
         }
-
+        
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<OrderDto>> GetOrder(Guid orderId)
         {
             var order = await _sender.Send(new GetOrderQuery(orderId));
@@ -43,6 +44,10 @@ namespace LunchRoom.Controllers
             return Ok(order);
         }
         
+        /// <summary>
+        /// История всех заказов пользователя
+        /// </summary>
+        /// <returns>Возвращает список идентификаторов и дат заказов пользователя</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<OrdersForUser>>> GetOrdersByUser(Guid userId)
@@ -53,6 +58,11 @@ namespace LunchRoom.Controllers
             return Ok(ordersList);
         }
         
+        /// <summary>
+        /// Сегоднящние заказы пользователя.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Возвращает список сегоднящних заказов пользователя.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<OrdersForUser>>> GetTodayOrdersByUser(Guid userId)
@@ -63,10 +73,15 @@ namespace LunchRoom.Controllers
             return Ok(ordersList);
         }
 
+        /// <summary>
+        /// Сводка заказов по дате.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<OrderReportDto>>> GetOrdersReportByDay(DateTime date)
         {
             var dateSearch = DateTime.SpecifyKind(date, DateTimeKind.Utc);
@@ -78,6 +93,7 @@ namespace LunchRoom.Controllers
         
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteOrder(Guid orderId)
         {
             var result = await _sender.Send(new DeleteOrderCommand(orderId));
@@ -87,6 +103,7 @@ namespace LunchRoom.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ConfirmPayment(Guid orderId)
         {
             var result = await _sender.Send(new ConfirmPaymentCommand(orderId));

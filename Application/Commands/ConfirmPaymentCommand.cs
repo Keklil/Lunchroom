@@ -1,6 +1,7 @@
 using Contracts;
 using Contracts.Repositories;
 using Domain.DataTransferObjects;
+using Domain.Exceptions;
 using MediatR;
 using Repository;
 
@@ -20,6 +21,8 @@ internal sealed class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentComm
     public async Task<Unit> Handle(ConfirmPaymentCommand request, CancellationToken cancellationToken)
     {
         var orderEntity = await _repository.Order.GetOrderAsync(request.orderId, true);
+        if (orderEntity is null)
+            throw new NotFoundException("Подтверждаемы заказ не найден");
         
         orderEntity.ConfirmPayment();
         

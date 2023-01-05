@@ -15,6 +15,7 @@ public class GroupErrorResponse
     public enum ErrorCodes
     {
         UserIsMember = 1001,
-        UserIsNotMember = 1002
+        UserIsNotMember = 1002,
+        AttemptCreateGroupByNonAdmin = 1003
     }
 }

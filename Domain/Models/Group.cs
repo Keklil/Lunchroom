@@ -21,7 +21,7 @@ public class Group
     public Group(User admin, string organizationName, string address)
     {
         if (admin.Role is not Role.Admin)
-            throw new AttemptCreateGroupByNonAdmin();
+            throw new AttemptCreateGroupByNonAdminException();
         
         Id = Guid.NewGuid();
         OrganizationName = organizationName;
