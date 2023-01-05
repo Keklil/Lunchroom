@@ -7,7 +7,7 @@ public class AuthErrorResponse
     /// <summary>
     /// Описание возникшей ошибки
     /// </summary>
-    public string ExceptionMessage { get; set; }
+    public string? ExceptionMessage { get; set; }
     
     /// <summary>
     /// Код ошибки
@@ -19,5 +19,5 @@ public class AuthErrorResponse
 public enum AuthCodes
 {
     UserExists = 1001,
-    EmptyPassword = 1002
+    WrongCredentials = 1002
 }

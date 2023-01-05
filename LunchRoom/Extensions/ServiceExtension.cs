@@ -114,6 +114,7 @@ namespace LunchRoom.Extensions
                 settings.OperationProcessors.Add(
                     new AspNetCoreOperationSecurityScopeProcessor("JWT"));
 
+                settings.GenerateEnumMappingDescription = true;
             });
 
             /*

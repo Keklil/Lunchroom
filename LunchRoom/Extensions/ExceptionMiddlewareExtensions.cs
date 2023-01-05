@@ -36,10 +36,15 @@ namespace LunchRoom.Extensions
                         {
                             await context.Response
                             .WriteAsync(JsonSerializer.Serialize(new { exception.Errors }));
-                        } else if (contextFeature.Error is UserExistsException existsException)
+                        } 
+                        else if (contextFeature.Error is UserExistsException existsException)
                         {
                             await context.Response
-                                .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse {Code = AuthCodes.UserExists, ExceptionMessage = existsException.Message}));
+                                .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
+                                {
+                                    Code = AuthCodes.UserExists, 
+                                    ExceptionMessage = existsException.Message
+                                }));
                         }
                         else
                         {

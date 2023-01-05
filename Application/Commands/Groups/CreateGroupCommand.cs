@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using Contracts;
 using Contracts.Repositories;
+using Domain.DataTransferObjects.Group;
 using Domain.Exceptions;
 using Domain.Models;
 using MediatR;
 
 namespace Application.Commands.Groups;
 
-public sealed record CreateGroupCommand(Guid AdminId, string OrganizationName, string Address) : IRequest<Group?>;
+public sealed record CreateGroupCommand(Guid AdminId, string OrganizationName, string Address) : IRequest<GroupDto?>;
 
-internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, Group?>
+internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, GroupDto?>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
@@ -24,7 +25,7 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
         _tokenService = tokenService;
     }
 
-    public async Task<Group?> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
+    public async Task<GroupDto?> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -41,22 +42,22 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
             _repository.Groups.CreateGroup(group);
             await _repository.SaveAsync();
 
-            return group;
+            return group.Map();
         }
         catch (AttemptCreateGroupByNonAdmin ex)
         {
             _logger.LogError(ex.ToString());
-            return null;
+            throw;
         }
         catch (AttemptSetNullOrEmptyToken ex)
         {
             _logger.LogError(ex.ToString());
-            return null;
+            throw;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.ToString());
-            return null;
+            throw;
         }
     }
 }

@@ -50,16 +50,19 @@ namespace LunchRoom.Controllers
             return admin;
         }
         
+        /// <summary>
+        /// Авторизация пользователя.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns>Возрвращает токен авторизации, содержит пользовательский id, email, роль.
+        /// Возвращает null, если пользователь не существует, неверные данные авторизации.</returns>
         [HttpPost]
-        public async Task<ActionResult<AuthResult>> Auth([FromBody] UserLogin login)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> Auth([FromBody] UserLogin login)
         {
             var token = await _sender.Send(new LoginCommand(login));
-            var result = new AuthResult() { Token = token, Message = "Success"};
 
-            if (token is null)
-                result.Message = "Check mailbox";
-            
-            return result;
+            return token;
         }
         
         [HttpPost]

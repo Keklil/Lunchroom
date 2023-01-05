@@ -51,7 +51,6 @@ public class AuthService : IAuthService
         }
         else if (user.IsEmailChecked is false)
         {
-            await SendConfirmationEmail(user.Email);
             return null;
         }
         else
@@ -159,6 +158,7 @@ public class AuthService : IAuthService
         {
             var newUser = new User(user.email, user.password, true);
             _repository.User.CreateUser(newUser);
+            await SendConfirmationEmail(user.email);
             return newUser;
         }
     }
@@ -174,6 +174,7 @@ public class AuthService : IAuthService
         {
             var newUser = new User(user.email, user.password, false);
             _repository.User.CreateUser(newUser);
+            await SendConfirmationEmail(user.email);
             return newUser;
         }
     }

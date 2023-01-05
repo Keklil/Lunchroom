@@ -38,11 +38,7 @@ builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureReportingKitchenService();
 //builder.Services.ConfigureHangfire(builder.Configuration);
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
