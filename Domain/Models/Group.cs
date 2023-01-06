@@ -11,7 +11,7 @@ public class Group
     public string Address { get; private set; }
     public IReadOnlyCollection<User> Members => _members;
     private List<User> _members = new();
-    public GroupReferral Referral { get; }
+    public GroupReferral Referral { get; private set; }
 
     private Group()
     {
@@ -28,8 +28,6 @@ public class Group
         Address = address;
         Admin = admin;
         _members.Add(admin);
-
-        Referral = new GroupReferral();
     }
 
     public void AddMember(User member)
@@ -41,6 +39,7 @@ public class Group
     {
         if (string.IsNullOrWhiteSpace(referToken))
             throw new AttemptSetNullOrEmptyToken();
-        Referral.SetReferToken(referToken);
+        
+        Referral = new(referToken);
     }
 }

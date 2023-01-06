@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Groups;
+using Application.Queries.Groups;
 using Contracts;
 using Domain.DataTransferObjects.Group;
 using Domain.ErrorModel;
@@ -55,5 +56,19 @@ public class GroupController : ControllerBase
     public async Task AddUser(Guid userId, Guid groupId)
     {
         await _sender.Send(new AddUserToGroupCommand(userId, groupId));
+    }
+
+    /// <summary>
+    /// Получить информацию о группе.
+    /// </summary>
+    /// <param name="groupId"></param>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+    public async Task<GroupDto> GetGroup(Guid groupId)
+    {
+        var group = await _sender.Send(new GetGroupQuery(groupId));
+
+        return group;
     }
 }
