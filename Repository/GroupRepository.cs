@@ -16,10 +16,6 @@ namespace Repository
 
         public async Task<Group?> GetGroupAsync(Guid groupId, bool trackChanges)
         {
-            var groupReferral = await _repositoryContext.Groups.Where(x => x.Id.Equals(groupId))
-                .Select(x => x.Referral)
-                .SingleOrDefaultAsync();
-            
             var group = await _repositoryContext.Groups.Where(x => x.Id.Equals(groupId))
                 .Include(x => x.Members)
                 .Include(x => x.Admin)

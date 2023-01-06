@@ -19,6 +19,7 @@ namespace Repository.EntitiyConfiguration
             */
             menuConfiguration.Property(x => x.Date);
 
+            menuConfiguration.Property(x => x.GroupId);
         }
     }
 }

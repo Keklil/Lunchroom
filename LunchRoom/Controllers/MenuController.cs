@@ -32,11 +32,11 @@ namespace LunchRoom.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MenuDto>> GetTodayMenu()
+        public async Task<ActionResult<MenuDto>> GetTodayMenu(Guid groupId)
         {
             var dateSearch = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             
-            var menu = await _sender.Send(new GetMenuQuery(dateSearch));
+            var menu = await _sender.Send(new GetMenuQuery(dateSearch, groupId));
 
             return Ok(menu);
         }
@@ -44,11 +44,11 @@ namespace LunchRoom.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MenuDto>> GetMenuByDate(DateTime date)
+        public async Task<ActionResult<MenuDto>> GetMenuByDate(DateTime date, Guid groupId)
         {
             var dateSearch = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-            var menu = await _sender.Send(new GetMenuQuery(dateSearch));
+            var menu = await _sender.Send(new GetMenuQuery(dateSearch, groupId));
 
             return Ok(menu);
         }
@@ -59,9 +59,9 @@ namespace LunchRoom.Controllers
         /// <returns>Возвращает список идентификаторов и дат загрузки меню</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<MenuForList>>> GetAllMenus()
+        public async Task<ActionResult<List<MenuForList>>> GetAllMenus(Guid groupId)
         {
-            var menus = await _sender.Send(new GetAllMenusQuery());
+            var menus = await _sender.Send(new GetAllMenusQuery(groupId));
 
             return Ok(menus);
         }

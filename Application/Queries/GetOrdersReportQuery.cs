@@ -5,7 +5,7 @@ using Domain.Exceptions;
 
 namespace Application.Queries
 {
-    public sealed record GetOrdersReportQuery(DateTime date) 
+    public sealed record GetOrdersReportQuery(DateTime Date, Guid GroupId) 
         : IRequest<List<OrderReportDto>>;
     
     internal class GetOrdersReportQueryHandler : IRequestHandler<GetOrdersReportQuery, List<OrderReportDto>>
@@ -19,7 +19,7 @@ namespace Application.Queries
 
         public async Task<List<OrderReportDto>> Handle(GetOrdersReportQuery request, CancellationToken cancellationToken)
         {
-            var report = await _reportService.GenerateOrdersReport(request.date, false);
+            var report = await _reportService.GenerateOrdersReport(request.Date, request.GroupId, false);
             if (report is null)
                 throw new NotFoundException("The report requested fate does not exist");
 

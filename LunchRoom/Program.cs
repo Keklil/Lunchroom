@@ -5,6 +5,7 @@ using MediatR;
 using Application.Behaviors;
 using Contracts.Security;
 using Hangfire;
+using LoggerService;
 using Services.AuthService;
 using Services.MailService;
 using Services.OrdersReport;
@@ -13,6 +14,8 @@ using Repository.EntitiyConfiguration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+builder.Services.Configure<SeqConfig>(builder.Configuration.GetSection("Seq"));
+
 builder.Services.AddMemoryCache();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureLoggerService();

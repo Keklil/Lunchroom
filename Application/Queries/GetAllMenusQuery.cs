@@ -8,7 +8,7 @@ using Domain.Exceptions;
 
 namespace Application.Queries;
 
-public sealed record GetAllMenusQuery() : IRequest<List<MenuForList>>;
+public sealed record GetAllMenusQuery(Guid GroupId) : IRequest<List<MenuForList>>;
 
 internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuForList>>
 {
@@ -23,7 +23,7 @@ internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuF
 
     public async Task<List<MenuForList>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
     {
-        var listRawMenus = await _repository.Menu.GetMenus();
+        var listRawMenus = await _repository.Menu.GetMenus(request.GroupId);
         List<MenuForList> listMenus = new();
         if (listRawMenus is null)
             return listMenus;

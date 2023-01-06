@@ -50,7 +50,7 @@ namespace LunchRoom.Controllers
         /// <returns>Возвращает список идентификаторов и дат заказов пользователя</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<OrdersForUser>>> GetOrdersByUser(Guid userId)
+        public async Task<ActionResult<List<OrdersForUser>>> GetOrdersByUser(Guid userId, Guid groupId)
         {
             var ordersList = await _sender.Send(new GetOrdersByUser(userId));
             if (ordersList is null)
@@ -77,16 +77,17 @@ namespace LunchRoom.Controllers
         /// Сводка заказов по дате.
         /// </summary>
         /// <param name="date"></param>
+        /// <param name="groupId"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<OrderReportDto>>> GetOrdersReportByDay(DateTime date)
+        public async Task<ActionResult<List<OrderReportDto>>> GetOrdersReportByDay(DateTime date, Guid groupId)
         {
             var dateSearch = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-            var orderReport = await _sender.Send(new GetOrdersReportQuery(dateSearch));
+            var orderReport = await _sender.Send(new GetOrdersReportQuery(dateSearch, groupId));
 
             return Ok(orderReport);
         }

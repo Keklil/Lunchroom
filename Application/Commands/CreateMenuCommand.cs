@@ -24,14 +24,15 @@ namespace Application.Commands
         public async Task<MenuDto> Handle(CreateMenuCommand request, CancellationToken cancellationToken)
         {
             var dateToday = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-            var todayMenu = await _repository.Menu.GetMenuByDateAsync(dateToday);
+            var todayMenu = await _repository.Menu.GetMenuByDateAsync(dateToday, request.Menu.GroupId);
             if (todayMenu is not null)
             {
                 _logger.LogInfo("Menu has already been uploaded");
                 return null;
             }
 
-            var menuEntity = new Menu();
+            //TODO: Вставка айди 
+            var menuEntity = new Menu(Guid.Empty);
             foreach(var item in request.Menu.LunchSets)
             {
                 menuEntity.AddLunchSet(item.Price, item.LunchSetList);
