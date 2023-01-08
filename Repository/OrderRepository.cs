@@ -31,17 +31,17 @@ namespace Repository
             Update(order);
         }
 
-        public async Task<List<Order>> GetOrdersByDateAsync(DateTime date)
+        public async Task<List<Order>> GetOrdersByDateAsync(DateTime date, Guid groupId)
         {
-            return await FindByCondition(x => x.OrderDate.Date == date, false)
+            return await FindByCondition(x => x.OrderDate.Date == date && x.GroupId == groupId, false)
                 .Include(x => x.Options)
                 .ToListAsync();
         }
 
-        public async Task<List<OrdersForUser>> GetOrdersByUserAsync(Guid userId)
+        public async Task<List<OrdersForUser>> GetOrdersByUserAsync(Guid userId, Guid groupId)
         {
             var list = await _repositoryContext.Orders
-                .Where(x => x.CustomerId.Equals(userId))
+                .Where(x => x.CustomerId.Equals(userId) && x.GroupId.Equals(groupId))
                 .Select(x => new OrdersForUser() { Date = x.OrderDate, Id = x.Id })
                 .OrderByDescending(x => x.Date)
                 .AsNoTracking()
@@ -49,10 +49,11 @@ namespace Repository
             return list;
         }
         
-        public async Task<List<OrdersForUser>> GetTodayOrdersByUserAsync(Guid userId)
+        public async Task<List<OrdersForUser>> GetTodayOrdersByUserAsync(Guid userId, Guid groupId)
         {
             var list = await _repositoryContext.Orders
                 .Where(x => x.CustomerId.Equals(userId) && x.OrderDate.Date == DateTime.UtcNow.Date)
+                .Where(x => x.GroupId.Equals(groupId))
                 .Select(x => new OrdersForUser() { Date = x.OrderDate, Id = x.Id })
                 .AsNoTracking()
                 .ToListAsync();

@@ -49,6 +49,24 @@ namespace LunchRoom.Extensions
                                     }));
                                 break;
                             
+                            case WrongUserCredentialsException wrongUserCredentialsException:
+                                await context.Response
+                                    .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
+                                    {
+                                        Code = AuthErrorResponse.ErrorCodes.WrongCredentials,
+                                        ExceptionMessage = wrongUserCredentialsException.Message
+                                    }));
+                                break;
+                            
+                            case UnconfirmedEmailException unconfirmedEmailException:
+                                await context.Response
+                                    .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
+                                    {
+                                        Code = AuthErrorResponse.ErrorCodes.UnconfirmedEmail,
+                                        ExceptionMessage = unconfirmedEmailException.Message
+                                    }));
+                                break;
+                            
                             case UserAlreadyInGroupException userInGroupException:
                                 await context.Response
                                     .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse()

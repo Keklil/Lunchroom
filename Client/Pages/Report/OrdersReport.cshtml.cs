@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Client.Pages.Report;
 
-[Authorize(Roles = "admin")]
+[Authorize(Roles = "Admin")]
 public class OrdersReport : PageModel
 {
     private readonly IApiClient _api;

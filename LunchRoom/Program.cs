@@ -63,7 +63,9 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseOpenApi();
+app.UseSwaggerUi3(x => x.PersistAuthorization = true);
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions

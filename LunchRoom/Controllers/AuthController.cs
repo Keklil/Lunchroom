@@ -65,9 +65,12 @@ namespace LunchRoom.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <remarks>Возрвращает токен авторизации, содержит пользовательский id, email, роль.
-        /// Возвращает null, если пользователь не существует, неверные данные авторизации.</remarks>
+        /// Если пользователь не подтвердил email, введены неверные данные авторизации - вернет 400.
+        /// Если пользователь не существует - 404.</remarks>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AuthErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<string>> Auth([FromBody] UserLogin login)
         {
             var token = await _sender.Send(new LoginCommand(login));

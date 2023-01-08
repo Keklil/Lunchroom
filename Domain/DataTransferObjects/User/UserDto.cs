@@ -8,5 +8,6 @@
         public string? Patronymic { get; init; }
         public string Email { get; init; }
         public bool NameFill { get; set; } = false;
+        public List<Guid> Groups { get; set; }
     }
 }

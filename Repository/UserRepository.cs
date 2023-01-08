@@ -16,6 +16,7 @@ namespace Repository
         public async Task<User?> GetUserAsync(Guid userId, bool trackChanges)
         {
             return await FindByCondition(x => x.Id.Equals(userId), trackChanges)
+                .Include(x => x.Groups)
                 .SingleOrDefaultAsync();
         }
 

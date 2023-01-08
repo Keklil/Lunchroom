@@ -21,7 +21,7 @@ namespace Application.Commands
 
         public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var orderEntity = new Order(request.Order.CustomerId, request.Order.MenuId);
+            var orderEntity = new Order(request.Order.CustomerId, request.Order.MenuId, request.Order.GroupId);
 
             var menu = await _repository.Menu.GetMenuAsync(request.Order.MenuId, trackChanges: false);
 

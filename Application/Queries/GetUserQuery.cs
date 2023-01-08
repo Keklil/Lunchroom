@@ -26,7 +26,7 @@ namespace Application.Queries
             if (userEntity is null)
                 throw new UserNotFoundException(request.Id);
 
-            var user = _mapper.Map<UserDto>(userEntity);
+            var user = userEntity.Map();
             if (user.Name.Length > 0 && user.Surname.Length > 0)
                 user.NameFill = true;
             

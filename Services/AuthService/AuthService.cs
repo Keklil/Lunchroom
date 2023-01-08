@@ -47,16 +47,18 @@ public class AuthService : IAuthService
         var user = await _repository.User.GetUserByEmailAsync(login.Email);
         if (user is null)
         {
-            return null;
+            throw new UserNotFoundException(login.Email);
         }
         else if (user.IsEmailChecked is false)
         {
-            return null;
+            throw new UnconfirmedEmailException();
         }
         else
         {
             var passMatch = user.Password == login.Password;
-            var token = passMatch ? await _tokenService.Generate(user) : null;
+            var token = passMatch 
+                ? await _tokenService.Generate(user) 
+                : throw new WrongUserCredentialsException();
             return token;
         }
     }

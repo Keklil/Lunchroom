@@ -13,6 +13,8 @@ namespace Repository.EntitiyConfiguration
             orderConfiguration.Property(x => x.Id)
                 .ValueGeneratedNever();
 
+            orderConfiguration.Property(x => x.GroupId);
+
             orderConfiguration.Property(x => x.CustomerId)
                 .HasField("_customerId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field);

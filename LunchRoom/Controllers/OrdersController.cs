@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LunchRoom.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [Authorize(Roles = "admin,user")]
+    [Authorize(Roles = "Admin,User")]
     [ApiController]
     [Produces("application/json")]
     public class OrdersController : ControllerBase
@@ -52,22 +52,23 @@ namespace LunchRoom.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<OrdersForUser>>> GetOrdersByUser(Guid userId, Guid groupId)
         {
-            var ordersList = await _sender.Send(new GetOrdersByUser(userId));
+            var ordersList = await _sender.Send(new GetOrdersByUser(userId, groupId));
             if (ordersList is null)
                 return Ok(new { });
             return Ok(ordersList);
         }
-        
+
         /// <summary>
         /// Сегоднящние заказы пользователя.
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="groupId"></param>
         /// <returns>Возвращает список сегоднящних заказов пользователя.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<OrdersForUser>>> GetTodayOrdersByUser(Guid userId)
+        public async Task<ActionResult<List<OrdersForUser>>> GetTodayOrdersByUser(Guid userId, Guid groupId)
         {
-            var ordersList = await _sender.Send(new GetTodayUserOrdersQuery(userId));
+            var ordersList = await _sender.Send(new GetTodayUserOrdersQuery(userId, groupId));
             if (ordersList is null)
                 return Ok(new { });
             return Ok(ordersList);

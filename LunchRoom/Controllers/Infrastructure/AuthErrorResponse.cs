@@ -17,6 +17,8 @@ public class AuthErrorResponse
     public enum ErrorCodes
     {
         UserExists = 1001,
+        UnconfirmedEmail = 1002,
+        WrongCredentials = 1003,
     }
 }
 

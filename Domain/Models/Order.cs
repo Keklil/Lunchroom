@@ -13,6 +13,8 @@
         public Guid MenuId => _menuId;
         private Guid _menuId;
         
+        public Guid GroupId { get; set; }
+        
         public string OrderStatus { get; private set; }
         private int _orderStatusId;
 
@@ -25,12 +27,13 @@
         public IReadOnlyCollection<OrderOption> Options => _orderOptions;
         private List<OrderOption> _orderOptions = new();
 
-        public Order(Guid customerId, Guid menuId)
+        public Order(Guid customerId, Guid menuId, Guid groupId)
         {
             Id = Guid.NewGuid();
             _customerId = customerId;
             _menuId = menuId;
             _orderDate = DateTime.UtcNow;
+            GroupId = groupId;
         }
 
         public void AddLunchSet(LunchSet lunchSet)

@@ -10,7 +10,8 @@ public static class UserMapper
             Surname = source.Surname,
             Name = source.Name,
             Patronymic = source.Patronymic,
-            Email = source.Email
+            Email = source.Email,
+            Groups = source.Groups.Select(x => x.Id).ToList()
         };
     }
 }

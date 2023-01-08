@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LunchRoom.Controllers;
 
 [Route("api/[controller]/[action]")]
-[Authorize(Roles = "admin,user")]
+[Authorize(Roles = "Admin,User")]
 [ApiController]
 [Produces("application/json")]
 public class UserController : ControllerBase

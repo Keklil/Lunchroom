@@ -26,7 +26,7 @@ namespace Services.OrdersReport
         
         public async Task<List<OrderReportDto>> GenerateOrdersReport(DateTime date, Guid groupId, bool excludeWithoutConfirmedPayment)
         {
-            var orders = await _repository.Order.GetOrdersByDateAsync(date);
+            var orders = await _repository.Order.GetOrdersByDateAsync(date, groupId);
             if (excludeWithoutConfirmedPayment)
                 orders = orders.Where(x => x.Payment).ToList();
             
