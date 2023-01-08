@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Application.Commands
 {
-    public sealed record CreateMenuCommand(MenuForCreationDto Menu): IRequest<MenuDto>;
+    public sealed record CreateMenuCommand(MenuForCreationDto Menu, Guid GroupId): IRequest<MenuDto>;
     internal sealed class CreateMenuHandler: IRequestHandler<CreateMenuCommand, MenuDto>
     {
         private readonly IRepositoryManager _repository;
@@ -24,15 +24,14 @@ namespace Application.Commands
         public async Task<MenuDto> Handle(CreateMenuCommand request, CancellationToken cancellationToken)
         {
             var dateToday = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-            var todayMenu = await _repository.Menu.GetMenuByDateAsync(dateToday, request.Menu.GroupId);
+            var todayMenu = await _repository.Menu.GetMenuByDateAsync(dateToday, request.GroupId);
             if (todayMenu is not null)
             {
-                _logger.LogInfo("Menu has already been uploaded");
+                _logger.LogWarning("Menu has already been uploaded");
                 return null;
             }
-
-            //TODO: Вставка айди 
-            var menuEntity = new Menu(Guid.Empty);
+            
+            var menuEntity = new Menu(request.GroupId);
             foreach(var item in request.Menu.LunchSets)
             {
                 menuEntity.AddLunchSet(item.Price, item.LunchSetList);

@@ -235,7 +235,9 @@ namespace Services.MailService
 						var body = (TextPart)client.Inbox.GetBodyPart(message.UniqueId, mailBody);
 						mailText = body.Text;
 						_logger.LogInfo($"Mail recived: {mailText}");
-						await _publisher.Publish(new EmailWithMenuFetched(mailText, TrackChanges: false));
+						
+						//TODO: Заглушка для групп
+						await _publisher.Publish(new EmailWithMenuFetched(mailText, Guid.Empty));
 					}
 				}
 			}

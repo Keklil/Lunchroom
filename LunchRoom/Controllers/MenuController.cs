@@ -1,11 +1,13 @@
 ﻿using Application.Queries;
 using Application.Commands;
+using Application.Notifications;
 using Contracts;
 using Domain.DataTransferObjects.Menu;
 using Domain.ErrorModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Services.MailService;
 
 namespace LunchRoom.Controllers
@@ -64,6 +66,21 @@ namespace LunchRoom.Controllers
             var menus = await _sender.Send(new GetAllMenusQuery(groupId));
 
             return Ok(menus);
+        }
+
+        /// <summary>
+        /// Загрузка меню
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UploadMenu([FromBody]RawMenuDto request)
+        {
+            var rawMenu = string.Join("\n", request.Menu);
+            await _publisher.Publish(new EmailWithMenuFetched(rawMenu, request.GroupId));
+            
+            return Ok();
         }
     }
 }

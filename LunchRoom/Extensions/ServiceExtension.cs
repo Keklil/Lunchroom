@@ -6,10 +6,12 @@ using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
 using LoggerService;
+using LunchRoom.Controllers.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
+using NSwag.Examples;
 using NSwag.Generation.Processors.Security;
 using Quartz;
 using Repository;
@@ -101,6 +103,7 @@ namespace LunchRoom.Extensions
         
         public static void ConfigureSwagger(this IServiceCollection services)
         {
+            services.AddExampleProviders(typeof(UploadMenuExamples).Assembly);
             services.AddOpenApiDocument((settings, serviceProvider) =>
             {
                 settings.AddSecurity("JWT", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
@@ -115,6 +118,8 @@ namespace LunchRoom.Extensions
                     new AspNetCoreOperationSecurityScopeProcessor("JWT"));
 
                 settings.GenerateEnumMappingDescription = true;
+                
+                settings.AddExamples(serviceProvider);
             });
         }
     }
