@@ -1,0 +1,58 @@
+﻿@page
+@model ClientV2.Pages.Account.Login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/css/registration.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link href="https://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet">
+</head>
+<body class="container-fluid h-100">
+    <header class="header">
+        <img class="header__logo" src="~/images/LunchRoom.svg" alt="logo">
+    </header>
+    <main class="container my-auto">
+        <form method="post">
+            <div class="row align-items-center p">
+                <img class="col-7 d-none d-lg-flex" src="~/images/login.png" />
+                <div class="col-12 col-lg-4">
+                    <div class="form mx-auto">
+                        <div class="form__header">Авторизация</div>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Email</div>
+                            <input asp-for="Email" class="text-input__input" placeholder="Введите Email"/>
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Пароль</div>
+                            <a class="text-input__link" href="#">Забыли пароль?</a>
+                            <input asp-for="Password" class="text-input__input" placeholder="Введите пароль" type="password"/>
+                            <span asp-validation-for="Password"></span>
+                            <div class="text-input__visibility-toggler"></div>
+                        </div>
+                        <button class="form__submit-button" type="submit">Войти</button>
+                        <div>
+                            <div class="form__login-link-container">У вас нет аккаунта? <a class="form__login-link" href="#">Зарегистрируйтесь</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>

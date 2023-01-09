@@ -1,0 +1,210 @@
+﻿@page
+@model ClientV2.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <style>
+        .carousel-item {
+            background-color: #ffffff;
+            height: 492px;
+            overflow-y: auto;
+        }  
+        .carousel-indicators{
+            bottom: -35px;
+        }
+        .carousel-indicators [data-bs-target] {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+@if (Model.TodayUserOrders is not null && Model.TodayUserOrders.Count > 0)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-6 mt-3">
+                    <h3 class="mb-3">Заказы сегодня</h3>
+                </div>
+                <div class="col-md-9 mx-auto">
+                    <div id="carousel" class="carousel carousel-dark slide" data-ride="carousel" data-bs-interval="false">
+                        <div class="carousel-indicators">
+                            @if (Model.TodayUserOrders.Count > 1)
+                            {
+                                <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                                @for (var i = 1; i < @Model.TodayUserOrders.Count; i++)
+                                {
+                                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="@i"></button>
+                                }    
+                            }
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="vstack mt-4">
+                                    <div class="row mx-auto col-11">
+                                        <h4 class="col-6 col-md-7 col-lg-6">Время заказа - @Model.TodayUserOrders[0].OrderDate.ToString("t")</h4>
+                                        @if (Model.TodayUserOrders[0].Payment)
+                                        {
+                                            <p class="col d-flex justify-content-end text-success">Подтвержден</p>
+                                        }
+                                        else
+                                        {
+                                            <a class="col d-flex justify-content-end text-danger" asp-page="/Order/SubmitOrder" asp-route-orderId="@Model.TodayUserOrders[0].Id.ToString()">Не подтвержден</a>
+                                        }
+                                        @if (!Model.TimeExpired)
+                                        {
+                                            <button class="btn btn-close col-1 me-3" data-bs-toggle="modal" data-bs-target="#modalDelete-@Model.TodayUserOrders[0].Id.ToString()"></button>
+                                        }
+                                    </div>
+                                    <div class="card-deck col-11 mx-auto">
+                                        <div class="card active mb-4">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <h5 class="card-title col me-auto">@Model.TodayUserOrders[0].LunchSet.Price.ToString()₽</h5>
+                                                </div>
+                                                @foreach (var lunchSetUnit in @Model.TodayUserOrders[0].LunchSet.LunchSetList)
+                                                {
+                                                    <p class="card-text">@lunchSetUnit</p>
+                                                }
+                                            </div>
+                                        </div>
+                                        @foreach (var option in Model.TodayUserOrders[0].Options)
+                                        {
+                                            <div class="card active mb-4">
+                                                <div class="card-body">
+                                                    <p class="card-text">@option.Option.Name +@option.Option.Price.ToString()₽</p>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="modal fade" id="modalDelete-@Model.TodayUserOrders[0].Id.ToString()" tabindex="-1" aria-labelledby="ModalDelete" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-1 m-3">
+                                                        <p class="h5">Удалить заказ?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                        <form asp-page-handler="delete" method="post">
+                                                            <button class="btn btn-danger">Удалить</button>
+                                                            <input type="hidden" name="orderId" value="@Model.TodayUserOrders[0].Id.ToString()"/>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            @for (var i = 1; i < @Model.TodayUserOrders.Count; i++)
+                            {
+                                <div class="carousel-item">
+                                    <div class="vstack mt-4">
+                                        <div class="row mx-auto col-11">
+                                            <h4 class="col-6 col-md-7 col-lg-6">Время заказа - @Model.TodayUserOrders[i].OrderDate.ToString("t")</h4>
+                                            @if (Model.TodayUserOrders[i].Payment)
+                                            {
+                                                <p class="col d-flex justify-content-end text-success">Подтвержден</p>
+                                            }
+                                            else
+                                            {
+                                                <a class="col d-flex justify-content-end text-danger" asp-page="/Order/SubmitOrder" asp-route-orderId="@Model.TodayUserOrders[i].Id.ToString()">Не подтвержден</a>
+                                            }
+                                            @if (!Model.TimeExpired)
+                                            {
+                                                <button class="btn btn-close col-1 me-3" data-bs-toggle="modal" data-bs-target="#modalDelete-@Model.TodayUserOrders[i].Id.ToString()"></button>
+                                            }
+                                        </div>
+                                        <div class="card-deck col-11 mx-auto">
+                                            <div class="card active mb-4">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <h5 class="card-title col me-auto">@Model.TodayUserOrders[i].LunchSet.Price.ToString()₽</h5>
+                                                    </div>
+                                                    @foreach (var lunchSetUnit in @Model.TodayUserOrders[i].LunchSet.LunchSetList)
+                                                    {
+                                                        <p class="card-text">@lunchSetUnit</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                            @foreach (var option in Model.TodayUserOrders[i].Options)
+                                            {
+                                                <div class="card active mb-4">
+                                                    <div class="card-body">
+                                                        <p class="card-text">@option.Option.Name +@option.Option.Price.ToString()₽</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="modal fade" id="modalDelete-@Model.TodayUserOrders[i].Id.ToString()" tabindex="-1" aria-labelledby="ModalDelete" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body p-1 m-3">
+                                                            <p class="h5">Удалить заказ?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                            <form asp-page-handler="delete" method="post">
+                                                                <button class="btn btn-danger">Удалить</button>
+                                                                <input type="hidden" name="orderId" value="@Model.TodayUserOrders[i].Id.ToString()" />
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+                @if (Model.TimeExpiredMessage)
+                {
+                      <div class="position-absolute top-0 end-0 p-3">
+                          <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toastNotice">
+                              <div class="toast-header">
+                                  <strong class="me-auto">Ошибка</strong>
+                                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                              </div>
+                              <div class="toast-body">
+                                     Заказы уже отправлены, удаление невозможно!
+                              </div>
+                          </div> 
+                      </div>  
+                }
+        </div>
+        <a class="btn btn-primary" asp-area="" asp-page="/Order/SelectItemsForOrder" style="position:absolute;bottom:80px;right:15px;margin:0;padding:15px 10px;">Дополнительный заказ</a>
+    }
+    else
+    {
+        <div class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">Сегодня вы еще ничего не заказали!</h1>
+                    <p>
+                        <a class="btn btn-primary mt-4" asp-area="" asp-page="/Order/SelectItemsForOrder">Перейти к меню</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/edit.js" asp-append-version="true"></script>
+</body>
+
+
+
+</html>
