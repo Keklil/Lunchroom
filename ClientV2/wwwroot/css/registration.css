@@ -38,9 +38,9 @@ body {
     vertical-align: middle;
 }
 .main {
+    display: flex;
     top: 100px;
     left: 0px;
-    width: 100vw;
     height: calc(100vh - 88px);
     box-sizing: border-box;
 }
@@ -399,12 +399,14 @@ body {
 }
 
 .search {
-    width: 1200px;
+    width: auto;
+    max-width: 1200px;
 }
 
 @media (min-width: 375px) and (max-width: 1024px) { 
     .search {
-        width: 1000px;
+        width: auto;
+        max-width: 1000px;
     }
     
     .header__nav {
@@ -424,7 +426,7 @@ body {
 .search__input {
     display: block;
     box-sizing: border-box;
-    width: 780px;
+    width: 80%;
     height: 40px;
     padding-left: 40px;
     background: url("../images/search.png") 15px 11px no-repeat;
@@ -470,7 +472,7 @@ body {
     display: grid;
     overflow: hidden;
     align-content: center;
-    justify-content: center;
+    justify-content: start;
     margin-bottom: 30px;
     column-gap: 35px;
     grid-template-rows: 1fr;

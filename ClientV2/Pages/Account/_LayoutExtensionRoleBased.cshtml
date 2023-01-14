@@ -1,19 +1,48 @@
-﻿@if (User.IsInRole("user"))
+﻿@if (User.IsInRole("User"))
 {
-    <ul class="navbar-nav flex-grow-1">
+    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Menu/Index">Главная</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-page="/Order/UserOrdersHistory">История заказов</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Order/UserOrdersHistory">Корзина</a>
+        </li>
+        <li>
+            <a asp-page="/Account/Edit" class="d-flex link-dark text-decoration-none">
+                <svg class="d-flex" width="24" height="24">
+                    <use xlink:href="#people-circle"></use>
+                </svg>
+            </a>
         </li>
     </ul>
 }
-else if (User.IsInRole("admin"))
+else if (User.IsInRole("Admin"))
 {
-    <ul class="navbar-nav flex-grow-1">
+    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Menu/Index">Главная</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Order/UserOrdersHistory">Команда</a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Report/MenusHistory">Контроль заказов</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-page="/Order/UserOrdersHistory">История заказов</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-page="/Report/MenusHistory">Контроль заказов</a>
+            <a class="nav-link text-dark" asp-area="" asp-page="/Order/UserOrdersHistory">Корзина</a>
+        </li>
+        <li>
+            <a asp-page="/Account/Edit" class="d-flex link-dark text-decoration-none">
+                <svg class="d-flex" width="24" height="24">
+                    <use xlink:href="#people-circle"></use>
+                </svg>
+            </a>
         </li>
     </ul>
 }
