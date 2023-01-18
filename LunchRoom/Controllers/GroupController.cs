@@ -71,4 +71,22 @@ public class GroupController : ControllerBase
 
         return group;
     }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    public async Task ConfigureKitchen([FromBody] GroupConfigDto config)
+    {
+        await _sender.Send(new AddKitchenSettingsToGroupCommand(config));
+    }
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    public async Task ConfigurePaymentInfo([FromBody] PaymentInfoDto paymentInfoDto)
+    {
+        await _sender.Send(new AddPaymentInfoToGroupCommand(paymentInfoDto));
+    }
 }

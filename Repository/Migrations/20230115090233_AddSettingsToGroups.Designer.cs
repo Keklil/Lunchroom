@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
@@ -12,9 +13,11 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230115090233_AddSettingsToGroups")]
+    partial class AddSettingsToGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,9 +162,6 @@ namespace Repository.Migrations
                     b.Property<Guid>("LunchSetId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("LunchSetUnits")
-                        .HasColumnType("integer");
-
                     b.Property<Guid>("MenuId")
                         .HasColumnType("uuid");
 
@@ -203,35 +203,6 @@ namespace Repository.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrdersOptions");
-                });
-
-            modelBuilder.Entity("Domain.Models.PaymentInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<byte[]>("Qr")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId")
-                        .IsUnique();
-
-                    b.ToTable("PaymentInfo");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -357,15 +328,6 @@ namespace Repository.Migrations
                         .HasForeignKey("OrderId");
                 });
 
-            modelBuilder.Entity("Domain.Models.PaymentInfo", b =>
-                {
-                    b.HasOne("Domain.Models.Group", null)
-                        .WithOne("PaymentInfo")
-                        .HasForeignKey("Domain.Models.PaymentInfo", "GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("GroupUser", b =>
                 {
                     b.HasOne("Domain.Models.Group", null)
@@ -383,9 +345,6 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Domain.Models.Group", b =>
                 {
-                    b.Navigation("PaymentInfo")
-                        .IsRequired();
-
                     b.Navigation("Settings")
                         .IsRequired();
                 });

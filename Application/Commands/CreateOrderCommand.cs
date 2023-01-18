@@ -26,7 +26,7 @@ namespace Application.Commands
             var menu = await _repository.Menu.GetMenuAsync(request.Order.MenuId, trackChanges: false);
 
             var lunchSet = menu.GetLunchSetById(request.Order.LunchSetId);
-            orderEntity.AddLunchSet(lunchSet);            
+            orderEntity.AddLunchSet(lunchSet, request.Order.LunchSetUnits);            
             
             var orderOptions = request.Order.Options;
 
@@ -41,7 +41,7 @@ namespace Application.Commands
             _repository.Order.CreateOrder(orderEntity);
             await _repository.SaveAsync();
 
-            var orderToReturn = _mapper.Map<OrderDto>(orderEntity);
+            var orderToReturn = orderEntity.Map();
 
             return orderToReturn;
         }

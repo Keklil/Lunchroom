@@ -46,5 +46,17 @@ namespace Repository
             return await FindByCondition(x => x.Email == email, true)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task<List<Guid>> GetUserGroupIdsAsync(Guid userId)
+        {
+            var user = await _repositoryContext.Users
+                .Include(x => x.Groups)
+                .Where(x => x.Id.Equals(userId))
+                .Select(x => x.Groups)
+                .SingleOrDefaultAsync();
+
+            var userGroups = user?.Select(x => x.Id).ToList();
+            return userGroups;
+        }
     }
 }

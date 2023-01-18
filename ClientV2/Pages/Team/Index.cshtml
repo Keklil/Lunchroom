@@ -1,0 +1,73 @@
+﻿@page "{handler?}"
+
+@model ClientV2.Pages.Team.Index
+
+@{
+    ViewData["Title"] = "Команда";
+}
+
+<body>
+<div>
+    <div class="content content_no-width">
+        <div class="content__wrapper content__wrapper_width_full">
+            <div class="team">
+                <div class="team__left-part">          
+                    <div class="team__name title">Название команды</div>
+                    <div class="team__link text_bordered">@Model.GroupInfo.Referral.ReferToken</div>
+                    <div class="team__code text_bordered">Код команды</div>
+                    <div class="team__users">
+                        @foreach (var user in Model.UserDtos)
+                        {
+                            <div class="team__user">
+                                <span class="team__user-name">@user.Surname @user.Name @user.Patronymic</span>
+                                <span class="delete-user-btn team__delete-btn">Удалить</span>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="team__right-part">
+                    <div class="settings">
+                        <div class="settings__top">
+                            <span class="settings__header">Настройка столовой</span>
+                            <div class="settings__parameters">
+                                <div class="settings__parameter-wrapper">
+                                    <span class="settings__parameter">Название</span>
+                                    <span class="settings__parameter-value">@Model.GroupInfo.Settings?.KitchenName</span>
+                                </div>
+                                <div class="settings__parameter-wrapper">
+                                    <span class="settings__parameter">Email</span>
+                                    <span class="settings__parameter-value">@Model.GroupInfo.Settings?.TargetEmail</span>
+                                </div>
+                                <div class="settings__parameter-wrapper">
+                                    <span class="settings__parameter">Заказывать до</span>
+                                    <span class="settings__parameter-value">@(Model.MenuExpired.HasValue ? Model.MenuExpired.Value.ToString("t") : "")</span>
+                                </div>
+                                <div class="settings__parameter-wrapper">
+                                    <span class="settings__parameter">Формат меню</span>
+                                    <span class="settings__parameter-value">@Model.GroupInfo.Settings?.MenuFormat.ToString()</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="settings__btn basic-button" onclick="window.location.href ='/Team/KitchenSettings'">Изменить</button>
+                    </div>
+                    <input class="team__add-menu-btn basic-button" type="button" value="Загрузить меню">
+                    <div class="settings">
+                        <div class="settings__top">
+                            <span class="settings__header">Оплата</span>
+                            <div class="qr">
+                                <img class="qr_img" src="~/images/qr.png" width="217px" height="217px"/>
+                                <span class="qr__comment">Комментарий</span>
+                            </div>
+                        </div>
+                        <button type="button" class="settings__btn basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Изменить</button>
+                    </div>
+                    <div id="modal-placeholder"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="js/uploadAjax.js" asp-append-version="true"></script>
+</body>

@@ -46,6 +46,8 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
 
             option.Option = _mapper.Map<OptionDto>(optionFromMenu);
         }
+
+        order.LunchSet.LunchSetUnits = orderEntity.LunchSetUnits;
         
         return order;
     }

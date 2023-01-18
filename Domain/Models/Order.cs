@@ -1,4 +1,6 @@
-﻿namespace Domain.Models
+﻿using Domain.Exceptions;
+
+namespace Domain.Models
 {
     public class Order
     {
@@ -23,6 +25,8 @@
         public LunchSet LunchSet { get; private set; }
         public Guid LunchSetId => _lunchSetId;
         private Guid _lunchSetId;
+        
+        public int LunchSetUnits { get; private set; }
 
         public IReadOnlyCollection<OrderOption> Options => _orderOptions;
         private List<OrderOption> _orderOptions = new();
@@ -36,14 +40,20 @@
             GroupId = groupId;
         }
 
-        public void AddLunchSet(LunchSet lunchSet)
+        public void AddLunchSet(LunchSet lunchSet, int units)
         {
+            if (units < 1)
+                throw new DomainException("Попытка установить некорректное количество");
+            
             _lunchSetId = lunchSet.Id;
             LunchSet = lunchSet;
+            LunchSetUnits = units;
         }
 
         public void AddOption(Option option, int units)
         {
+            if (units < 1)
+                throw new DomainException("Попытка установить некорректное количество");
 
             var existingOption = _orderOptions.Where(o => o.OptionId == option.Id)
                 .FirstOrDefault();

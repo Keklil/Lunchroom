@@ -67,9 +67,9 @@ namespace LunchRoom.Extensions
 
         public static void ConfigureReportingKitchenService(this IServiceCollection services)
         {
-            services.AddSingleton<ReportingKitchenService>();
-            services.AddHostedService(
-                serviceProvider => serviceProvider.GetRequiredService<ReportingKitchenService>());
+            // services.AddSingleton<ReportingKitchenService>();
+            // services.AddHostedService(
+            //     serviceProvider => serviceProvider.GetRequiredService<ReportingKitchenService>());
         }
         
 

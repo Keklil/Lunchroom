@@ -12,6 +12,8 @@ public class Group
     public IReadOnlyCollection<User> Members => _members;
     private List<User> _members = new();
     public GroupReferral Referral { get; private set; }
+    public GroupKitchenSettings Settings { get; private set; }
+    public PaymentInfo PaymentInfo { get; set; }
 
     private Group()
     {
@@ -41,5 +43,15 @@ public class Group
             throw new AttemptSetNullOrEmptyToken();
         
         Referral = new(referToken);
+    }
+
+    public void SetSettings(GroupKitchenSettings settings)
+    {
+        Settings = settings;
+    }
+
+    public void SetPaymentInfo(PaymentInfo paymentInfo)
+    {
+        PaymentInfo = paymentInfo;
     }
 }

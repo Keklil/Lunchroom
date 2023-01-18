@@ -1,6 +1,6 @@
 ﻿@if (User.IsInRole("User"))
 {
-    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0">
+    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0" style="font-size: 18px; font-weight: 600">
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-page="/Menu/Index">Главная</a>
         </li>
@@ -21,7 +21,7 @@
 }
 else if (User.IsInRole("Admin"))
 {
-    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0">
+    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0" style="font-size: 18px; font-weight: 600">
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-page="/Menu/Index">Главная</a>
         </li>
