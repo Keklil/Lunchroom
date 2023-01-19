@@ -49,7 +49,13 @@ public class Index : PageModel
     public async Task<ActionResult> OnGetPaymentModalPartialAsync()
     {
         var groupInfo = await _api.Group_GetGroupAsync(new Guid("2b974f1e-618d-4aef-962e-713d1db8d2c6"));
-        return Partial("_PaymentModalPartial", groupInfo.PaymentInfo ?? new());
+        var paymentInfo = new PaymentInfo();
+        if (groupInfo.PaymentInfo is not null)
+        {
+            paymentInfo.Description = groupInfo.PaymentInfo.Description;
+            paymentInfo.Link = groupInfo.PaymentInfo.Link;
+        }
+        return Partial("_PaymentModalPartial", paymentInfo);
     }
     
     public async Task<ActionResult> OnPostPaymentModalPartialAsync(PaymentInfo paymentInfo)

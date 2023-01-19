@@ -1,0 +1,13 @@
+@model List<ClientV2.Apis.LunchSetDto>
+
+@foreach (var item in Model)
+{
+    <div class="dish-container__dish" id="@item.Id.ToString()">
+        <img class="dish-container__dish-img" src="~/images/dish.png"/>
+        <div class="dish-container__dish-description">@item.LunchSetList.FirstOrDefault(x => x.Contains("Салат", StringComparison.CurrentCultureIgnoreCase))</div>
+        <div class="dish-container__dish-description">@item.LunchSetList.FirstOrDefault(x => x.Contains("Суп", StringComparison.CurrentCultureIgnoreCase))</div>
+        <div class="dish-container__dish-description">@item.LunchSetList.FirstOrDefault(x => !x.Contains("Салат", StringComparison.CurrentCultureIgnoreCase) && !x.Contains("Суп", StringComparison.CurrentCultureIgnoreCase))</div>
+        <span class="dish-container__dish-price">@item.Price.ToString()</span>
+        <img class="dish-container__basket-icon" src="~/images/basket.png"/>
+    </div>
+}

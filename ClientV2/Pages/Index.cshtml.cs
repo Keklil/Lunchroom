@@ -40,30 +40,13 @@ namespace ClientV2.Pages
 
         public async Task<ActionResult> OnGetAsync()
         {
-            if (DateTime.Now.TimeOfDay > new TimeSpan(hour, minute, 0))
-            {
-                TimeExpired = true;
-            }
+            var userIdFromContext = _accessor.HttpContext.User.Claims.First(x => x.Type == "UserId").Value;
+            var userId = Guid.Parse(userIdFromContext);
+            var todayOrders = await _api.Orders_GetTodayOrdersByUserAsync(userId, new Guid("2b974f1e-618d-4aef-962e-713d1db8d2c6"));
+            if (todayOrders.Count < 1)
+                return Redirect("./Menu");
             
-            await GetData();
-
-            return Page();
-        }
-
-        public async Task<ActionResult> OnPostAsync()
-        {
-            if (HttpContext.User.IsInRole("admin"))
-            {
-                var date = MenuDate;
-                return Redirect("./Report/OrdersReport?date=" + date);
-            }
-
-            if (HttpContext.User.IsInRole("user"))
-            {
-                
-            }
-
-            return RedirectToPage("/Index");
+            return Redirect("./Orders/History");
         }
 
         public async Task<ActionResult> OnPostDeleteAsync(string orderId)

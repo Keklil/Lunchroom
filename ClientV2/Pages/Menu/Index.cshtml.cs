@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using ClientV2.Apis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -47,9 +48,24 @@ public class Index : PageModel
         }
 
         Menu.LunchSets = Menu.LunchSets.OrderBy(x => x.Price).ToList();
+        var lunchSetsJson = JsonSerializer.Serialize(Menu.LunchSets);
         Menu.Options = Menu.Options.OrderBy(x => x.Price).ToList();
+        var optionsJson = JsonSerializer.Serialize(Menu.Options);
         
         HttpContext.Session.SetString("MenuId", Menu.Id.ToString());
+        HttpContext.Session.SetString("MenuLunchSets", lunchSetsJson);
+        HttpContext.Session.SetString("MenuOptions", optionsJson);
         return Page();
+    }
+
+    public async Task<PartialViewResult> OnGetLunchSetsPartialAsync()
+    {
+        var lunchSetsJson = HttpContext.Session.GetString("MenuLunchSets");
+        if (lunchSetsJson != null)
+        {
+            var lunchSets = JsonSerializer.Deserialize<List<LunchSetDto>>(lunchSetsJson);
+            return Partial("_LunchSetsPartial", lunchSets);
+        }
+        return Partial("_LunchSetsPartial", new List<LunchSetDto>());
     }
 }

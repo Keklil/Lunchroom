@@ -1,0 +1,16 @@
+@model List<ClientV2.Apis.OrderDto>
+
+@foreach (var order in Model)
+{
+    <div class="basket__dish">
+        <img class="basket__dish-img" src="~/images/dish.png"/>
+        <div class="basket__dish-middle">
+            <span class="basket__dish-name">Комбо набор №1</span>
+            <div class="basket__dish-order-date">01.12.2022</div>
+        </div>
+        <div class="basket__dish-end">
+            <span class="basket__top-right-area">240 ₽</span>
+            <span class="basket__dish-price">240 ₽</span>
+        </div>
+    </div>
+}

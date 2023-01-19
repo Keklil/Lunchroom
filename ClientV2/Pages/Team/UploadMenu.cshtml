@@ -1,0 +1,19 @@
+@page "{token?}"
+@model ClientV2.Pages.Team.UploadMenu
+
+@{
+    ViewData["Title"] = "Загрузить меню";
+}
+
+
+<div class="container d-flex justify-content-center">
+    <form method="post" class="form mt-5" style="max-width: 450px;">
+        <input type="hidden" asp-for="GroupId"/>
+        <div class="form__header">Загрузить меню</div>
+        <div class="text-input">
+            <textarea class="text-input__input input" asp-for="MenuRaw" placeholder="Вставьте меню" style="min-height: 240px;"></textarea>
+        </div>
+        <button class="form__submit-button" type="submit">Загрузить меню</button>
+    </form>
+</div>
+

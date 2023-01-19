@@ -400,6 +400,8 @@ body {
 }
 
 .search {
+    margin-left: auto;
+    margin-right: auto;
     width: auto;
     max-width: 1200px;
 }
@@ -469,18 +471,17 @@ body {
 }
 
 .dish-container {
-    margin-left: 10px;
     display: grid;
     overflow: hidden;
     align-content: center;
-    justify-content: start;
+    justify-content: space-evenly;
     margin-bottom: 30px;
     column-gap: 35px;
     grid-template-rows: 1fr;
     row-gap: 26px;
     grid-auto-rows: auto;
     grid-auto-columns:0;
-    grid-template-columns: repeat(auto-fit, 230px);
+    grid-template-columns: repeat(auto-fit, 392px);
 }
 
 .dish-container__dish {

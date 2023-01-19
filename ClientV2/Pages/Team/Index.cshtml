@@ -28,39 +28,56 @@
                 </div>
                 <div class="team__right-part">
                     <div class="settings">
-                        <div class="settings__top">
-                            <span class="settings__header">Настройка столовой</span>
-                            <div class="settings__parameters">
-                                <div class="settings__parameter-wrapper">
-                                    <span class="settings__parameter">Название</span>
-                                    <span class="settings__parameter-value">@Model.GroupInfo.Settings?.KitchenName</span>
-                                </div>
-                                <div class="settings__parameter-wrapper">
-                                    <span class="settings__parameter">Email</span>
-                                    <span class="settings__parameter-value">@Model.GroupInfo.Settings?.TargetEmail</span>
-                                </div>
-                                <div class="settings__parameter-wrapper">
-                                    <span class="settings__parameter">Заказывать до</span>
-                                    <span class="settings__parameter-value">@(Model.MenuExpired.HasValue ? Model.MenuExpired.Value.ToString("t") : "")</span>
-                                </div>
-                                <div class="settings__parameter-wrapper">
-                                    <span class="settings__parameter">Формат меню</span>
-                                    <span class="settings__parameter-value">@Model.GroupInfo.Settings?.MenuFormat.ToString()</span>
+                        @if (Model.GroupInfo.Settings is not null)
+                        {
+                            <div class="settings__top">
+                                <span class="settings__header">Настройка столовой</span>
+                                <div class="settings__parameters">
+                                    <div class="settings__parameter-wrapper">
+                                        <span class="settings__parameter">Название</span>
+                                        <span class="settings__parameter-value">@Model.GroupInfo.Settings?.KitchenName</span>
+                                    </div>
+                                    <div class="settings__parameter-wrapper">
+                                        <span class="settings__parameter">Email</span>
+                                        <span class="settings__parameter-value">@Model.GroupInfo.Settings?.TargetEmail</span>
+                                    </div>
+                                    <div class="settings__parameter-wrapper">
+                                        <span class="settings__parameter">Заказывать до</span>
+                                        <span class="settings__parameter-value">@(Model.MenuExpired.HasValue ? Model.MenuExpired.Value.ToString("t") : "")</span>
+                                    </div>
+                                    <div class="settings__parameter-wrapper">
+                                        <span class="settings__parameter">Формат меню</span>
+                                        <span class="settings__parameter-value">@Model.GroupInfo.Settings?.MenuFormat.ToString()</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <button type="button" class="settings__btn basic-button" onclick="window.location.href ='/Team/KitchenSettings'">Изменить</button>
+                            <button type="button" class="settings__btn basic-button" onclick="window.location.href ='/Team/KitchenSettings'">Изменить</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="basic-button" onclick="window.location.href ='/Team/KitchenSettings'">Добавить столовую</button>
+                        }
                     </div>
-                    <input class="team__add-menu-btn basic-button" type="button" value="Загрузить меню">
-                    <div class="settings">
-                        <div class="settings__top">
-                            <span class="settings__header">Оплата</span>
-                            <div class="qr">
-                                <img class="qr_img" src="~/images/qr.png" width="217px" height="217px"/>
-                                <span class="qr__comment">Комментарий</span>
-                            </div>
-                        </div>
-                        <button type="button" class="settings__btn basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Изменить</button>
+                    @if (Model.GroupInfo.Settings is not null)
+                    {
+                        <button class="team__add-menu-btn basic-button" type="button" onclick="window.location.href ='/Team/UploadMenu/@Model.GroupInfo.Referral.ReferToken'">Загрузить меню</button>
+                    }
+                    <div class="settings mt-2">
+                        @if (Model.GroupInfo.PaymentInfo is not null)
+                            {
+                                <div class="settings__top">
+                                    <span class="settings__header">Оплата</span>
+                                    <div class="qr">
+                                        <img class="qr_img" src="~/images/qr.png" width="217px" height="217px"/>
+                                        <span class="qr__comment">Комментарий</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="settings__btn basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Изменить</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Добавить информацию об оплате</button>
+                            }
                     </div>
                     <div id="modal-placeholder"></div>
                 </div>
@@ -69,5 +86,5 @@
     </div>
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="js/uploadAjax.js" asp-append-version="true"></script>
+<script src="js/uploadModalAjax.js" asp-append-version="true"></script>
 </body>

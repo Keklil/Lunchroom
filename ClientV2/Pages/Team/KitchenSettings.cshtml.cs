@@ -67,6 +67,6 @@ public class KitchenSettings : PageModel
 
         _api.Group_ConfigureKitchenAsync(settings);
 
-        return RedirectToPage(nameof(Menu.Index));
+        return Redirect("./Menu");
     }
 }
