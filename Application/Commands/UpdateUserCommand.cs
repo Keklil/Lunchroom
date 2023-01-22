@@ -30,7 +30,7 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
         _repository.User.UpdateUser(userEntity);
         await _repository.SaveAsync();
 
-        var user = _mapper.Map<UserDto>(userEntity);
+        var user = userEntity.Map();
         return user;
     }
 }

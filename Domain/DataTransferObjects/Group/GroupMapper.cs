@@ -30,7 +30,7 @@ public static class GroupMapper
                     GroupId = source.PaymentInfo.GroupId,
                     Link = source.PaymentInfo.Link,
                     Description = source.PaymentInfo.Description,
-                    Qr = source.PaymentInfo.Qr.ToString()
+                    Qr = source.PaymentInfo.Qr
                 }
                 : null);
     }
@@ -54,7 +54,7 @@ public static class GroupMapper
             GroupId = source.GroupId,
             Link = source.Link,
             Description = source.Description,
-            Qr = new byte[]{}
+            Qr = source.Qr
         };
     }
 }

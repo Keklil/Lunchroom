@@ -273,7 +273,13 @@ body {
     height: 44px;
     margin-right: 20px;
     display: inline-block;
+    overflow-x: scroll;
 }
+
+.team__link::-webkit-scrollbar {
+    display: none;
+}
+
 .team__code {
     width: 134px;
     height: 44px;
@@ -321,6 +327,7 @@ body {
 
 .settings {
     max-width: 280px;
+    min-width: 246px;
 }
 .settings__top {
     background: #F5F5F5;
@@ -354,15 +361,14 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 .settings__parameter {
     display: inline-block;
-    max-width: calc(50% - 20px);
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    width: 50%;
 }
 
 .basic-button {
@@ -458,10 +464,10 @@ body {
     padding: 6px 12px;
     background: #F5F5F5;
     border-radius: 16px;
+    border: none;
 }
 .dish-container-wrapper {
     overflow-y: auto;
-    height: calc(100vh - 250px);
     width: 100%;
     margin: 0 auto;
 }
@@ -485,14 +491,13 @@ body {
 }
 
 .dish-container__dish {
+    min-width: 125px;
     position: relative;
     background: #FFFFFF;
-    height: fit-content;
-    width: fit-content;
     border: 2px solid #F5F5F5;
     border-radius: 39px;
     box-sizing: border-box;
-    padding: 24px 10px 40px 10px;
+    padding: 23px 12px 15px 22px;
 }
 
 .dish-container__dish-description {
@@ -510,8 +515,6 @@ body {
 }
 
 .dish-container__dish-price {
-    position: absolute;
-    right: 55px;
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
@@ -544,11 +547,8 @@ body {
 }
 
 .dish-container__basket-icon {
-    position: absolute;
-    right: -10px;
     width: 52px;
     height: 42px;
-    bottom: 0;
 }
 
 .basket-wrapper {
@@ -700,11 +700,137 @@ body {
     margin-left: -80px;
 }
 
+.monitoring__search {
+    display: inline-block;
+    width: 580px;
+    box-sizing: border-box;
+    height: 40px;
+    margin-right: 20px;
+    padding-left: 15px;
+}
+
+.monitoring__search::placeholder {
+    color: inherit;
+}
+
 @media (min-height: 600px) and (min-width: 800px){
     .img-btm {
         width: auto;
         height: 380px;
     }
+}
+
+.soft-rect {
+    border-radius: 8px;
+    border: 0.5px solid #E1E1E1;
+    color: #1A2E35;
+    font-size: 14px;
+}
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.5px solid #E1E1E1;
+    padding-bottom: 10px;
+    margin-top: 42px;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 21px;
+    font-family: 'Gilroy-Medium';
+}
+
+.order {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 0.5px solid #E1E1E1;
+
+    padding: 10px 0;
+}
+
+.order__dishes {
+    justify-self: center;
+}
+
+.order__dish, .order__item-cost, .order__user {
+    margin-bottom: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.order__dish:last-child:nth-last-of-type(1), .order__item-cost:nth-last-of-type(1) {
+    margin-bottom: 0;
+}
+
+.order__item-cost {
+    width: fit-content;
+    margin-left: auto;
+}
+
+.order__item-cost_total {
+    font-family: 'Gilroy-Bold';
+}
+
+.order__item-cost_margin-30 {
+    margin-right: 30px;
+}
+
+.date {
+    height: 40px;
+    width: 140px;
+    padding: 0 15px;
+    box-sizing: border-box;
+    line-height: 16px;
+}
+
+.scroll-container-wrapper {
+    overflow-y: auto;
+    height: calc(100vh - 270px);
+    width: 100%;
+}
+
+.scroll-container-wrapper_height_full {
+    height: calc(100vh - 135px);
+}
+
+.scroll-container {
+    max-height: 100%;
+}
+
+.dish-container-wrapper::-webkit-scrollbar, .scroll-container-wrapper::-webkit-scrollbar {
+    width: 0;
+}
+
+.btn-danger-custom {
+    background-color: #FF4F5A; 
+    border-color: #FF4F5A;
+}
+
+span {cursor:pointer; }
+.minus, .plus{
+    font-size: 30px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+}
+.lunch-counter {
+    height:34px;
+    width: 100px;
+    text-align: center;
+    font-size: 26px;
+    border:1px solid #ddd;
+    border-radius:4px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 @media (min-height: 800px) and (min-width: 800px){

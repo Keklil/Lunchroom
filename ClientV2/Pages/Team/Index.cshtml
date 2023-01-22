@@ -6,6 +6,7 @@
     ViewData["Title"] = "Команда";
 }
 
+
 <body>
 <div>
     <div class="content content_no-width">
@@ -68,9 +69,12 @@
                                 <div class="settings__top">
                                     <span class="settings__header">Оплата</span>
                                     <div class="qr">
-                                        <img class="qr_img" src="~/images/qr.png" width="217px" height="217px"/>
-                                        <span class="qr__comment">Комментарий</span>
-                                    </div>
+                                            @if (!string.IsNullOrWhiteSpace(Model.QrImage))
+                                            {
+                                                <img class="qr_img" src="@Model.QrImage" width="217px" height="217px"/>
+                                            }
+                                            <span class="qr__comment">@Model.GroupInfo.PaymentInfo.Description</span>
+                                        </div>
                                 </div>
                                 <button type="button" class="settings__btn basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Изменить</button>
                             }
@@ -86,5 +90,5 @@
     </div>
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="js/uploadModalAjax.js" asp-append-version="true"></script>
+<script src="~/js/uploadModalAjax.js" asp-append-version="true"></script>
 </body>

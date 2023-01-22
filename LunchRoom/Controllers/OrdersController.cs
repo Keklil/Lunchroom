@@ -81,7 +81,7 @@ namespace LunchRoom.Controllers
         /// <param name="groupId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<OrderReportDto>>> GetOrdersReportByDay(DateTime date, Guid groupId)

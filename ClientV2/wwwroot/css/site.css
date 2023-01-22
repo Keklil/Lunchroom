@@ -14,9 +14,7 @@ html {
 }
 
 .active-card {
-  border-color: #28a745 !important;
-  background-color: #f2f2f2;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-color: #FF4F5A !important;
 }
 
 .card {

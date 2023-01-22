@@ -13,6 +13,9 @@ public class Index : PageModel
     public GroupDto GroupInfo { get; set; }
     public List<UserDto> UserDtos { get; set; }
     public PaymentInfo PaymentInfo { get; set; }
+    
+    public string QrImage { get; set; }
+    
     public Index(IApiClientV2 api)
     {
         _api = api;
@@ -36,6 +39,8 @@ public class Index : PageModel
         {
             PaymentInfo.Description = groupInfo.PaymentInfo.Description;
             PaymentInfo.Link = groupInfo.PaymentInfo.Link;
+            if (!string.IsNullOrWhiteSpace(groupInfo.PaymentInfo.Qr))
+                QrImage = string.Format("data:image/jpg;base64, {0}", groupInfo.PaymentInfo.Qr);
         }
 
         if (groupInfo.Settings is not null)
@@ -55,23 +60,36 @@ public class Index : PageModel
             paymentInfo.Description = groupInfo.PaymentInfo.Description;
             paymentInfo.Link = groupInfo.PaymentInfo.Link;
         }
+
+        if (!string.IsNullOrWhiteSpace(groupInfo.PaymentInfo.Qr))
+        {
+            var file = Convert.FromBase64String(groupInfo.PaymentInfo.Qr);
+            var stream = new MemoryStream(file);
+            var formFile = new FormFile(stream, 0, stream.Length, "qr", "qr");
+            paymentInfo.FormFile = formFile;
+        }
+        
         return Partial("_PaymentModalPartial", paymentInfo);
     }
     
     public async Task<ActionResult> OnPostPaymentModalPartialAsync(PaymentInfo paymentInfo)
     {
+        if (!ModelState.IsValid)
+            return Partial("_PaymentModalPartial", paymentInfo);
+        
         string qrBase64 = null;
-        using (var memoryStream = new MemoryStream())
+        using var memoryStream = new MemoryStream();
+        if (paymentInfo.FormFile is not null)
         {
             await paymentInfo.FormFile.CopyToAsync(memoryStream);
-            
+                        
             if (memoryStream.Length < 1097152)
             {
                 qrBase64 = Convert.ToBase64String(memoryStream.ToArray());
             }
             else
             {
-                ModelState.AddModelError("File", "The file is too large.");
+                ModelState.AddModelError("FormFile", "Файл слишком большой");
             }
         }
 

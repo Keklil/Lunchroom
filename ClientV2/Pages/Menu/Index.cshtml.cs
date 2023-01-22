@@ -14,8 +14,13 @@ public class Index : PageModel
 
     [BindProperty]
     public List<Guid> CheckedOption { get; set; }
+    
+    [BindProperty]
+    public int LunchSetUnits { get; set; }
+    
     [BindProperty]
     public string CheckedLunchSet { get; set; }
+    
     public MenuDto? Menu { get; set; }
     
     public Index(IApiClientV2 api, IHttpContextAccessor accessor,
@@ -48,24 +53,56 @@ public class Index : PageModel
         }
 
         Menu.LunchSets = Menu.LunchSets.OrderBy(x => x.Price).ToList();
-        var lunchSetsJson = JsonSerializer.Serialize(Menu.LunchSets);
         Menu.Options = Menu.Options.OrderBy(x => x.Price).ToList();
-        var optionsJson = JsonSerializer.Serialize(Menu.Options);
-        
+
         HttpContext.Session.SetString("MenuId", Menu.Id.ToString());
-        HttpContext.Session.SetString("MenuLunchSets", lunchSetsJson);
-        HttpContext.Session.SetString("MenuOptions", optionsJson);
         return Page();
     }
 
-    public async Task<PartialViewResult> OnGetLunchSetsPartialAsync()
+
+    public async Task<ActionResult> OnPostAsync()
     {
-        var lunchSetsJson = HttpContext.Session.GetString("MenuLunchSets");
-        if (lunchSetsJson != null)
+        var container = new OrderContainer() { OptionsIds = new() };
+
+        if (LunchSetUnits > 0 && 
+            !string.IsNullOrWhiteSpace(CheckedLunchSet) && 
+            Guid.TryParse(CheckedLunchSet, out var lunchId))
         {
-            var lunchSets = JsonSerializer.Deserialize<List<LunchSetDto>>(lunchSetsJson);
-            return Partial("_LunchSetsPartial", lunchSets);
+            container.LunchSetId = lunchId;
+            container.LunchSetUnits = LunchSetUnits;
         }
-        return Partial("_LunchSetsPartial", new List<LunchSetDto>());
+
+        if (CheckedOption is not null && CheckedOption.Count > 0)
+        {
+            container.OptionsIds = CheckedOption;
+        }
+
+        if (container.LunchSetUnits > 0 || container.OptionsIds.Count > 0)
+        {
+            var cart = HttpContext.Session.GetString("cart");
+            if (!string.IsNullOrWhiteSpace(cart))
+            {
+                var cartEntity = JsonSerializer.Deserialize<List<OrderContainer>>(cart);
+                cartEntity.Add(container);
+                var cartJson = JsonSerializer.Serialize(cartEntity);
+                HttpContext.Session.SetString("cart", cartJson);
+            }
+            else
+            {
+                var newCart = new List<OrderContainer>();
+                newCart.Add(container);
+                var cartJson = JsonSerializer.Serialize(newCart);
+                HttpContext.Session.SetString("cart", cartJson);
+            }
+        }
+        return Redirect("/Menu");
     }
+    
+}
+
+public class OrderContainer
+{
+    public Guid LunchSetId { get; set; }
+    public int LunchSetUnits { get; set; }
+    public List<Guid> OptionsIds { get; set; }
 }

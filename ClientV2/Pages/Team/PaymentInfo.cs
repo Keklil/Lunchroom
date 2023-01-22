@@ -5,9 +5,9 @@ namespace ClientV2.Pages.Team;
 public class PaymentInfo
 {
     [Display(Name="QR")]
-    public IFormFile FormFile { get; set; }
+    public IFormFile? FormFile { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Обязательное поле")]
     public string Link { get; set; }
     
     public string Description { get; set; }

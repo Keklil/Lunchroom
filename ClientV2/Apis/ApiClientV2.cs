@@ -2651,10 +2651,10 @@ namespace ClientV2.Apis
         public string Link { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("qr")]
-        public string Qr { get; set; }
+        public string? Qr { get; set; }
 
     }
 

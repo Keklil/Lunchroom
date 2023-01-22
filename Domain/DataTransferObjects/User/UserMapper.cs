@@ -14,4 +14,6 @@ public static class UserMapper
             Groups = source.Groups.Select(x => x.Id).ToList()
         };
     }
+    
+    
 }
