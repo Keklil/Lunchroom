@@ -2,13 +2,13 @@
 {
     <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0" style="font-size: 18px; font-weight: 600">
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Menu">Меню</a>
+            <a class="nav-link text-dark" asp-page="/Menu/Index">Меню</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-page="/Orders/History">История заказов</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Order/UserOrdersHistory">Корзина</a>
+            <a class="nav-link text-dark" asp-page="/Cart/Index">Корзина</a>
         </li>
         <li>
             <a asp-page="/Account/Edit" class="d-flex link-dark text-decoration-none">
@@ -35,7 +35,7 @@ else if (User.IsInRole("Admin"))
             <a class="nav-link text-dark" asp-page="/Orders/History">История заказов</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Order/UserOrdersHistory">Корзина</a>
+            <a class="nav-link text-dark" asp-page="/Cart/Index">Корзина</a>
         </li>
         <li>
             <a asp-page="/Account/Edit" class="d-flex link-dark text-decoration-none">

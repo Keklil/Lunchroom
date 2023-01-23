@@ -10,13 +10,15 @@ public static class OrderMapper
             CustomerId = source.CustomerId,
             GroupId = source.GroupId,
             OrderDate = source.OrderDate,
-            LunchSet = new Menu.LunchSetDto
-            {
-                Id = source.LunchSet.Id,
-                Price = source.LunchSet.Price,
-                LunchSetList = source.LunchSet.LunchSetList,
-                LunchSetUnits = source.LunchSetUnits
-            },
+            LunchSet = source.LunchSetId != default 
+                ? new Menu.LunchSetDto
+                {
+                    Id = source.LunchSet.Id,
+                    Price = source.LunchSet.Price,
+                    LunchSetList = source.LunchSet.LunchSetList,
+                    LunchSetUnits = source.LunchSetUnits
+                }
+                : null,
             Options = source.Options.Select(sourceOption => new OrderOptionDto
             {
                 Id = sourceOption.Id,

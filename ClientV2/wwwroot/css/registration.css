@@ -308,6 +308,8 @@ body {
 .delete-user-btn {
     color: #FF4F5A;
     font-size: 16px;
+    border: none;
+    background: none;
     line-height: 19px;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -568,7 +570,7 @@ body {
 .basket__dish {
     display: flex;
     width: 780px;
-    height: 92px;
+
     border-bottom: 1px solid #A9B1BB;
     margin-bottom: 32px;
     padding-bottom: 32px;
@@ -589,7 +591,7 @@ body {
 }
 
 .basket__dish-end {
-    width: 100%;
+    
 }
 
 .basket__top-right-area {
@@ -608,8 +610,6 @@ body {
 }
 
 .counter {
-    position: absolute;
-    bottom: 32px;
     display: flex;
     align-items: center;
     gap: 25px;
@@ -622,8 +622,6 @@ body {
 .basket__dish-order-date {
     font-size: 18px;
     line-height: 21px;
-    position: absolute;
-    bottom: 32px;
 }
 
 .total {

@@ -34,10 +34,16 @@
                                 </div>
                             }
                         </div>
-                        <div class="mx-auto mb-3" id="counter" style="display: none;">
-                            <span class="minus">-</span>
+                        <div class="mx-auto mb-3 counter" id="counter" style="display: none;">
+                            <svg class="minus" width="13" height="2" viewBox="0 0 13 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.39453 1H11.3945" stroke="#1A2E35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                             <input type="text" class="lunch-counter" asp-for="LunchSetUnits" value="1"/>
-                            <span class="plus">+</span>
+                            <svg class="plus" width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.39453 6H11.3945" stroke="#1A2E35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6.39453 11V1" stroke="#1A2E35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            
                         </div>
                     </div>
                 </div>

@@ -25,8 +25,11 @@ namespace Application.Commands
 
             var menu = await _repository.Menu.GetMenuAsync(request.Order.MenuId, trackChanges: false);
 
-            var lunchSet = menu.GetLunchSetById(request.Order.LunchSetId);
-            orderEntity.AddLunchSet(lunchSet, request.Order.LunchSetUnits);            
+            if (request.Order.LunchSetId != default)
+            {
+                var lunchSet = menu.GetLunchSetById(request.Order.LunchSetId);
+                orderEntity.AddLunchSet(lunchSet, request.Order.LunchSetUnits);   
+            }
             
             var orderOptions = request.Order.Options;
 

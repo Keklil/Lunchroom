@@ -60,11 +60,9 @@ function makeActive(element) {
 function clickCheckbox(inputElement) {
     $('#submit').fadeIn();
     if ($("#" + inputElement + "-card").hasClass("active-card")){
-        console.log("active true");
         $("#" + inputElement + "-card").removeClass("active-card");
         $("#" + inputElement).prop("checked", false);
     } else {
-        console.log("active false");
         $("#" + inputElement + "-card").addClass("active-card");
         $("#" + inputElement).prop("checked", true);
     }

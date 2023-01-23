@@ -62,7 +62,15 @@ public class Index : PageModel
 
     public async Task<ActionResult> OnPostAsync()
     {
-        var container = new OrderContainer() { OptionsIds = new() };
+        var menuIdRaw = HttpContext.Session.GetString("MenuId");
+        Guid.TryParse(menuIdRaw, out var menuId);
+                
+        var container = new OrderContainer()
+        {
+            Id = Guid.NewGuid(), 
+            OptionsIds = new(),
+            MenuId = menuId
+        };
 
         if (LunchSetUnits > 0 && 
             !string.IsNullOrWhiteSpace(CheckedLunchSet) && 
@@ -102,6 +110,8 @@ public class Index : PageModel
 
 public class OrderContainer
 {
+    public Guid MenuId { get; set; }
+    public Guid Id { get; set; }
     public Guid LunchSetId { get; set; }
     public int LunchSetUnits { get; set; }
     public List<Guid> OptionsIds { get; set; }

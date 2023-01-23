@@ -1,4 +1,5 @@
 @page "{handler?}"
+@using ClientV2.Apis
 @model ClientV2.Pages.Orders.History
 
 @{
@@ -7,19 +8,45 @@
 <body>
 <div class="container">
     <div class="content__wrapper">
-        <div class="basket-wrapper basket-wrapper_height_full">
+        <div class="basket-wrapper basket-wrapper_height_full d-flex justify-content-center">
             <div class="basket">
                 @foreach (var order in Model.UserOrders)
                 {
                     <div class="basket__dish">
                         <img class="basket__dish-img" src="~/images/dish.png"/>
-                        <div class="basket__dish-middle">
-                            <span class="basket__dish-name">Комбо набор №1</span>
-                            <div class="basket__dish-order-date">01.12.2022</div>
+                        <div class="basket__dish-middle d-flex flex-column">
+                            <div class="row">
+                                <span class="col basket__dish-name mb-1">@(order.LunchSet is not null ? "Комбо набор" : "")</span>
+                                <span class="col mb-1">@(order.LunchSet is not null ? $"{order.LunchSet?.Price.ToString()} ₽ x {order.LunchSet?.LunchSetUnits.ToString()}" : "")</span>
+                            </div>    
+                            @if (order.Options.Count > 0)
+                            {
+                                foreach (var option in order.Options)
+                                {
+                                    <div class="row">
+                                        <div class="col">@option.Option.Name</div>
+                                        <div class="col">@option.Option.Price.ToString()₽</div> 
+                                    </div>
+                                }
+                            }
+                            <div class="basket__dish-order-date mt-auto">@order.OrderDate.ToString("dd.MM.yyyy")</div>
                         </div>
                         <div class="basket__dish-end">
-                            <span class="basket__top-right-area">240 ₽</span>
-                            <span class="basket__dish-price">240 ₽</span>
+                            @{
+                                decimal sum = 0;
+                                foreach (var x in order.Options)
+                                {
+                                    sum += x.Option.Price;
+                                }
+                            }
+                            @if (order.LunchSet is null)
+                            {
+                                <span class="basket__dish-price">@sum.ToString() ₽</span>
+                            }
+                            else
+                            {
+                                <span class="basket__dish-price">@((order.LunchSet.Price * order.LunchSet.LunchSetUnits + sum).ToString()) ₽</span>
+                            }
                         </div>
                     </div>
                 }
