@@ -29,7 +29,7 @@
                                     </div>
                                 }
                             }
-                            <div class="basket__dish-order-date mt-auto">@order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy")</div>
+                            <div class="basket__dish-order-date mt-auto pt-2">@order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
                         </div>
                         <div class="basket__dish-end">
                             @if (order.LunchSet is null)

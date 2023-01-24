@@ -13,17 +13,14 @@
                 @foreach (var item in Model.Cart)
                 {
                     <div class="basket__dish" id="@item.Id.ToString()">
-                        <img class="basket__dish-img d-none d-md-flex me-3" src="~/images/dish.png"/>
+                        <img class="basket__dish-img d-none d-md-flex me-4" src="~/images/dish.png"/>
                         <div class="basket__dish-middle me-auto">
                             @if (item.LunchId != default)
                             {
                                 <span class="basket__dish-name">
                                     <div class="row mb-1">
                                         <div class="col-7">@item.LunchName</div>
-                                        @if (item.Options.Count > 0)
-                                        {
-                                            <div class="col">@item.LunchPrice.ToString()₽</div>
-                                        }
+                                        <div class="col" style="font-size: 14px;">@item.LunchPrice.ToString()₽ x @item.LunchSetUnits.ToString()</div>
                                     </div>
                                 </span>
                             }

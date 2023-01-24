@@ -41,7 +41,8 @@ public class Index : PageModel
             {
                 order.LunchId = item.LunchSetId;
                 order.LunchName = "Комбо набор";
-                order.LunchPrice = Menu.LunchSets.Single(x => x.Id == item.LunchSetId).Price; 
+                order.LunchPrice = Menu.LunchSets.Single(x => x.Id == item.LunchSetId).Price;
+                order.LunchSetUnits = item.LunchSetUnits;
             }
             foreach (var option in item.OptionsIds)
             {
@@ -49,7 +50,7 @@ public class Index : PageModel
                 {
                     Id = option,
                     Name = Menu.Options.SingleOrDefault(x => x.Id == option)?.Name ?? string.Empty,
-                    Price = Menu.Options.SingleOrDefault(x => x.Id == option)?.Price ?? 0L
+                    Price = Menu.Options.SingleOrDefault(x => x.Id == option)?.Price ?? 0L,
                 };
                 order.Options.Add(cartOption);
             }
@@ -94,7 +95,8 @@ public class CartOrder
     public Guid LunchId { get; set; }
     public string LunchName { get; set; }
     public decimal LunchPrice { get; set; }
-    public decimal TotalPrice => LunchPrice + OptionsTotalPrice;
+    public int LunchSetUnits { get; set; }
+    public decimal TotalPrice => LunchPrice * LunchSetUnits + OptionsTotalPrice;
     public decimal OptionsTotalPrice => Options.Sum(x => x.Price);
     public List<CartOption> Options { get; set; } = new();
     
