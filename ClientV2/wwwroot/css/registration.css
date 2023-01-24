@@ -585,23 +585,24 @@ body {
 } 
 
 .basket__dish-middle {
-    width: 400px;
-    margin-left: 32px;
+    min-width: 292px;
+    max-width: 450px;
 }
 
 .basket__dish-end {
-    
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .basket__top-right-area {
-    position: absolute;
-    top: 0;
-    right: 0;
+
 }
 
 .basket__dish-price {
     font-size: 22px;
-    position: absolute;
+    min-width: 67px;
     bottom: 32px;
     right: 0;
     line-height: 26px;

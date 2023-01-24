@@ -13,8 +13,8 @@
                 @foreach (var item in Model.Cart)
                 {
                     <div class="basket__dish" id="@item.Id.ToString()">
-                        <img class="basket__dish-img" src="~/images/dish.png"/>
-                        <div class="basket__dish-middle">
+                        <img class="basket__dish-img d-none d-md-flex me-3" src="~/images/dish.png"/>
+                        <div class="basket__dish-middle me-auto">
                             @if (item.LunchId != default)
                             {
                                 <span class="basket__dish-name">
@@ -45,16 +45,15 @@
                                 <input type="hidden" name="cartOrderId" value="@item.Id.ToString()"/>
                             </form>
                             
-                            <span class="basket__dish-price">@(item.TotalPrice.ToString()) ₽</span>
+                            <span class="basket__dish-price mt-3">@(item.TotalPrice.ToString()) ₽</span>
                         </div>
                     </div>
                 }
             </div>
         </div>
-        <div class="total">
-            <span class="total__header">Общая стоимость</span>
-            <span class="total__price">@Model.TotalPrice ₽</span>
-            <form method="post" style="display: inline-block;">
+        <div class="total row align-items-center">
+            <span class="total__header col pb-3 pb-md-0" style="text-align: center">Общая стоимость <span class="total__price">@Model.TotalPrice ₽</span></span>
+            <form method="post" class="col" style="display: inline-block;">
                 <button class="total__payment-link basic-button" type="submit">Перейти к оплате</button>
             </form>
         </div>

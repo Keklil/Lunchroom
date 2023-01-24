@@ -13,10 +13,10 @@
                 @foreach (var order in Model.UserOrders)
                 {
                     <div class="basket__dish">
-                        <img class="basket__dish-img d-none d-md-block" src="~/images/dish.png"/>
-                        <div class="basket__dish-middle d-flex flex-column">
+                        <img class="basket__dish-img d-none d-md-flex me-5" src="~/images/dish.png"/>
+                        <div class="basket__dish-middle w-100 d-flex flex-column me-auto">
                             <div class="row">
-                                <span class="col basket__dish-name mb-1">@(order.LunchSet is not null ? "Комбо набор" : "")</span>
+                                <span class="col-8 basket__dish-name mb-1">@(order.LunchSet is not null ? "Комбо набор" : "")</span>
                                 <span class="col mb-1">@(order.LunchSet is not null ? $"{order.LunchSet?.Price.ToString()} ₽ x {order.LunchSet?.LunchSetUnits.ToString()}" : "")</span>
                             </div>    
                             @if (order.Options.Count > 0)
@@ -24,7 +24,7 @@
                                 foreach (var option in order.Options)
                                 {
                                     <div class="row">
-                                        <div class="col">@option.Option.Name</div>
+                                        <div class="col-8">@option.Option.Name</div>
                                         <div class="col">@option.Option.Price.ToString()₽</div> 
                                     </div>
                                 }
@@ -32,20 +32,13 @@
                             <div class="basket__dish-order-date mt-auto">@order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy")</div>
                         </div>
                         <div class="basket__dish-end">
-                            @{
-                                decimal sum = 0;
-                                foreach (var x in order.Options)
-                                {
-                                    sum += x.Option.Price;
-                                }
-                            }
                             @if (order.LunchSet is null)
                             {
-                                <span class="basket__dish-price">@sum.ToString() ₽</span>
+                                <span class="basket__dish-price">@order.Options.Sum(x => x.Option.Price).ToString() ₽</span>
                             }
                             else
                             {
-                                <span class="basket__dish-price">@((order.LunchSet.Price * order.LunchSet.LunchSetUnits + sum).ToString()) ₽</span>
+                                <span class="basket__dish-price">@((order.LunchSet.Price * order.LunchSet.LunchSetUnits + order.Options.Sum(x => x.Option.Price)).ToString()) ₽</span>
                             }
                         </div>
                     </div>
