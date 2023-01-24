@@ -29,7 +29,7 @@
                                     </div>
                                 }
                             }
-                            <div class="basket__dish-order-date mt-auto">@order.OrderDate.ToString("dd.MM.yyyy")</div>
+                            <div class="basket__dish-order-date mt-auto">@order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy")</div>
                         </div>
                         <div class="basket__dish-end">
                             @{

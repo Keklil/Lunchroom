@@ -75,7 +75,7 @@ namespace Services.OrdersReport
                 
                 var row = new OrderReportDto()
                 {
-                    
+                    LunchSetUnits = order.o.LunchSetUnits,
                     LunchSetPrice = order.ls.Price.ToString(),
                     OptionsPrice = optionsPriceToString.TrimStart('+'),
                     Summary = order.o.Payment ? order.ls.Price + optionsPrice : 0,

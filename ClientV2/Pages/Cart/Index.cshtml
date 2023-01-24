@@ -19,7 +19,7 @@
                             {
                                 <span class="basket__dish-name">
                                     <div class="row mb-1">
-                                        <div class="col">@item.LunchName</div>
+                                        <div class="col-7">@item.LunchName</div>
                                         @if (item.Options.Count > 0)
                                         {
                                             <div class="col">@item.LunchPrice.ToString()₽</div>
@@ -32,7 +32,7 @@
                                 foreach (var option in item.Options)
                                 {
                                     <div class="row">
-                                        <div class="col">@option.Name</div>
+                                        <div class="col-7">@option.Name</div>
                                         <div class="col">@option.Price.ToString()₽</div>
                                     </div>
                                 }

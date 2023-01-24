@@ -1,26 +1,33 @@
-﻿@model List<ClientV2.Apis.OrderDto>
+﻿@model List<ClientV2.Apis.OrderReportDto>
 
-<div class="orders-header">
-    <span>Пользователь</span>
-    <span>Информация о заказе</span>
-    <span>Сумма</span>
-</div>
-<div class="scroll-container-wrapper">
-    <div class="scroll-container">
-        <div class="order">
-            <div class="order__user">ФИО сотрудника</div>
-            <div class="order__dishes">
-                <div class="order__dish">Комбо набор №1</div>
-                <div class="order__dish">Комбо набор №1</div>
-            </div>
-            <div class="order__costs">
-                <div class="order__item-cost">240 P</div>
-                <div class="order__item-cost">240 P</div>
-                <div class="order__item-cost order__item-cost_total">
-                    <span class="order__item-cost_margin-30">Итого:</span>
-                    <span>480 P</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+<table class="table mt-4">
+    <thead>
+    <tr class="orders-header">
+        <th scope="col">Пользователь</th>
+        <th scope="col">Обеденный набор</th>
+        <th scope="col">Опции</th>
+        <th scope="col">Сумма</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model is not null)
+    {
+        var i = 1;
+        foreach (var row in Model)
+        {
+            <tr>
+                <td>@row.UserName</td>
+                <td>@row.LunchSetPrice</td>
+                <td>@row.OptionsPrice</td>
+                <td>@row.Summary.ToString()</td>
+            </tr>
+        }
+    }
+    <tr>
+        <td colspan="2"></td>
+        <td class="text-right">Итого: </td>
+        <td class="text-right">@Model.Sum(x => x.Summary).ToString()</td>
+    </tr>
+    </tbody>
+</table>

@@ -33,9 +33,13 @@ namespace Repository
 
         public async Task<List<Order>> GetOrdersByDateAsync(DateTime date, Guid groupId)
         {
-            return await FindByCondition(x => x.OrderDate.Date == date && x.GroupId == groupId, false)
-                .Include(x => x.Options)
-                .ToListAsync();
+            var orders = _repositoryContext.Orders
+                .Where(x => x.OrderDate.Date == date.Date && x.GroupId == groupId)
+                .Include(x => x.Options);
+
+            var ordersStr = orders.ToQueryString();
+
+            return await orders.ToListAsync();
         }
 
         public async Task<List<OrdersForUser>> GetOrdersByUserAsync(Guid userId, Guid groupId)
