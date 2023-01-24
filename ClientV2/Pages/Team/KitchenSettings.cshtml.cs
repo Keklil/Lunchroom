@@ -1,11 +1,13 @@
 ﻿using ClientV2.Apis;
 using ClientV2.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ClientV2.Pages.Team;
 
+[Authorize]
 public class KitchenSettings : PageModel
 {
     private readonly IApiClientV2 _api;

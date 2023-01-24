@@ -2,11 +2,13 @@
 using ClientV2.Apis;
 using ClientV2.Pages.Menu;
 using ClientV2.Pages.Team;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClientV2.Pages.Orders;
 
+[Authorize]
 public class Confirm : PageModel
 {
     private readonly IApiClientV2 _api;

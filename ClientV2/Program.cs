@@ -17,7 +17,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         o.AccessDeniedPath = "/Account/AccessDenied";
         o.SlidingExpiration = false;
         o.ExpireTimeSpan = new TimeSpan(30, 0, 0, 0);
-    });;
+    });
 
 builder.Services.AddHttpClient<IApiClientV2, ApiClientV2>(client =>
     {

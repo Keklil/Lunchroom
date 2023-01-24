@@ -1,9 +1,11 @@
 using ClientV2.Apis;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ClientV2.Pages.Report;
 
+[Authorize]
 public class Orders : PageModel
 {
     private readonly IApiClientV2 _api;

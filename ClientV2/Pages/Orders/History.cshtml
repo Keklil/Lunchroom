@@ -13,7 +13,7 @@
                 @foreach (var order in Model.UserOrders)
                 {
                     <div class="basket__dish">
-                        <img class="basket__dish-img" src="~/images/dish.png"/>
+                        <img class="basket__dish-img d-none d-md-block" src="~/images/dish.png"/>
                         <div class="basket__dish-middle d-flex flex-column">
                             <div class="row">
                                 <span class="col basket__dish-name mb-1">@(order.LunchSet is not null ? "Комбо набор" : "")</span>

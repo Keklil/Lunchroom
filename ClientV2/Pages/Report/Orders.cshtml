@@ -9,8 +9,10 @@
     <div class="content__wrapper">
         <div class="monitoring">
             <form asp-page="Orders" id="date-form" asp-page-handler="OrderDetails">
-                <input class="monitoring__search soft-rect" placeholder="Поиск..."/>
-                <input type="date" id="date" class="date soft-rect" asp-for="DateSearch" />
+                <div class="row">
+                    <input class="col-8 monitoring__search soft-rect" placeholder="Поиск..."/>
+                    <input type="date" id="date" class="col date soft-rect" asp-for="DateSearch"/>
+                </div>
             </form>
             <div id="orders-placeholder" data-url="@Url.Page("Orders", "OrderDetails")"></div>
         </div>

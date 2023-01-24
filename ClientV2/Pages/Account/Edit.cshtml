@@ -1,6 +1,10 @@
 ﻿@page
 @model ClientV2.Pages.Account.Edit
 
+@{
+    ViewData["Title"] = "Профиль";
+}
+
 <!DOCTYPE html>
 
 <html>
@@ -24,7 +28,10 @@
             <span class="mb-1" asp-validation-for="SurnameForm"></span>
         </div>
         
-        <button class="w-100 btn btn-lg btn-primary mt-5" type="submit">Сохранить изменения</button>
+        <button class="w-50 btn btn btn-danger btn-danger-custom mt-5" type="submit">Сохранить изменения</button>
+    </form>
+    <form method="post" class="d-flex justify-content-center" asp-page="/Account/Logout">
+        <button type="submit" class="btn btn-link">Выйти</button>
     </form>
     @if (!Model.User.NameFill)
     {
