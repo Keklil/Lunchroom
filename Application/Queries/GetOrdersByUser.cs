@@ -5,7 +5,7 @@ using Domain.DataTransferObjects.User;
 
 namespace Application.Queries
 {
-    public sealed record GetOrdersByUser(Guid userId)
+    public sealed record GetOrdersByUser(Guid UserId, Guid GroupId)
         : IRequest<List<OrdersForUser>>;
 
     internal class GetOrdersByUserHandler : IRequestHandler<GetOrdersByUser, List<OrdersForUser>>
@@ -19,7 +19,7 @@ namespace Application.Queries
 
         public async Task<List<OrdersForUser>> Handle(GetOrdersByUser request, CancellationToken cancellationToken)
         {
-            var listOrders = await _repository.Order.GetOrdersByUserAsync(request.userId);
+            var listOrders = await _repository.Order.GetOrdersByUserAsync(request.UserId, request.GroupId);
 
             return listOrders;
         }

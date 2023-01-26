@@ -18,10 +18,73 @@ namespace Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Models.Group", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("AdminId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Referral")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("Domain.Models.GroupKitchenSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("HourExpired")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("KitchenName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("MenuFormat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinuteExpired")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PeriodicRefresh")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TargetEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId")
+                        .IsUnique();
+
+                    b.ToTable("GroupKitchenSettings");
+                });
 
             modelBuilder.Entity("Domain.Models.LunchSet", b =>
                 {
@@ -52,6 +115,9 @@ namespace Repository.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsReported")
                         .HasColumnType("boolean");
@@ -91,8 +157,14 @@ namespace Repository.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("LunchSetId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("LunchSetUnits")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("MenuId")
                         .HasColumnType("uuid");
@@ -137,6 +209,35 @@ namespace Repository.Migrations
                     b.ToTable("OrdersOptions");
                 });
 
+            modelBuilder.Entity("Domain.Models.PaymentInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Qr")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId")
+                        .IsUnique();
+
+                    b.ToTable("PaymentInfo");
+                });
+
             modelBuilder.Entity("Domain.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -152,12 +253,15 @@ namespace Repository.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Patronymic")
                         .HasColumnType("text");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Surname")
                         .HasColumnType("text");
@@ -184,6 +288,41 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmailValidations");
+                });
+
+            modelBuilder.Entity("GroupUser", b =>
+                {
+                    b.Property<Guid>("GroupsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MembersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("GroupsId", "MembersId");
+
+                    b.HasIndex("MembersId");
+
+                    b.ToTable("GroupUser");
+                });
+
+            modelBuilder.Entity("Domain.Models.Group", b =>
+                {
+                    b.HasOne("Domain.Models.User", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+                });
+
+            modelBuilder.Entity("Domain.Models.GroupKitchenSettings", b =>
+                {
+                    b.HasOne("Domain.Models.Group", null)
+                        .WithOne("Settings")
+                        .HasForeignKey("Domain.Models.GroupKitchenSettings", "GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.LunchSet", b =>
@@ -220,6 +359,39 @@ namespace Repository.Migrations
                     b.HasOne("Domain.Models.Order", null)
                         .WithMany("Options")
                         .HasForeignKey("OrderId");
+                });
+
+            modelBuilder.Entity("Domain.Models.PaymentInfo", b =>
+                {
+                    b.HasOne("Domain.Models.Group", null)
+                        .WithOne("PaymentInfo")
+                        .HasForeignKey("Domain.Models.PaymentInfo", "GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GroupUser", b =>
+                {
+                    b.HasOne("Domain.Models.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Group", b =>
+                {
+                    b.Navigation("PaymentInfo")
+                        .IsRequired();
+
+                    b.Navigation("Settings")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.Menu", b =>

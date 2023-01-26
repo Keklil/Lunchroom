@@ -12,8 +12,6 @@ namespace Application.Validators
 
             RuleFor(x => x.Order.MenuId).NotEmpty();
 
-            RuleFor(x => x.Order.LunchSetId).NotEmpty();
-
             RuleFor(x => x.Order.Options)
                 .ForEach(options => options
                 .ChildRules(option =>

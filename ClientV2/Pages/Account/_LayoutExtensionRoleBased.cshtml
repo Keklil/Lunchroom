@@ -1,0 +1,53 @@
+﻿
+@if (User.IsInRole("User"))
+{
+    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0" style="font-size: 18px; font-weight: 600">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Menu/Index">Меню</a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Cart/Index">
+                Корзина
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Orders/History">История заказов</a>
+        </li>
+        <li>
+            <a asp-page="/Account/Edit" class="d-flex link-dark text-decoration-none">
+                <svg class="d-flex" width="24" height="24">
+                    <use xlink:href="#people-circle"></use>
+                </svg>
+            </a>
+        </li>
+    </ul>
+}
+else if (User.IsInRole("Admin"))
+{
+    <ul class="navbar-nav flex-grow-1 col-md-auto mb-2 justify-content-evenly align-items-center mb-sm-0" style="font-size: 18px; font-weight: 600">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Menu/Index">Меню</a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Cart/Index">
+                Корзина
+            </a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Orders/History">История заказов</a>
+        </li>        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Report/Orders">Контроль заказов</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-page="/Team/Index">Команда</a>
+        </li>
+        <li>
+            <a asp-page="/Account/Edit" class="d-flex link-dark text-decoration-none">
+                <svg class="d-flex" width="24" height="24">
+                    <use xlink:href="#people-circle"></use>
+                </svg>
+            </a>
+        </li>
+    </ul>
+}

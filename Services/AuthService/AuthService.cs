@@ -1,15 +1,20 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using Contracts;
 using Contracts.Repositories;
 using Contracts.Security;
+using Domain.DataTransferObjects.User;
 using Microsoft.IdentityModel.Tokens;
 using Domain.Exceptions;
+using Domain.Exceptions.AuthExceptions;
 using Domain.Models;
 using Domain.SecurityModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Org.BouncyCastle.Security;
 
 namespace Services.AuthService;
 
@@ -37,25 +42,23 @@ public class AuthService : IAuthService
         hostLink = _configuration.GetSection("LunchRoomDomainName").Value + "/EmailConfirmation?token=";
     }
     
-    public async Task<string> Auth(string email)
+    public async Task<string> Auth(UserLogin login)
     {
-        var user = await _repository.User.GetUserByEmailAsync(email);
+        var user = await _repository.User.GetUserByEmailAsync(login.Email);
         if (user is null)
         {
-            var newUser = new User(email);
-            _repository.User.CreateUser(newUser);
-            await _repository.SaveAsync();
-            await SendConfirmationEmail(newUser.Email);
-            return null;
+            throw new UserNotFoundException(login.Email);
         }
         else if (user.IsEmailChecked is false)
         {
-            await SendConfirmationEmail(user.Email);
-            return null;
+            throw new UnconfirmedEmailException();
         }
         else
         {
-            var token = await _tokenService.Generate(user);
+            var passMatch = user.Password == login.Password;
+            var token = passMatch 
+                ? await _tokenService.Generate(user) 
+                : throw new WrongUserCredentialsException();
             return token;
         }
     }
@@ -145,4 +148,38 @@ public class AuthService : IAuthService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     } 
+    
+    public async Task<User> RegisterAdmin(UserRegisterDto user)
+    {
+        var userEntity = await _repository.User.GetUserByEmailAsync(user.email);
+        if (userEntity is not null)
+        {
+            throw new UserExistsException();
+        }
+        else
+        {
+            var newUser = new User(user.email, user.password, true);
+            _repository.User.CreateUser(newUser);
+            await SendConfirmationEmail(user.email);
+            await _repository.SaveAsync();
+            return newUser;
+        }
+    }
+    
+    public async Task<User> RegisterUser(UserRegisterDto user)
+    {
+        var userEntity = await _repository.User.GetUserByEmailAsync(user.email);
+        if (userEntity is not null)
+        {
+            throw new UserExistsException();
+        }
+        else
+        {
+            var newUser = new User(user.email, user.password, false);
+            _repository.User.CreateUser(newUser);
+            await SendConfirmationEmail(user.email);
+            await _repository.SaveAsync();
+            return newUser;
+        }
+    }
 }

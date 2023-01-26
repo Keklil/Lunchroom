@@ -6,15 +6,18 @@ using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
 using LoggerService;
+using LunchRoom.Controllers.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
+using NSwag.Examples;
 using NSwag.Generation.Processors.Security;
 using Quartz;
 using Repository;
 using Services.MailService;
 using Services.OrdersReport;
+using ZymLabs.NSwag.FluentValidation;
 
 namespace LunchRoom.Extensions
 {
@@ -64,9 +67,9 @@ namespace LunchRoom.Extensions
 
         public static void ConfigureReportingKitchenService(this IServiceCollection services)
         {
-            services.AddSingleton<ReportingKitchenService>();
-            services.AddHostedService(
-                serviceProvider => serviceProvider.GetRequiredService<ReportingKitchenService>());
+            // services.AddSingleton<ReportingKitchenService>();
+            // services.AddHostedService(
+            //     serviceProvider => serviceProvider.GetRequiredService<ReportingKitchenService>());
         }
         
 
@@ -100,54 +103,24 @@ namespace LunchRoom.Extensions
         
         public static void ConfigureSwagger(this IServiceCollection services)
         {
-            services.AddOpenApiDocument(document =>
+            services.AddExampleProviders(typeof(UploadMenuExamples).Assembly);
+            services.AddOpenApiDocument((settings, serviceProvider) =>
             {
-                document.AddSecurity("JWT", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
+                settings.AddSecurity("JWT", Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.ApiKey,
                     Name = "Authorization",
                     In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
+                    Description = "Type into the textbox: Bearer {your JWT token}.",
                 });
  
-                document.OperationProcessors.Add(
+                settings.OperationProcessors.Add(
                     new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+
+                settings.GenerateEnumMappingDescription = true;
+                
+                settings.AddExamples(serviceProvider);
             });
-            
-            /*
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "LunchRoom API"
-                });
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
-                    }
-                });
-
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-            });*/
         }
     }
 }

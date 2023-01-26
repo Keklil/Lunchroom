@@ -1,0 +1,8 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    <button type="submit" asp-page="/Account/Logout" class="btn btn-link">Выйти</button>
+}
+else
+{
+    <a class="btn" asp-page="/Account/Login">Войти</a>
+}

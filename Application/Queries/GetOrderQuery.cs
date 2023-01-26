@@ -30,14 +30,18 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
 
         var menu = await _repository.Menu.GetMenuAsync(orderEntity.MenuId, false);
         
-        
         var order = _mapper.Map<OrderDto>(orderEntity);
-        
-        var lunchSet = menu.LunchSets
-            .Where(x => x.Id == orderEntity.LunchSetId)
-            .SingleOrDefault();
 
-        order.LunchSet = _mapper.Map<LunchSetDto>(lunchSet);
+        if (orderEntity.LunchSetId != default)
+        {
+           var lunchSet = menu.LunchSets
+               .Where(x => x.Id == orderEntity.LunchSetId)
+               .SingleOrDefault();
+           
+            order.LunchSet = _mapper.Map<LunchSetDto>(lunchSet); 
+            order.LunchSet.LunchSetUnits = orderEntity.LunchSetUnits;
+        }
+        
         foreach (var option in order.Options)
         {
             var optionFromMenu = menu.Options

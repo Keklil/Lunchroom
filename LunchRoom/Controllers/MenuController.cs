@@ -1,17 +1,20 @@
 ﻿using Application.Queries;
 using Application.Commands;
+using Application.Notifications;
 using Contracts;
 using Domain.DataTransferObjects.Menu;
+using Domain.ErrorModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Services.MailService;
 
 namespace LunchRoom.Controllers
 {
     
     [Route("api/[controller]/[action]")]
-    [Authorize(Roles = "admin,user")]
+    [Authorize(Roles = "Admin,User")]
     [ApiController]
     [Produces("application/json")]
     public class MenuController : ControllerBase
@@ -30,35 +33,54 @@ namespace LunchRoom.Controllers
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MenuDto>> GetTodayMenu()
+        [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<MenuDto>> GetTodayMenu(Guid groupId)
         {
             var dateSearch = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             
-            var menu = await _sender.Send(new GetMenuQuery(dateSearch));
+            var menu = await _sender.Send(new GetMenuQuery(dateSearch, groupId));
 
             return Ok(menu);
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MenuDto>> GetMenuByDate(DateTime date)
+        [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<MenuDto>> GetMenuByDate(DateTime date, Guid groupId)
         {
             var dateSearch = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-            var menu = await _sender.Send(new GetMenuQuery(dateSearch));
+            var menu = await _sender.Send(new GetMenuQuery(dateSearch, groupId));
 
             return Ok(menu);
         }
         
+        /// <summary>
+        /// История всех загруженных меню
+        /// </summary>
+        /// <returns>Возвращает список идентификаторов и дат загрузки меню</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<MenuForList>>> GetAllMenus()
+        public async Task<ActionResult<List<MenuForList>>> GetAllMenus(Guid groupId)
         {
-            var menus = await _sender.Send(new GetAllMenusQuery());
+            var menus = await _sender.Send(new GetAllMenusQuery(groupId));
 
             return Ok(menus);
+        }
+
+        /// <summary>
+        /// Загрузка меню
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UploadMenu([FromBody]RawMenuDto request)
+        {
+            var rawMenu = string.Join("\n", request.Menu);
+            await _publisher.Publish(new EmailWithMenuFetched(rawMenu, request.GroupId));
+            
+            return Ok();
         }
     }
 }

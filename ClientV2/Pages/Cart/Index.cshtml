@@ -1,0 +1,59 @@
+﻿@page
+@model ClientV2.Pages.Cart.Index
+
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+
+<div class="content">
+    <div class="content__wrapper">
+        <div class="scroll-container-wrapper">
+            <div class="scroll-container basket">
+                @foreach (var item in Model.Cart)
+                {
+                    <div class="basket__dish" id="@item.Id.ToString()">
+                        <img class="basket__dish-img d-none d-md-flex me-4" src="~/images/dish.png"/>
+                        <div class="basket__dish-middle me-auto">
+                            @if (item.LunchId != default)
+                            {
+                                <span class="basket__dish-name">
+                                    <div class="row mb-1">
+                                        <div class="col-7">@item.LunchName</div>
+                                        <div class="col" style="font-size: 14px;">@item.LunchPrice.ToString()₽ x @item.LunchSetUnits.ToString()</div>
+                                    </div>
+                                </span>
+                            }
+                            @if (item.Options.Count > 0)
+                            {
+                                foreach (var option in item.Options)
+                                {
+                                    <div class="row">
+                                        <div class="col-7">@option.Name</div>
+                                        <div class="col">@option.Price.ToString()₽</div>
+                                    </div>
+                                }
+                                
+                            }
+                        </div>
+                        <div class="basket__dish-end">
+                            <form asp-page-handler="delete" method="post">
+                                <button class="delete-user-btn basket__top-right-area">Удалить</button>
+                                <input type="hidden" name="cartOrderId" value="@item.Id.ToString()"/>
+                            </form>
+                            
+                            <span class="basket__dish-price mt-3">@(item.TotalPrice.ToString()) ₽</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="total row align-items-center">
+            <span class="total__header col pb-3 pb-md-0" style="text-align: center">Общая стоимость <span class="total__price">@Model.TotalPrice ₽</span></span>
+            <form method="post" class="col" style="display: inline-block;">
+                <button class="total__payment-link basic-button" type="submit">Перейти к оплате</button>
+            </form>
+        </div>
+    </div>
+</div>
+        

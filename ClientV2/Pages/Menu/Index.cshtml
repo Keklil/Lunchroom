@@ -1,0 +1,68 @@
+﻿@page "{handler?}"
+@model ClientV2.Pages.Menu.Index
+
+@{
+    ViewData["Title"] = "Меню";
+}
+
+<div class="content content_no-width">
+    <div class="content__wrapper w-100">
+        <div class="search">
+            <input class="search__input"/>
+        </div>
+        <div class="categories">
+            <button class="category" data-toggle="lunchsets">наборы</button>
+            <button class="category" data-toggle="options">опции</button>
+        </div>
+        <form method="post" class="d-flex flex-column mb-5" asp-page="Index">
+            <input type="hidden"/>
+            <div class="dish-container-wrapper">
+                <div id="lunch-placeholder">
+                    <div class="d-flex flex-column">
+                        <div class="dish-container">
+                            @foreach (var item in Model.Menu.LunchSets)
+                            {
+                                <div class="dish-container__dish d-flex flex-column lunchset" role="button" id="@item.Id.ToString()-card">
+                                    <input class="form-check-input d-none form-control" asp-for="CheckedLunchSet" id="@item.Id.ToString()" type="radio" value="@item.Id.ToString()">
+                                    <img class="dish-container__dish-img mb-auto" src="~/images/dish.png"/>
+                                    <div class="dish-container__dish-description">@item.LunchSetList.FirstOrDefault(x => x.Contains("Салат", StringComparison.CurrentCultureIgnoreCase))</div>
+                                    <div class="dish-container__dish-description">@item.LunchSetList.FirstOrDefault(x => x.Contains("Суп", StringComparison.CurrentCultureIgnoreCase))</div>
+                                    <div class="dish-container__dish-description">@item.LunchSetList.FirstOrDefault(x => !x.Contains("Салат", StringComparison.CurrentCultureIgnoreCase) && !x.Contains("Суп", StringComparison.CurrentCultureIgnoreCase))</div>
+                                    <div class="d-flex align-items-center justify-content-end mt-auto">
+                                        <span class="dish-container__dish-price me-2">@item.Price.ToString()₽</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="mx-auto mb-3 counter" id="counter" style="display: none;">
+                            <svg class="minus" width="13" height="2" viewBox="0 0 13 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.39453 1H11.3945" stroke="#1A2E35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <input type="text" class="lunch-counter" asp-for="LunchSetUnits" value="1"/>
+                            <svg class="plus" width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.39453 6H11.3945" stroke="#1A2E35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6.39453 11V1" stroke="#1A2E35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-container" id="options-placeholder">
+                    @foreach (var item in Model.Menu.Options)
+                    {
+                        <div class="dish-container__dish d-flex flex-column option" role="button" id="@item.Id.ToString()-card">
+                            <input class="form-check-input d-none" name="CheckedOption" type="checkbox" value="@item.Id.ToString()" id="@item.Id.ToString()">
+                            <div class="dish-container__dish-description">@item.Name</div>
+                            <div class="d-flex align-items-center justify-content-end mt-auto">
+                                <span class="dish-container__dish-price me-3">@item.Price.ToString()₽</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <button class="btn btn-danger btn-danger-custom mx-auto" id="submit" type="submit" style="display: none; min-width: 220px; max-width: 360px">Добавить заказ</button>
+        </form>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/menu.js" type="application/javascript" asp-append-version="true"></script>

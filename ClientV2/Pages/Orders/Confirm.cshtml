@@ -1,0 +1,21 @@
+﻿@page
+@model ClientV2.Pages.Orders.Confirm
+
+@{
+    ViewData["Title"] = "Оформить заказ";
+}
+
+
+<div class="content">
+    <div class="content__wrapper payment mb-5">
+        <div class="subtitle hor-centered-block">Пожалуйста, отсканируйте QR-код для оплаты заказа</div>
+        <img class="img-btm_size_middle mx-auto d-flex" src="@Model.PaymentInfo.Qr"/> 
+        <a class="link hor-centered-block" href="@Model.PaymentInfo.Link">Ссылка для перевода денег на карту</a>
+        <div class="text-center" role="alert">
+            Стоимость заказа - @Model.TotalPrice₽
+        </div>
+        <form method="post">
+            <button type="submit" class="basic-button payment-btn hor-centered-block">Подтвердить заказ</button>
+        </form>
+    </div>
+</div>

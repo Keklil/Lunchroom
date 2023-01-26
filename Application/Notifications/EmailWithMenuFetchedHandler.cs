@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace Application.Notifications
 {
-    public sealed record EmailWithMenuFetched(string mailBody, bool TrackChanges) : INotification;
+    public sealed record EmailWithMenuFetched(string MailBody, Guid GroupId) : INotification;
 
     internal sealed class EmailWithMenuFetchedHandler : INotificationHandler<EmailWithMenuFetched>
     {
@@ -29,7 +29,7 @@ namespace Application.Notifications
                 WriteIndented = true
             };
 
-            var mailBody = notification.mailBody;
+            var mailBody = notification.MailBody;
             List<string> menuRaw = _mailParser.NormalizeMenu(mailBody);
             var text = JsonSerializer.Serialize(menuRaw, options);
             _logger.LogInfo($"{text}");
@@ -38,7 +38,7 @@ namespace Application.Notifications
             text = JsonSerializer.Serialize(menuDto, options);
             _logger.LogInfo($"{text}");
             
-            var menu = await _sender.Send(new CreateMenuCommand(menuDto));
+            var menu = await _sender.Send(new CreateMenuCommand(menuDto, notification.GroupId));
         }
     }
 

@@ -1,0 +1,33 @@
+﻿@model List<ClientV2.Apis.OrderReportDto>
+
+
+<table class="table mt-4">
+    <thead>
+    <tr class="orders-header">
+        <th scope="col">Пользователь</th>
+        <th scope="col">Обеденный набор</th>
+        <th scope="col">Опции</th>
+        <th scope="col">Сумма</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model is not null)
+    {
+        var i = 1;
+        foreach (var row in Model)
+        {
+            <tr>
+                <td>@row.UserName</td>
+                <td>@row.LunchSetPrice</td>
+                <td>@row.OptionsPrice</td>
+                <td>@row.Summary.ToString()</td>
+            </tr>
+        }
+    }
+    <tr>
+        <td colspan="2"></td>
+        <td style="text-align: end">Итого: </td>
+        <td class="text-right">@Model.Sum(x => x.Summary).ToString()</td>
+    </tr>
+    </tbody>
+</table>

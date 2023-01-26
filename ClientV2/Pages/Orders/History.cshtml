@@ -1,0 +1,52 @@
+@page "{handler?}"
+@using ClientV2.Apis
+@model ClientV2.Pages.Orders.History
+
+@{
+    ViewData["Title"] = "История заказов";
+}
+<body>
+<div class="container">
+    <div class="content__wrapper">
+        <div class="basket-wrapper basket-wrapper_height_full d-flex justify-content-center">
+            <div class="basket">
+                @foreach (var order in Model.UserOrders)
+                {
+                    <div class="basket__dish">
+                        <img class="basket__dish-img d-none d-md-flex me-5" src="~/images/dish.png"/>
+                        <div class="basket__dish-middle w-100 d-flex flex-column me-auto">
+                            <div class="row">
+                                <span class="col-8 basket__dish-name mb-1">@(order.LunchSet is not null ? "Комбо набор" : "")</span>
+                                <span class="col mb-1">@(order.LunchSet is not null ? $"{order.LunchSet?.Price.ToString()} ₽ x {order.LunchSet?.LunchSetUnits.ToString()}" : "")</span>
+                            </div>    
+                            @if (order.Options.Count > 0)
+                            {
+                                foreach (var option in order.Options)
+                                {
+                                    <div class="row">
+                                        <div class="col-8">@option.Option.Name</div>
+                                        <div class="col">@option.Option.Price.ToString()₽</div> 
+                                    </div>
+                                }
+                            }
+                            <div class="basket__dish-order-date mt-auto pt-2">@order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                        <div class="basket__dish-end">
+                            @if (order.LunchSet is null)
+                            {
+                                <span class="basket__dish-price">@order.Options.Sum(x => x.Option.Price).ToString() ₽</span>
+                            }
+                            else
+                            {
+                                <span class="basket__dish-price">@((order.LunchSet.Price * order.LunchSet.LunchSetUnits + order.Options.Sum(x => x.Option.Price)).ToString()) ₽</span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/uploadDishes.js" asp-append-version="true"></script>
+</body>

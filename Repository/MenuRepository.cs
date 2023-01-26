@@ -12,6 +12,8 @@ namespace Repository
         {
 
         }
+        
+        
 
         public async Task<Menu> GetMenuAsync(Guid menuId, bool trackChanges)
         {
@@ -21,19 +23,20 @@ namespace Repository
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Menu> GetMenuByDateAsync(DateTime date)
+        public async Task<Menu> GetMenuByDateAsync(DateTime date, Guid groupId)
         {
             var dateSearch = date.ToUniversalTime().Date;
-            var menu = await FindByCondition(x => x.Date.Date.Equals(dateSearch), false)
+            var menu = await FindByCondition(x => x.Date.Date.Equals(dateSearch) && x.GroupId.Equals(groupId), false)
                 .Include(x => x.LunchSets)
                 .Include(x => x.Options)
                 .FirstOrDefaultAsync();
             return menu;
         }
 
-        public async Task<List<Menu>> GetMenus()
+        public async Task<List<Menu>> GetMenus(Guid groupId)
         {
             var menus = await _repositoryContext.Menu
+                .Where(x => x.GroupId.Equals(groupId))
                 .OrderByDescending(x => x.Date)
                 .ToListAsync();
             return menus;

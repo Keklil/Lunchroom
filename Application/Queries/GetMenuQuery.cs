@@ -8,7 +8,7 @@ using Domain.DataTransferObjects.Menu;
 
 namespace Application.Queries
 {
-    public sealed record GetMenuQuery(DateTime date) :
+    public sealed record GetMenuQuery(DateTime Date, Guid GroupId) :
         IRequest<MenuDto>;
     internal class GetMenuQueryHandler : IRequestHandler<GetMenuQuery, MenuDto>
     {
@@ -24,9 +24,9 @@ namespace Application.Queries
 
         public async Task<MenuDto> Handle(GetMenuQuery request, CancellationToken cancellationToken)
         {
-            var menu = await _repository.Menu.GetMenuByDateAsync(request.date);
+            var menu = await _repository.Menu.GetMenuByDateAsync(request.Date, request.GroupId);
             if (menu is null)
-                throw new NotFoundException($"Menu not found for this date: {request.date.Date}");
+                throw new NotFoundException($"Меню не найдено для даты: {request.Date.Date}");
             return _mapper.Map<MenuDto>(menu);
         }
     }

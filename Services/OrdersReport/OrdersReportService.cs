@@ -24,15 +24,15 @@ namespace Services.OrdersReport
             };
         }
         
-        public async Task<List<OrderReportDto>> GenerateOrdersReport(DateTime date, bool excludeWithoutConfirmedPayment)
+        public async Task<List<OrderReportDto>> GenerateOrdersReport(DateTime date, Guid groupId, bool excludeWithoutConfirmedPayment)
         {
-            var orders = await _repository.Order.GetOrdersByDateAsync(date);
+            var orders = await _repository.Order.GetOrdersByDateAsync(date, groupId);
             if (excludeWithoutConfirmedPayment)
                 orders = orders.Where(x => x.Payment).ToList();
             
             var listUserIds = orders.AsParallel().Select(x => x.CustomerId).ToList();
             var users = await _repository.User.GetListUsersByIds(listUserIds);
-            var menu = await GetMenu(date);
+            var menu = await GetMenu(date, groupId);
 
             var orderReport = new List<OrderReportDto>();
 
@@ -75,7 +75,7 @@ namespace Services.OrdersReport
                 
                 var row = new OrderReportDto()
                 {
-                    
+                    LunchSetUnits = order.o.LunchSetUnits,
                     LunchSetPrice = order.ls.Price.ToString(),
                     OptionsPrice = optionsPriceToString.TrimStart('+'),
                     Summary = order.o.Payment ? order.ls.Price + optionsPrice : 0,
@@ -120,9 +120,9 @@ namespace Services.OrdersReport
             return reportForSend;
         }
         
-        public async Task<Menu> GetMenu(DateTime date)
+        public async Task<Menu> GetMenu(DateTime date, Guid groupId)
         {
-            var menu = await _repository.Menu.GetMenuByDateAsync(date);
+            var menu = await _repository.Menu.GetMenuByDateAsync(date, groupId);
 
             return menu;
         }
