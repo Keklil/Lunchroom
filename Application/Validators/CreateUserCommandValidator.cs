@@ -1,15 +1,14 @@
 ﻿using Application.Commands;
 using FluentValidation;
 
-namespace Application.Validators
+namespace Application.Validators;
+
+public class CreateUserCommandValidator :
+    AbstractValidator<CreateUserCommand>
 {
-    public class CreateUserCommandValidator :
-        AbstractValidator<CreateUserCommand>
+    public CreateUserCommandValidator()
     {
-        public CreateUserCommandValidator()
-        {
-            RuleFor(x => x.User.email).NotEmpty();
-            RuleFor(x => x.User.password).NotEmpty();
-        }
+        RuleFor(x => x.User.email).NotEmpty();
+        RuleFor(x => x.User.password).NotEmpty();
     }
 }

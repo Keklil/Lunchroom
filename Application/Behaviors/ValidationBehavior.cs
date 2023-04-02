@@ -2,44 +2,43 @@
 using FluentValidation;
 using MediatR;
 
-namespace Application.Behaviors
+namespace Application.Behaviors;
+
+public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
 {
-    public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+    private readonly IEnumerable<IValidator<TRequest>> _validators;
+
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        if (!_validators.Any())
+            return await next();
 
-        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
-        {
-            _validators = validators;
-        }
+        var context = new ValidationContext<TRequest>(request);
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
-	        CancellationToken cancellationToken)
-        {
-			if (!_validators.Any())
-				return await next();
+        var errorsDictionary = _validators
+            .Select(x => x.Validate(context))
+            .SelectMany(x => x.Errors)
+            .Where(x => x != null)
+            .GroupBy(
+                x => x.PropertyName.Substring(x.PropertyName.IndexOf('.') + 1),
+                x => x.ErrorMessage,
+                (propertyName, errorMessages) => new
+                {
+                    Key = propertyName,
+                    Values = errorMessages.Distinct().ToArray()
+                })
+            .ToDictionary(x => x.Key, x => x.Values);
 
-			var context = new ValidationContext<TRequest>(request);
+        if (errorsDictionary.Any())
+            throw new ValidationAppException(errorsDictionary);
 
-			var errorsDictionary = _validators
-				.Select(x => x.Validate(context))
-				.SelectMany(x => x.Errors)
-				.Where(x => x != null)
-				.GroupBy(
-					x => x.PropertyName.Substring(x.PropertyName.IndexOf('.') + 1),
-					x => x.ErrorMessage,
-					(propertyName, errorMessages) => new
-					{
-						Key = propertyName,
-						Values = errorMessages.Distinct().ToArray()
-					})
-				.ToDictionary(x => x.Key, x => x.Values);
+        return await next();
+    }
 
-			if (errorsDictionary.Any())
-				throw new ValidationAppException(errorsDictionary);
-
-			return await next();
-		}
+    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    {
+        _validators = validators;
     }
 }

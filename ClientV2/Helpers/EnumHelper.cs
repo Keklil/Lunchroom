@@ -2,7 +2,7 @@
 
 namespace ClientV2.Helpers;
 
-public static  class EnumHelper
+public static class EnumHelper
 {
     public static SelectList ToEnumDescriptionsList<TEnum>(this TEnum value)
     {

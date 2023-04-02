@@ -1,9 +1,8 @@
-﻿namespace Contracts
+﻿namespace Contracts;
+
+public interface IMailIdleClient
 {
-    public interface IMailIdleClient
-    {
-        Task RunAsync();
-        void Exit();
-        void Dispose();
-    }
+    Task RunAsync();
+    void Exit();
+    void Dispose();
 }

@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using Contracts;
+﻿using Contracts;
 using Contracts.Repositories;
 using Domain.DataTransferObjects.Group;
 using Domain.Exceptions;
 using Domain.Models;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Commands.Groups;
 
@@ -12,16 +12,9 @@ public sealed record CreateGroupCommand(Guid AdminId, string OrganizationName, s
 
 internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, GroupDto>
 {
+    private readonly ILogger<CreateGroupHandler> _logger;
     private readonly IRepositoryManager _repository;
-    private readonly ILoggerManager _logger;
     private readonly ITokenService _tokenService;
-
-    public CreateGroupHandler(IRepositoryManager repository, ILoggerManager logger, ITokenService tokenService)
-    {
-        _repository = repository;
-        _logger = logger;
-        _tokenService = tokenService;
-    }
 
     public async Task<GroupDto> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
@@ -36,7 +29,7 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
             var referToken = await _tokenService.GenerateReferral(group);
 
             group.SetReferralToken(referToken);
-            
+
             _repository.Groups.CreateGroup(group);
             await _repository.SaveAsync();
 
@@ -52,10 +45,12 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
             _logger.LogError(ex.ToString());
             throw;
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.ToString());
-            throw;
-        }
+    }
+
+    public CreateGroupHandler(IRepositoryManager repository, ILogger<CreateGroupHandler> logger, ITokenService tokenService)
+    {
+        _repository = repository;
+        _logger = logger;
+        _tokenService = tokenService;
     }
 }

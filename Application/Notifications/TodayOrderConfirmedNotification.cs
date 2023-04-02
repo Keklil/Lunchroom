@@ -1,27 +1,25 @@
 ﻿using Contracts;
 using MediatR;
-using System.Text.Encodings.Web;
-using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Notifications;
 
-public sealed record TodayOrderConfirmedNotification() : INotification;
+public sealed record TodayOrderConfirmedNotification : INotification;
 
 internal sealed class TodayOrderConfirmedHandler : INotificationHandler<TodayOrderConfirmedNotification>
 {
-    private readonly ILoggerManager _logger;
-    private readonly ISender _sender;
+    private readonly ILogger<TodayOrderConfirmedHandler> _logger;
     private readonly IMailParser _mailParser;
-    
-    public TodayOrderConfirmedHandler(ILoggerManager logger, ISender sender, IMailParser mailService)
+    private readonly ISender _sender;
+
+    public async Task Handle(TodayOrderConfirmedNotification notification, CancellationToken cancellationToken)
+    {
+    }
+
+    public TodayOrderConfirmedHandler(ILogger<TodayOrderConfirmedHandler> logger, ISender sender, IMailParser mailService)
     {
         _logger = logger;
         _sender = sender;
         _mailParser = mailService;
-    }
-
-    public async Task Handle(TodayOrderConfirmedNotification notification, CancellationToken cancellationToken)
-    {
-        
     }
 }

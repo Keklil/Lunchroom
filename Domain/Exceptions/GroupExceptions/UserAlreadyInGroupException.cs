@@ -2,5 +2,7 @@
 
 public class UserAlreadyInGroupException : BadRequestException
 {
-    public UserAlreadyInGroupException() : base("Пользователь уже включен в группу"){}
+    public UserAlreadyInGroupException() : base("Пользователь уже включен в группу")
+    {
+    }
 }

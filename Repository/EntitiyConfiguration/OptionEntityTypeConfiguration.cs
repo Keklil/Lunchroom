@@ -2,20 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Repository.EntitiyConfiguration
+namespace Repository.EntitiyConfiguration;
+
+internal class OptionEntityTypeConfiguration : IEntityTypeConfiguration<Option>
 {
-    class OptionEntityTypeConfiguration : IEntityTypeConfiguration<Option>
+    public void Configure(EntityTypeBuilder<Option> optionConfiguraion)
     {
-        public void Configure(EntityTypeBuilder<Option> optionConfiguraion)
-        {
-            optionConfiguraion.HasKey(x => x.Id);
+        optionConfiguraion.HasKey(x => x.Id);
 
-            optionConfiguraion.Property(x => x.Id)
-                .ValueGeneratedNever();
+        optionConfiguraion.Property(x => x.Id)
+            .ValueGeneratedNever();
 
-            optionConfiguraion.Property<string>(x => x.Name);
+        optionConfiguraion.Property<string>(x => x.Name);
 
-            optionConfiguraion.Property<decimal>(x => x.Price);
-        }
+        optionConfiguraion.Property(x => x.Price);
     }
 }

@@ -33,7 +33,6 @@
                                         <div class="col">@option.Price.ToString()₽</div>
                                     </div>
                                 }
-                                
                             }
                         </div>
                         <div class="basket__dish-end">
@@ -41,7 +40,7 @@
                                 <button class="delete-user-btn basket__top-right-area">Удалить</button>
                                 <input type="hidden" name="cartOrderId" value="@item.Id.ToString()"/>
                             </form>
-                            
+
                             <span class="basket__dish-price mt-3">@(item.TotalPrice.ToString()) ₽</span>
                         </div>
                     </div>

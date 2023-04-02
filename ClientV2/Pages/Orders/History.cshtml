@@ -1,5 +1,4 @@
 @page "{handler?}"
-@using ClientV2.Apis
 @model ClientV2.Pages.Orders.History
 
 @{
@@ -18,18 +17,18 @@
                             <div class="row">
                                 <span class="col-8 basket__dish-name mb-1">@(order.LunchSet is not null ? "Комбо набор" : "")</span>
                                 <span class="col mb-1">@(order.LunchSet is not null ? $"{order.LunchSet?.Price.ToString()} ₽ x {order.LunchSet?.LunchSetUnits.ToString()}" : "")</span>
-                            </div>    
+                            </div>
                             @if (order.Options.Count > 0)
                             {
                                 foreach (var option in order.Options)
                                 {
                                     <div class="row">
                                         <div class="col-8">@option.Option.Name</div>
-                                        <div class="col">@option.Option.Price.ToString()₽</div> 
+                                        <div class="col">@option.Option.Price.ToString()₽</div>
                                     </div>
                                 }
                             }
-                            <div class="basket__dish-order-date mt-auto pt-2">@order.OrderDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                            <div class="basket__dish-order-date mt-auto pt-2">@order.OrderDate.ToLocalTime().AddHours(5).ToString("dd.MM.yyyy HH:mm")</div>
                         </div>
                         <div class="basket__dish-end">
                             @if (order.LunchSet is null)

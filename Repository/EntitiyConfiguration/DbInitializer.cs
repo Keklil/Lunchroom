@@ -7,17 +7,9 @@ namespace Repository.EntitiyConfiguration;
 
 public class DbInitializer
 {
-    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IConfiguration _configuration;
-    private string adminEmail;
-
-    public DbInitializer(IServiceScopeFactory scopeFactory, IConfiguration configuration)
-    {
-        _scopeFactory = scopeFactory;
-        _configuration = configuration;
-
-        adminEmail = _configuration.GetSection("AdminEmail").Value;
-    }
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly string adminEmail;
 
     public void Initialize()
     {
@@ -46,5 +38,13 @@ public class DbInitializer
                 context.SaveChanges();
             }
         }
+    }
+
+    public DbInitializer(IServiceScopeFactory scopeFactory, IConfiguration configuration)
+    {
+        _scopeFactory = scopeFactory;
+        _configuration = configuration;
+
+        adminEmail = _configuration.GetSection("AdminEmail").Value;
     }
 }

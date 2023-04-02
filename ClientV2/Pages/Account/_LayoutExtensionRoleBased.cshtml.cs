@@ -6,6 +6,5 @@ public class _LayoutExtensionRoleBased : PageModel
 {
     public void OnGet()
     {
-
     }
 }

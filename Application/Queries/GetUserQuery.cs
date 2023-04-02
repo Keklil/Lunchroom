@@ -1,36 +1,35 @@
 ﻿using AutoMapper;
-using MediatR;
 using Contracts.Repositories;
 using Domain.DataTransferObjects.User;
 using Domain.Exceptions;
+using MediatR;
 
-namespace Application.Queries
+namespace Application.Queries;
+
+public sealed record GetUserQuery(Guid Id) :
+    IRequest<UserDto>;
+
+internal class GetUserHandler : IRequestHandler<GetUserQuery, UserDto>
 {
-    public sealed record GetUserQuery(Guid Id) :
-        IRequest<UserDto>;
+    private readonly IMapper _mapper;
+    private readonly IRepositoryManager _repository;
 
-    internal class GetUserHandler : IRequestHandler<GetUserQuery, UserDto>
+    public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        private readonly IRepositoryManager _repository;
-        private readonly IMapper _mapper;
+        var userEntity = await _repository.User.GetUserAsync(request.Id, true);
+        if (userEntity is null)
+            throw new UserNotFoundException(request.Id);
 
-        public GetUserHandler(IRepositoryManager repository, IMapper mapper)
-        {
-            _repository = repository;
-            _mapper = mapper;
-        }
+        var user = userEntity.Map();
+        if (user.Name.Length > 0 && user.Surname.Length > 0)
+            user.NameFill = true;
 
-        public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
-        {
-            var userEntity = await _repository.User.GetUserAsync(request.Id, true);
-            if (userEntity is null)
-                throw new UserNotFoundException(request.Id);
+        return user;
+    }
 
-            var user = userEntity.Map();
-            if (user.Name.Length > 0 && user.Surname.Length > 0)
-                user.NameFill = true;
-            
-            return user;
-        }
+    public GetUserHandler(IRepositoryManager repository, IMapper mapper)
+    {
+        _repository = repository;
+        _mapper = mapper;
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Domain.DataTransferObjects.Group;
+﻿namespace Domain.DataTransferObjects.Group;
 
 public class PaymentInfoDto
 {

@@ -6,6 +6,5 @@ public class Error404 : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

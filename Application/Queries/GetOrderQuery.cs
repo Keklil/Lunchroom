@@ -1,11 +1,9 @@
-﻿using MediatR;
-using AutoMapper;
-using Domain.Models;
-using Contracts;
+﻿using AutoMapper;
 using Contracts.Repositories;
 using Domain.DataTransferObjects.Menu;
 using Domain.DataTransferObjects.Order;
 using Domain.Exceptions;
+using MediatR;
 
 namespace Application.Queries;
 
@@ -13,14 +11,8 @@ public sealed record GetOrderQuery(Guid OrderId) : IRequest<OrderDto>;
 
 internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
 {
-    private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
-    
-    public GetOrderHandler(IRepositoryManager repository, IMapper mapper)
-    {
-        _repository = repository;
-        _mapper = mapper;
-    }
+    private readonly IRepositoryManager _repository;
 
     public async Task<OrderDto> Handle(GetOrderQuery request, CancellationToken cancellationToken)
     {
@@ -29,19 +21,19 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
             throw new NotFoundException("Order not found");
 
         var menu = await _repository.Menu.GetMenuAsync(orderEntity.MenuId, false);
-        
+
         var order = _mapper.Map<OrderDto>(orderEntity);
 
         if (orderEntity.LunchSetId != default)
         {
-           var lunchSet = menu.LunchSets
-               .Where(x => x.Id == orderEntity.LunchSetId)
-               .SingleOrDefault();
-           
-            order.LunchSet = _mapper.Map<LunchSetDto>(lunchSet); 
+            var lunchSet = menu.LunchSets
+                .Where(x => x.Id == orderEntity.LunchSetId)
+                .SingleOrDefault();
+
+            order.LunchSet = _mapper.Map<LunchSetDto>(lunchSet);
             order.LunchSet.LunchSetUnits = orderEntity.LunchSetUnits;
         }
-        
+
         foreach (var option in order.Options)
         {
             var optionFromMenu = menu.Options
@@ -50,7 +42,13 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
 
             option.Option = _mapper.Map<OptionDto>(optionFromMenu);
         }
-        
+
         return order;
+    }
+
+    public GetOrderHandler(IRepositoryManager repository, IMapper mapper)
+    {
+        _repository = repository;
+        _mapper = mapper;
     }
 }

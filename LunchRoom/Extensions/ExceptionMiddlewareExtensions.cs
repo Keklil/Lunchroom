@@ -1,102 +1,100 @@
-﻿using Contracts;
+﻿using System.Text.Json;
 using Domain.ErrorModel;
 using Domain.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Text.Json;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Exceptions.GroupExceptions;
 using LunchRoom.Controllers.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics;
 
-namespace LunchRoom.Extensions
+namespace LunchRoom.Extensions;
+
+public static class ExceptionMiddlewareExtensions
 {
-    public static class ExceptionMiddlewareExtensions
+    public static void ConfigureExceptionHandler(this WebApplication app, ILogger logger)
     {
-        public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager logger)
+        app.UseExceptionHandler(appError =>
         {
-            app.UseExceptionHandler(appError =>
+            appError.Run(async context =>
             {
-                appError.Run(async context =>
+                context.Response.ContentType = "application/json";
+
+                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (contextFeature != null)
                 {
-                    context.Response.ContentType = "application/json";
-
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
+                    context.Response.StatusCode = contextFeature.Error switch
                     {
-                        context.Response.StatusCode = contextFeature.Error switch
-                        {
-                            NotFoundException => StatusCodes.Status404NotFound,
-                            BadRequestException => StatusCodes.Status400BadRequest,
-                            ValidationAppException => StatusCodes.Status400BadRequest,
-                            DomainException => StatusCodes.Status400BadRequest,
-                            _ => StatusCodes.Status500InternalServerError
-                        };
+                        NotFoundException => StatusCodes.Status404NotFound,
+                        BadRequestException => StatusCodes.Status400BadRequest,
+                        ValidationAppException => StatusCodes.Status400BadRequest,
+                        DomainException => StatusCodes.Status400BadRequest,
+                        _ => StatusCodes.Status500InternalServerError
+                    };
 
-                        logger.LogError($"{contextFeature.Error}");
+                    logger.LogError($"{contextFeature.Error}");
 
-                        switch (contextFeature.Error)
-                        {
-                            case ValidationAppException exception:
-                                await context.Response
-                                    .WriteAsync(JsonSerializer.Serialize(new { exception.Errors }));
-                                break;
-                            
-                            case UserExistsException existsException:
-                                await context.Response
-                                    .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
-                                    {
-                                        Code = AuthErrorResponse.ErrorCodes.UserExists, 
-                                        ExceptionMessage = existsException.Message
-                                    }));
-                                break;
-                            
-                            case WrongUserCredentialsException wrongUserCredentialsException:
-                                await context.Response
-                                    .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
-                                    {
-                                        Code = AuthErrorResponse.ErrorCodes.WrongCredentials,
-                                        ExceptionMessage = wrongUserCredentialsException.Message
-                                    }));
-                                break;
-                            
-                            case UnconfirmedEmailException unconfirmedEmailException:
-                                await context.Response
-                                    .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
-                                    {
-                                        Code = AuthErrorResponse.ErrorCodes.UnconfirmedEmail,
-                                        ExceptionMessage = unconfirmedEmailException.Message
-                                    }));
-                                break;
-                            
-                            case UserAlreadyInGroupException userInGroupException:
-                                await context.Response
-                                    .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse()
-                                    {
-                                        Code = GroupErrorResponse.ErrorCodes.UserIsMember,
-                                        ExceptionMessage = userInGroupException.Message
-                                    }));
-                                break;
-                            
-                            case AttemptCreateGroupByNonAdminException attemptCreateGroupByNonAdminException:
-                                await context.Response
-                                    .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse()
-                                    {
-                                        Code = GroupErrorResponse.ErrorCodes.AttemptCreateGroupByNonAdmin,
-                                        ExceptionMessage = attemptCreateGroupByNonAdminException.Message
-                                    }));
-                                break;
-                            
-                            default:
-                                await context.Response
-                                    .WriteAsync(new ErrorDetails()
-                                    {
-                                        StatusCode = context.Response.StatusCode,
-                                        ExceptionMessage = contextFeature.Error.Message
-                                    }.ToString());
-                                break;
-                        }
+                    switch (contextFeature.Error)
+                    {
+                        case ValidationAppException exception:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new { exception.Errors }));
+                            break;
+
+                        case UserExistsException existsException:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
+                                {
+                                    Code = AuthErrorResponse.ErrorCodes.UserExists,
+                                    ExceptionMessage = existsException.Message
+                                }));
+                            break;
+
+                        case WrongUserCredentialsException wrongUserCredentialsException:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
+                                {
+                                    Code = AuthErrorResponse.ErrorCodes.WrongCredentials,
+                                    ExceptionMessage = wrongUserCredentialsException.Message
+                                }));
+                            break;
+
+                        case UnconfirmedEmailException unconfirmedEmailException:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new AuthErrorResponse
+                                {
+                                    Code = AuthErrorResponse.ErrorCodes.UnconfirmedEmail,
+                                    ExceptionMessage = unconfirmedEmailException.Message
+                                }));
+                            break;
+
+                        case UserAlreadyInGroupException userInGroupException:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse
+                                {
+                                    Code = GroupErrorResponse.ErrorCodes.UserIsMember,
+                                    ExceptionMessage = userInGroupException.Message
+                                }));
+                            break;
+
+                        case AttemptCreateGroupByNonAdminException attemptCreateGroupByNonAdminException:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse
+                                {
+                                    Code = GroupErrorResponse.ErrorCodes.AttemptCreateGroupByNonAdmin,
+                                    ExceptionMessage = attemptCreateGroupByNonAdminException.Message
+                                }));
+                            break;
+
+                        default:
+                            await context.Response
+                                .WriteAsync(new ErrorDetails
+                                {
+                                    StatusCode = context.Response.StatusCode,
+                                    ExceptionMessage = contextFeature.Error.Message
+                                }.ToString());
+                            break;
                     }
-                });
+                }
             });
-        }
+        });
     }
 }

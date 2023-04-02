@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
 <body>
@@ -27,7 +27,7 @@
             <input type="text" class="form-control" asp-for="SurnameForm" id="surname" placeholder="" value="@Model.User.Surname" required="">
             <span class="mb-1" asp-validation-for="SurnameForm"></span>
         </div>
-        
+
         <button class="w-50 btn btn btn-danger btn-danger-custom mt-5" type="submit">Сохранить изменения</button>
     </form>
     <form method="post" class="d-flex justify-content-center" asp-page="/Account/Logout">
@@ -35,17 +35,17 @@
     </form>
     @if (!Model.User.NameFill)
     {
-          <div class="position-absolute top-0 end-0 p-3">
-              <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" id="toastNotice">
-                  <div class="toast-header">
-                      <strong class="me-auto">Предупреждение</strong>
-                      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
-                  </div>
-                  <div class="toast-body">
-                         Пожалуйста, заполните информацию о себе. Без этого функция заказа обедов будет недоступна.
-                  </div>
-              </div> 
-          </div>  
+        <div class="position-absolute top-0 end-0 p-3">
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" id="toastNotice">
+                <div class="toast-header">
+                    <strong class="me-auto">Предупреждение</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                </div>
+                <div class="toast-body">
+                    Пожалуйста, заполните информацию о себе. Без этого функция заказа обедов будет недоступна.
+                </div>
+            </div>
+        </div>
     }
 
 

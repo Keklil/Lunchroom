@@ -1,8 +1,9 @@
-﻿namespace Domain.Exceptions
+﻿namespace Domain.Exceptions;
+
+public abstract class BadRequestException : Exception
 {
-    public abstract class BadRequestException : Exception
+    protected BadRequestException(string massage)
+        : base(massage)
     {
-        protected BadRequestException(string massage) 
-            : base(massage) { }
     }
 }

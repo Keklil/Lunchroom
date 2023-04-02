@@ -12,6 +12,10 @@
         <div class="form__header">Загрузить меню</div>
         <div class="text-input">
             <textarea class="text-input__input input" asp-for="MenuRaw" placeholder="Вставьте меню" style="min-height: 240px;"></textarea>
+            @if (Model.AlreadyUpload)
+            {
+                <span class="text-danger">Меню уже загружено!</span>
+            }
         </div>
         <button class="form__submit-button" type="submit">Загрузить меню</button>
     </form>

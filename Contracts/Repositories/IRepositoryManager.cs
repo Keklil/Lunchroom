@@ -1,12 +1,11 @@
-﻿namespace Contracts.Repositories
+﻿namespace Contracts.Repositories;
+
+public interface IRepositoryManager
 {
-    public interface IRepositoryManager
-    {
-        IUserRepository User { get; }
-        IMenuRepository Menu { get; }
-        IOrderRepository Order { get; }
-        ISecurityRepository Security { get; }
-        IGroupRepository Groups { get; }
-        Task SaveAsync();
-    }
+    IUserRepository User { get; }
+    IMenuRepository Menu { get; }
+    IOrderRepository Order { get; }
+    ISecurityRepository Security { get; }
+    IGroupRepository Groups { get; }
+    Task SaveAsync();
 }

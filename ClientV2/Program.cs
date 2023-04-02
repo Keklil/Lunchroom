@@ -1,6 +1,5 @@
 using ClientV2.Apis;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Westwind.AspNetCore.LiveReload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +10,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(o => {
+    .AddCookie(o =>
+    {
         o.LoginPath = "/Account/Login";
         o.LogoutPath = "/Account/Logout";
         o.AccessDeniedPath = "/Account/AccessDenied";
@@ -20,18 +20,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddHttpClient<IApiClientV2, ApiClientV2>(client =>
-    {
-        client.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
-    });
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
+});
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-}
+if (!app.Environment.IsDevelopment()) app.UseExceptionHandler("/Error");
 
 app.UseStatusCodePagesWithRedirects("/Errors/{0}");
 app.UseStaticFiles();

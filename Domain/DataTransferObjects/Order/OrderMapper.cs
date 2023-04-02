@@ -1,4 +1,6 @@
-﻿namespace Domain.DataTransferObjects.Order;
+﻿using Domain.DataTransferObjects.Menu;
+
+namespace Domain.DataTransferObjects.Order;
 
 public static class OrderMapper
 {
@@ -10,8 +12,8 @@ public static class OrderMapper
             CustomerId = source.CustomerId,
             GroupId = source.GroupId,
             OrderDate = source.OrderDate,
-            LunchSet = source.LunchSetId != default 
-                ? new Menu.LunchSetDto
+            LunchSet = source.LunchSetId != default
+                ? new LunchSetDto
                 {
                     Id = source.LunchSet.Id,
                     Price = source.LunchSet.Price,

@@ -1,34 +1,36 @@
-using Microsoft.AspNetCore.HttpOverrides;
-using LunchRoom.Extensions;
-using Contracts;
-using MediatR;
+using Application;
 using Application.Behaviors;
+using Contracts;
 using Contracts.Security;
-using Hangfire;
 using LoggerService;
+using LunchRoom.Extensions;
+using MediatR;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.HttpOverrides;
+using Repository.EntitiyConfiguration;
 using Services.AuthService;
 using Services.MailService;
 using Services.OrdersReport;
-using Repository.EntitiyConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureLoggerService(builder.Configuration);
+builder.Host.ConfigureLogger();
 
 builder.Configuration.AddEnvironmentVariables();
-builder.Services.Configure<SeqConfig>(builder.Configuration.GetSection("Seq"));
 
 builder.Services.AddMemoryCache();
 builder.Services.ConfigureCors();
-builder.Services.ConfigureLoggerService();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>),
-typeof(ValidationBehavior<,>));
-builder.Services.AddMediatR(typeof(Application.AssemblyReference).Assembly);
+    typeof(ValidationBehavior<,>));
+builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
 builder.Services.ConfigureValidator();
 //builder.Services.ConfigureInboxIdleClient();
-builder.Services.AddSingleton<IMailParser,MailParser>();
+builder.Services.AddSingleton<IMailParser, MailParser>();
 builder.Services.AddScoped<IOrdersReportService, OrdersReportService>();
 builder.Services.AddScoped<IMailSender, MailSender>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -42,7 +44,7 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILoggerManager>();
+var logger = app.Services.GetRequiredService<ILogger<ExceptionHandlerMiddleware>>();
 app.ConfigureExceptionHandler(logger);
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();

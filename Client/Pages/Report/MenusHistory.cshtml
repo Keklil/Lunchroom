@@ -1,5 +1,5 @@
 @page
-@model Client.Pages.Report.MenusHistory
+@model MenusHistory
 
 <!DOCTYPE html>
 
@@ -16,11 +16,11 @@
                 {
                     <div id="@menu.Id.ToString()-card" class="card menu mb-4">
                         <div class="card-body p-0" role="button">
-                            
-                                <button class="btn btn-lg w-100" id="@menu.Id.ToString()" type="submit" value="@menu.Date.ToString("yyyy-MM-dd")" name="MenuDate">
-                                    @menu.Date.ToString("dd MMMM")
-                                </button>
-                            
+
+                            <button class="btn btn-lg w-100" id="@menu.Id.ToString()" type="submit" value="@menu.Date.ToString("yyyy-MM-dd")" name="MenuDate">
+                                @menu.Date.ToString("dd MMMM")
+                            </button>
+
                         </div>
                     </div>
                 }

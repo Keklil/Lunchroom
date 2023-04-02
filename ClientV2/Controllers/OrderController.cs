@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using ClientV2.Apis;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ClientV2.Controllers;
 
@@ -9,11 +9,6 @@ public class OrderController : ControllerBase
 {
     private readonly IApiClientV2 _api;
 
-    public OrderController(IApiClientV2 api)
-    {
-        _api = api;
-    }
-
     [HttpPost]
     public async Task<ActionResult> Delete(string orderId)
     {
@@ -22,5 +17,10 @@ public class OrderController : ControllerBase
         await _api.Orders_DeleteOrderAsync(orderIdGuid);
 
         return RedirectToPage("/Index");
+    }
+
+    public OrderController(IApiClientV2 api)
+    {
+        _api = api;
     }
 }

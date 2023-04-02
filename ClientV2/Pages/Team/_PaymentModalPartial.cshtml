@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body d-flex flex-column">
                 <form asp-page="Index" asp-page-handler="PaymentModalPartial">
-                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()"/>
                     <div class="mb-3">
                         <label class="form-label">Загрузите QR-код</label>
                         <input class="form-control" asp-for="FormFile" type="file">

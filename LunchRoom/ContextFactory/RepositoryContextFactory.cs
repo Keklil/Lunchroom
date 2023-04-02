@@ -2,21 +2,19 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Repository;
 
-namespace LunchRoom
+namespace LunchRoom;
+
+public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryContext>
 {
-    public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryContext>
+    public RepositoryContext CreateDbContext(string[] args)
     {
-        public RepositoryContext CreateDbContext(string[] args)
-        {
-            var configuration = new ConfigurationBuilder()
+        var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.Development.json")
             .Build();
-            var builder = new DbContextOptionsBuilder<RepositoryContext>()
+        var builder = new DbContextOptionsBuilder<RepositoryContext>()
             .UseNpgsql(configuration.GetConnectionString("DbConnection"),
                 x => x.MigrationsAssembly(nameof(Repository)));
-            return new RepositoryContext(builder.Options);
-        }
+        return new RepositoryContext(builder.Options);
     }
-
 }

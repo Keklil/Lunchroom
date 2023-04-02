@@ -2,5 +2,7 @@
 
 public class WrongUserCredentialsException : AuthException
 {
-    public WrongUserCredentialsException() : base("Почта и пароль не совпадают."){}
+    public WrongUserCredentialsException() : base("Почта и пароль не совпадают.")
+    {
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Contracts;
 using Contracts.Repositories;
 using Domain.DataTransferObjects.User;
 using Domain.Exceptions;
@@ -12,13 +11,6 @@ public sealed record UpdateUserCommand(Guid UserId, UserForCreationDto User) : I
 internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDto>
 {
     private readonly IRepositoryManager _repository;
-    private readonly IMapper _mapper;
-
-    public UpdateUserCommandHandler(IRepositoryManager repository, IMapper mapper)
-    {
-        _repository = repository;
-        _mapper = mapper;
-    }
 
     public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
@@ -32,5 +24,10 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
 
         var user = userEntity.Map();
         return user;
+    }
+
+    public UpdateUserCommandHandler(IRepositoryManager repository)
+    {
+        _repository = repository;
     }
 }

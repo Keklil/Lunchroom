@@ -11,11 +11,6 @@ internal class GetGroupHandler : IRequestHandler<GetGroupQuery, GroupDto>
 {
     private readonly IRepositoryManager _repository;
 
-    public GetGroupHandler(IRepositoryManager repository)
-    {
-        _repository = repository;
-    }
-    
     public async Task<GroupDto> Handle(GetGroupQuery request, CancellationToken cancellationToken)
     {
         var group = await _repository.Groups.GetGroupAsync(request.Id, false);
@@ -23,5 +18,10 @@ internal class GetGroupHandler : IRequestHandler<GetGroupQuery, GroupDto>
             throw new NotFoundException("Группа не найдена");
 
         return group.Map();
+    }
+
+    public GetGroupHandler(IRepositoryManager repository)
+    {
+        _repository = repository;
     }
 }

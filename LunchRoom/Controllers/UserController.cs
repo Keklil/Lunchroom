@@ -1,6 +1,5 @@
-﻿using Application.Queries;
-using Application.Commands;
-using Contracts;
+﻿using Application.Commands;
+using Application.Queries;
 using Domain.DataTransferObjects.User;
 using Domain.ErrorModel;
 using MediatR;
@@ -15,14 +14,7 @@ namespace LunchRoom.Controllers;
 [Produces("application/json")]
 public class UserController : ControllerBase
 {
-    private readonly ILoggerManager _logger;
     private readonly ISender _sender;
-
-    public UserController(ISender sender, ILoggerManager logger)
-    {
-        _sender = sender;
-        _logger = logger;
-    }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,7 +22,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult<UserDto>> GetUser(Guid userId)
     {
         var user = await _sender.Send(new GetUserQuery(userId));
-        
+
         return Ok(user);
     }
 
@@ -44,11 +36,16 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorDetails),StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<List<Guid>> GetUserGroupIds(Guid userId)
     {
         var groups = await _sender.Send(new GetUserGroupIdsQuery(userId));
 
         return groups;
+    }
+
+    public UserController(ISender sender, ILogger logger)
+    {
+        _sender = sender;
     }
 }

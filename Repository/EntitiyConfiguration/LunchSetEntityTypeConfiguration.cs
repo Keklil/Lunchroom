@@ -2,21 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Repository.EntitiyConfiguration
+namespace Repository.EntitiyConfiguration;
+
+internal class LunchSetEntityTypeConfiguration : IEntityTypeConfiguration<LunchSet>
 {
-    class LunchSetEntityTypeConfiguration : IEntityTypeConfiguration<LunchSet>
+    public void Configure(EntityTypeBuilder<LunchSet> lunchSetConfiguration)
     {
-        public void Configure(EntityTypeBuilder<LunchSet> lunchSetConfiguration)
-        {            
-            lunchSetConfiguration.HasKey(x => x.Id);
+        lunchSetConfiguration.HasKey(x => x.Id);
 
-            lunchSetConfiguration.Property(x => x.Id)
-                .ValueGeneratedNever();
+        lunchSetConfiguration.Property(x => x.Id)
+            .ValueGeneratedNever();
 
-            lunchSetConfiguration.Property(x => x.Price);
+        lunchSetConfiguration.Property(x => x.Price);
 
-            lunchSetConfiguration.Property(x => x.LunchSetList);
-
-        }
+        lunchSetConfiguration.Property(x => x.LunchSetList);
     }
 }

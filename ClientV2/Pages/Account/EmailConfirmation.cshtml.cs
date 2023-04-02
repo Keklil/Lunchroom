@@ -5,9 +5,9 @@ namespace ClientV2.Pages.Account;
 public class EmailConfirmation : PageModel
 {
     public bool Success { get; set; } = true;
+
     public void OnGet()
     {
-        
     }
 
     public void OnGetError()

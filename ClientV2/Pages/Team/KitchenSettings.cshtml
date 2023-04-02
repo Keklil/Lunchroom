@@ -6,37 +6,37 @@
 }
 
 <div>
-   <div class="content">
-       <div class="content__wrapper">
-           <div class="create-team-page__form">
-               <form method="post">
-                   <div class="form form_wide">
-                       <div class="form__header">Информация о столовой</div>
-                       <input type="hidden" asp-for="GroupId"/>
-                       <div class="text-input">
-                           <div class="text-input__label" class="span">Название столовой</div>
-                           <input class="text-input__input" asp-for="Name" type="text" placeholder="Введите название столовой"/>
-                       </div>
-                       <div class="text-input">
-                           <div class="text-input__label" class="span">Email</div>
-                           <input class="text-input__input" asp-for="Email" type="text" placeholder="Введите Email"/>
-                       </div>
-                       <div class="text-input">
-                           <div class="text-input__label" class="span">Переодичность обновления меню</div>
-                           <select class="text-input__input" asp-for="PeriodicRefresh" asp-items="Model.PeriodicRefreshList" placeholder="Выберите переодичность обновления меню"></select>
-                       </div>
-                       <div class="text-input">
-                           <div class="text-input__label" class="span">Ограничение времени заказа</div>
-                           <input class="text-input__input" asp-for="MenuExpired" type="time" placeholder="До скольки надо заказать"/>
-                       </div>
-                       <div class="text-input">
-                           <div class="text-input__label" class="span">Формат меню</div>
-                           <select class="text-input__input" asp-for="MenuFormat" asp-items="Model.MenuFormatList" placeholder="Выберите формат меню"></select>
-                       </div>
-                       <input class="form__submit-button" type="submit" value="Сохранить">
-                   </div>
-               </form>
-           </div>
-       </div>
-   </div> 
+    <div class="content">
+        <div class="content__wrapper">
+            <div class="create-team-page__form">
+                <form method="post">
+                    <div class="form form_wide">
+                        <div class="form__header">Информация о столовой</div>
+                        <input type="hidden" asp-for="GroupId"/>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Название столовой</div>
+                            <input class="text-input__input" asp-for="Name" type="text" placeholder="Введите название столовой"/>
+                        </div>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Email</div>
+                            <input class="text-input__input" asp-for="Email" type="text" placeholder="Введите Email"/>
+                        </div>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Переодичность обновления меню</div>
+                            <select class="text-input__input" asp-for="PeriodicRefresh" asp-items="Model.PeriodicRefreshList" placeholder="Выберите переодичность обновления меню"></select>
+                        </div>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Ограничение времени заказа</div>
+                            <input class="text-input__input" asp-for="MenuExpired" type="time" placeholder="До скольки надо заказать"/>
+                        </div>
+                        <div class="text-input">
+                            <div class="text-input__label" class="span">Формат меню</div>
+                            <select class="text-input__input" asp-for="MenuFormat" asp-items="Model.MenuFormatList" placeholder="Выберите формат меню"></select>
+                        </div>
+                        <input class="form__submit-button" type="submit" value="Сохранить">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

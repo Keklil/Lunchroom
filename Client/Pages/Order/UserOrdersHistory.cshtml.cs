@@ -8,25 +8,19 @@ namespace Client.Pages.Order;
 [Authorize]
 public class UserOrdersHistory : PageModel
 {
-    private readonly IApiClient _api;
     private readonly IHttpContextAccessor _accessor;
-    
+    private readonly IApiClient _api;
+
     public List<OrdersForUser> UserOrders { get; set; }
-    
-    [BindProperty]
-    public string OrderId { get; set; }
-    
-    public UserOrdersHistory(IApiClient api, IHttpContextAccessor accessor)
-    {
-        _api = api;
-        _accessor = accessor;
-    }
+
+    [BindProperty] public string OrderId { get; set; }
+
     public async Task<ActionResult> OnGet()
     {
         var userIdFromContext = _accessor.HttpContext.User.Claims.First(x => x.Type == "UserId").Value;
         var userId = Guid.Parse(userIdFromContext);
         UserOrders = await _api.Orders_GetOrdersByUserAsync(userId) as List<OrdersForUser>;
-    
+
         return Page();
     }
 
@@ -34,5 +28,11 @@ public class UserOrdersHistory : PageModel
     {
         var id = OrderId;
         return Redirect($"/Order/UserOrderDetailed?orderId={id}");
+    }
+
+    public UserOrdersHistory(IApiClient api, IHttpContextAccessor accessor)
+    {
+        _api = api;
+        _accessor = accessor;
     }
 }

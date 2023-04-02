@@ -12,18 +12,20 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddMvc().AddRazorRuntimeCompilation();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(o => {
+    .AddCookie(o =>
+    {
         o.LoginPath = "/Account/Login";
         o.LogoutPath = "/Account/Logout";
         o.AccessDeniedPath = "/Account/AccessDenied";
         o.SlidingExpiration = false;
         o.ExpireTimeSpan = new TimeSpan(30, 0, 0, 0);
-    });;
+    });
+;
 
 builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
-    {
-        client.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
-    });
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
+});
 
 builder.Services.AddLiveReload(config =>
 {
@@ -37,10 +39,7 @@ var app = builder.Build();
 app.UseLiveReload();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-}
+if (!app.Environment.IsDevelopment()) app.UseExceptionHandler("/Error");
 
 app.UseStatusCodePagesWithRedirects("/Errors/{0}");
 app.UseStaticFiles();

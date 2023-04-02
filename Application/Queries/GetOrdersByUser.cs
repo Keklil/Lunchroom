@@ -1,27 +1,25 @@
-﻿using MediatR;
-using Contracts.Repositories;
+﻿using Contracts.Repositories;
 using Domain.DataTransferObjects.User;
+using MediatR;
 
+namespace Application.Queries;
 
-namespace Application.Queries
+public sealed record GetOrdersByUser(Guid UserId, Guid GroupId)
+    : IRequest<List<OrdersForUser>>;
+
+internal class GetOrdersByUserHandler : IRequestHandler<GetOrdersByUser, List<OrdersForUser>>
 {
-    public sealed record GetOrdersByUser(Guid UserId, Guid GroupId)
-        : IRequest<List<OrdersForUser>>;
+    private readonly IRepositoryManager _repository;
 
-    internal class GetOrdersByUserHandler : IRequestHandler<GetOrdersByUser, List<OrdersForUser>>
+    public async Task<List<OrdersForUser>> Handle(GetOrdersByUser request, CancellationToken cancellationToken)
     {
-        private readonly IRepositoryManager _repository;
+        var listOrders = await _repository.Order.GetOrdersByUserAsync(request.UserId, request.GroupId);
 
-        public GetOrdersByUserHandler(IRepositoryManager repository)
-        {
-            _repository = repository;
-        }
+        return listOrders;
+    }
 
-        public async Task<List<OrdersForUser>> Handle(GetOrdersByUser request, CancellationToken cancellationToken)
-        {
-            var listOrders = await _repository.Order.GetOrdersByUserAsync(request.UserId, request.GroupId);
-
-            return listOrders;
-        }
+    public GetOrdersByUserHandler(IRepositoryManager repository)
+    {
+        _repository = repository;
     }
 }

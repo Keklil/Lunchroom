@@ -8,6 +8,5 @@ public class Empty : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

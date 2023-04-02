@@ -8,6 +8,5 @@ public class TimeOut : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

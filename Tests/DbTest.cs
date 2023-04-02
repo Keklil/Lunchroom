@@ -1,20 +1,19 @@
 using Xunit;
 
-namespace Tests
+namespace Tests;
+
+public class DbTest
 {
-    public class DbTest
+    [Fact]
+    public void TestsConnectiontoDb()
     {
-        [Fact]
-        public void TestsConnectiontoDb()
+        var flag = true;
+
+        /*using (var db = new ApplicationContext())
         {
-            bool flag = true;
+            flag = db.Database.CanConnect();
+        }*/
 
-            /*using (var db = new ApplicationContext())
-            {
-                flag = db.Database.CanConnect();
-            }*/
-
-            Assert.Equal(true, flag);
-        }
+        Assert.Equal(true, flag);
     }
 }

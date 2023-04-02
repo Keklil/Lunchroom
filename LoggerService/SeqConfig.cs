@@ -1,14 +1,16 @@
-﻿namespace LoggerService;
+﻿using System.ComponentModel.DataAnnotations;
+using Serilog.Events;
+
+namespace LoggerService;
 
 public class SeqConfig
 {
+    [Required(ErrorMessage = "Пропущено или пустое необходимое поле конфигурации \"ServerUrl\"")]
     public string ServerUrl { get; set; }
-    public string ApiKey { get; set; }
-    public string MinimumLevel { get; set; }
-    public LevelOverrideConfig LevelOverride { get; set; }
 
-    public class LevelOverrideConfig
-    {
-        public string Microsoft { get; set; }
-    }
+    [Required(ErrorMessage = "Пропущено или пустое необходимое поле конфигурации \"ApiKey\"")]
+    public string ApiKey { get; set; }
+
+    [Required(ErrorMessage = "Пропущено или пустое необходимое поле конфигурации \"MinimumLogLevel\"")]
+    public LogEventLevel MinimumLogLevel { get; set; }
 }

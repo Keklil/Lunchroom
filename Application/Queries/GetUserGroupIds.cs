@@ -11,11 +11,6 @@ internal class GetUserGroupIdsHandler : IRequestHandler<GetUserGroupIdsQuery, Li
 {
     private readonly IRepositoryManager _repository;
 
-    public GetUserGroupIdsHandler(IRepositoryManager repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<List<Guid>> Handle(GetUserGroupIdsQuery request, CancellationToken cancellationToken)
     {
         var userEntity = await _repository.User.GetUserAsync(request.Id, true);
@@ -23,7 +18,12 @@ internal class GetUserGroupIdsHandler : IRequestHandler<GetUserGroupIdsQuery, Li
             throw new UserNotFoundException(request.Id);
 
         var userGroups = await _repository.User.GetUserGroupIdsAsync(request.Id);
-            
+
         return userGroups;
+    }
+
+    public GetUserGroupIdsHandler(IRepositoryManager repository)
+    {
+        _repository = repository;
     }
 }

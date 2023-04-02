@@ -1,5 +1,5 @@
 ﻿@page
-@model Client.Pages.Order.SubmitOrder
+@model SubmitOrder
 
 @{
     Layout = null;
@@ -11,35 +11,35 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
 <body>
 <div class="container">
     <div class="bg-light p-5 rounded mx-auto vstack col-lg-6">
-          <h1>Оплата</h1>
-          <img src="~/images/qr-code.png" class="img-fluid m-5" alt="@Model.paymentLink" />
-          <div class="alert alert-primary mx-auto mb-4" role="alert">
-              <a href="@Model.paymentLink">@Model.paymentLink</a>
-          </div>          
-          <p class="h5 text-center mb-3">Стоимость заказа — @Model.TotalPrice₽</p>
-          <button type="button" class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#modalSubmit">Подтвердить оплату</button>
-          
-          <div class="modal fade" id="modalSubmit" tabindex="-1" aria-labelledby="ModalSubmit" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                      <form method="post">
-                      <div class="modal-body m-3 p-2">
-                          <p class="h5">Подтвердить заказ?</p>
-                      </div>
-                      <div class="modal-footer">
-                          <button type="submit" class="btn btn btn-primary">Подтвердить оплату</button>
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                      </div>
-                      </form>
-                  </div>
-              </div>
-          </div>
+        <h1>Оплата</h1>
+        <img src="~/images/qr-code.png" class="img-fluid m-5" alt="@Model.paymentLink"/>
+        <div class="alert alert-primary mx-auto mb-4" role="alert">
+            <a href="@Model.paymentLink">@Model.paymentLink</a>
+        </div>
+        <p class="h5 text-center mb-3">Стоимость заказа — @Model.TotalPrice₽</p>
+        <button type="button" class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#modalSubmit">Подтвердить оплату</button>
+
+        <div class="modal fade" id="modalSubmit" tabindex="-1" aria-labelledby="ModalSubmit" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form method="post">
+                        <div class="modal-body m-3 p-2">
+                            <p class="h5">Подтвердить заказ?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn btn-primary">Подтвердить оплату</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

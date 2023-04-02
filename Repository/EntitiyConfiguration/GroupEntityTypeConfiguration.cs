@@ -6,29 +6,28 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Repository.EntitiyConfiguration
+namespace Repository.EntitiyConfiguration;
+
+internal class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
 {
-    class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
+    public void Configure(EntityTypeBuilder<Group> groupConfiguration)
     {
-        public void Configure(EntityTypeBuilder<Group> groupConfiguration)
+        var options = new JsonSerializerOptions
         {
-            var options = new JsonSerializerOptions()
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-            }; 
-            
-            groupConfiguration.HasKey(x => x.Id);
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        };
 
-            groupConfiguration.Property(x => x.Id)
-                .ValueGeneratedNever();
+        groupConfiguration.HasKey(x => x.Id);
 
-            groupConfiguration.HasOne<User>(x => x.Admin)
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
+        groupConfiguration.Property(x => x.Id)
+            .ValueGeneratedNever();
 
-            groupConfiguration.Property(x => x.Referral)
-                .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
-                    x => JsonSerializer.Deserialize<GroupReferral>(x, JsonSerializerOptions.Default));
-        }
+        groupConfiguration.HasOne<User>(x => x.Admin)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        groupConfiguration.Property(x => x.Referral)
+            .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
+                x => JsonSerializer.Deserialize<GroupReferral>(x, JsonSerializerOptions.Default));
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Domain.DataTransferObjects.Menu;
 
-namespace Contracts
+namespace Contracts;
+
+public interface IMailParser
 {
-    public interface IMailParser
-    {
-        List<string> NormalizeMenu(string mailRaw);
-        MenuForCreationDto ConvertMenu(List<string> menuRaw);
-    }
+    List<string> NormalizeMenu(string mailRaw);
+    MenuForCreationDto ConvertMenu(List<string> menuRaw);
 }

@@ -6,6 +6,5 @@ public class Error403 : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

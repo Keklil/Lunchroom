@@ -13,42 +13,43 @@ public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
 
-    public TokenService(IConfiguration configuration) => _configuration = configuration;
-
     public async Task<string> GenerateReferral(Group group)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
+            Subject = new ClaimsIdentity(new[]
             {
                 new Claim("GroupId", group.Id.ToString())
             }),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-    
+
     public async Task<string> Generate(string payload)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
+            Subject = new ClaimsIdentity(new[]
             {
                 new Claim("", payload)
             }),
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Issuer"],
             Expires = DateTime.Now.AddDays(31),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+
     public async Task<string> Generate(object payload)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -56,22 +57,20 @@ public class TokenService : ITokenService
 
         var properties = payload.GetType()
             .GetProperties(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => 
-                f.PropertyType == typeof(string) || 
-                f.PropertyType == typeof(Guid) || 
+            .Where(f =>
+                f.PropertyType == typeof(string) ||
+                f.PropertyType == typeof(Guid) ||
                 f.PropertyType == typeof(Enum))
-            .ToDictionary(f => f.Name, f => (string) f.GetValue(null));
+            .ToDictionary(f => f.Name, f => (string)f.GetValue(null));
 
         var claims = new List<Claim>();
 
         foreach (var prop in properties)
-        {
             if (prop.Value is not null)
             {
                 var claim = new Claim(prop.Key, prop.Value);
                 claims.Add(claim);
             }
-        }
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -79,30 +78,37 @@ public class TokenService : ITokenService
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Issuer"],
             Expires = DateTime.Now.AddDays(31),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-    
+
     public async Task<string> Generate(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
+            Subject = new ClaimsIdentity(new[]
             {
-                new Claim("UserID", user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email.ToString()),
+                new("UserID", user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             }),
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Issuer"],
             Expires = DateTime.Now.AddDays(31),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    } 
+    }
+
+    public TokenService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 }

@@ -1,5 +1,4 @@
-﻿using Contracts;
-using Contracts.Security;
+﻿using Contracts.Security;
 using MediatR;
 
 namespace Application.Commands;
@@ -12,15 +11,15 @@ internal sealed class ConfirmEmailHandler :
 {
     private readonly IAuthService _authService;
 
-    public ConfirmEmailHandler(IAuthService authService)
-    {
-        _authService = authService;
-    }
-
     public async Task<string> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
         var email = await _authService.ConfirmEmail(request.Token);
-        
+
         return email;
+    }
+
+    public ConfirmEmailHandler(IAuthService authService)
+    {
+        _authService = authService;
     }
 }

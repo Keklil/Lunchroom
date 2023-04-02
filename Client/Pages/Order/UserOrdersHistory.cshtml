@@ -1,5 +1,5 @@
 ﻿@page
-@model Client.Pages.Order.UserOrdersHistory
+@model UserOrdersHistory
 
 <!DOCTYPE html>
 
@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
 <body>
@@ -22,14 +22,14 @@
                         <div id="@order.Id.ToString()-card" class="card menu mb-4">
                             <div class="card-body p-0" role="button">
                                 <button class="btn btn-lg w-100" id="@order.Id.ToString()" type="submit" value="@order.Id.ToString()" name="OrderId">
-                                          @order.Date.ToLocalTime().ToString("dd MMMM, HH:mm")
+                                    @order.Date.ToLocalTime().ToString("dd MMMM, HH:mm")
                                 </button>
                             </div>
                         </div>
                     }
                 </div>
             </div>
-        </form>  
+        </form>
     }
     else
     {
@@ -45,7 +45,7 @@
         </div>
     }
 
-</div> 
+</div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

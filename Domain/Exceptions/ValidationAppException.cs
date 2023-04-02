@@ -1,10 +1,12 @@
-﻿namespace Domain.Exceptions
+﻿namespace Domain.Exceptions;
+
+public sealed class ValidationAppException : Exception
 {
-    public sealed class ValidationAppException : Exception
+    public IReadOnlyDictionary<string, string[]> Errors { get; }
+
+    public ValidationAppException(IReadOnlyDictionary<string, string[]> errors)
+        : base("One or more validation errors occured")
     {
-        public IReadOnlyDictionary<string, string[]> Errors { get; }
-        public ValidationAppException(IReadOnlyDictionary<string, string[]> errors)
-            : base("One or more validation errors occured")
-            => Errors = errors;
+        Errors = errors;
     }
 }

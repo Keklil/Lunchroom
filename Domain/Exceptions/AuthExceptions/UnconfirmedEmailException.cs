@@ -2,5 +2,7 @@
 
 public class UnconfirmedEmailException : AuthException
 {
-    public UnconfirmedEmailException() : base("Почта не подтверждена."){}
+    public UnconfirmedEmailException() : base("Почта не подтверждена.")
+    {
+    }
 }

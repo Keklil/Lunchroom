@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace ClientV2.Apis;
 
@@ -7,17 +9,9 @@ public partial class ApiClientV2
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _contextAccessor;
     private string _token;
-    public ApiClientV2(System.Net.Http.HttpClient httpClient, IHttpContextAccessor contextAccessor, IConfiguration configuration)
-    {
-        _contextAccessor = contextAccessor;
-        _httpClient = httpClient;
-        _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings);
-        _configuration = configuration;
-        BaseUrl = _configuration.GetSection("ApiUrl").Value;
-    }
 
-    partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request,
-        System.Text.StringBuilder urlBuilder)
+    partial void PrepareRequest(HttpClient client, HttpRequestMessage request,
+        StringBuilder urlBuilder)
     {
         if (_contextAccessor is not null)
         {
@@ -27,17 +21,22 @@ public partial class ApiClientV2
         }
     }
 
-    partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response)
+    partial void ProcessResponse(HttpClient client, HttpResponseMessage response)
     {
         var status = (int)response.StatusCode;
-        if (status == 401)
-        {
-            throw new AuthException();
-        }
+        if (status == 401) throw new AuthException();
+    }
+
+    public ApiClientV2(HttpClient httpClient, IHttpContextAccessor contextAccessor, IConfiguration configuration)
+    {
+        _contextAccessor = contextAccessor;
+        _httpClient = httpClient;
+        _settings = new Lazy<JsonSerializerOptions>(CreateSerializerSettings);
+        _configuration = configuration;
+        BaseUrl = _configuration.GetSection("ApiUrl").Value;
     }
 }
 
 public class AuthException : Exception
 {
-    
 }

@@ -12,9 +12,9 @@
     <div class="content content_no-width">
         <div class="content__wrapper content__wrapper_width_full">
             <div class="team">
-                <div class="team__left-part">          
+                <div class="team__left-part">
                     <div class="team__name title">Название команды</div>
-                    <div class="team__link text_bordered">http://45.86.183.11:5350/invite/@Model.GroupInfo.Referral.ReferToken</div>
+                    <div class="team__link text_bordered">http://45.86.183.11/invite/@Model.GroupInfo.Referral.ReferToken</div>
                     <div class="team__users">
                         @foreach (var user in Model.UserDtos)
                         {
@@ -64,23 +64,23 @@
                     }
                     <div class="settings mt-2">
                         @if (Model.GroupInfo.PaymentInfo is not null)
-                            {
-                                <div class="settings__top">
-                                    <span class="settings__header">Оплата</span>
-                                    <div class="qr">
-                                            @if (!string.IsNullOrWhiteSpace(Model.QrImage))
-                                            {
-                                                <img class="qr_img" src="@Model.QrImage" width="217px" height="217px"/>
-                                            }
-                                            <span class="qr__comment">@Model.GroupInfo.PaymentInfo.Description</span>
-                                        </div>
+                        {
+                            <div class="settings__top">
+                                <span class="settings__header">Оплата</span>
+                                <div class="qr">
+                                    @if (!string.IsNullOrWhiteSpace(Model.QrImage))
+                                    {
+                                        <img class="qr_img" src="@Model.QrImage" width="217px" height="217px"/>
+                                    }
+                                    <span class="qr__comment">@Model.GroupInfo.PaymentInfo.Description</span>
                                 </div>
-                                <button type="button" class="settings__btn basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Изменить</button>
-                            }
-                            else
-                            {
-                                <button type="button" class="basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Добавить информацию об оплате</button>
-                            }
+                            </div>
+                            <button type="button" class="settings__btn basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Изменить</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="basic-button" data-toggle="ajax-modal" data-url="@Url.Page("Index", "PaymentModalPartial")">Добавить информацию об оплате</button>
+                        }
                     </div>
                     <div id="modal-placeholder"></div>
                 </div>

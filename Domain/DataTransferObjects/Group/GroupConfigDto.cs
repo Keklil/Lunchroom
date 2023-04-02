@@ -10,4 +10,3 @@ public record GroupConfigDto(
     PeriodicRefresh Refresh,
     MenuFormat MenuFormat,
     string TargetEmail);
-    

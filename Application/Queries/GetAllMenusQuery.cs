@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using MediatR;
-using Domain.Models;
-using Contracts;
 using Contracts.Repositories;
 using Domain.DataTransferObjects.Menu;
-using Domain.Exceptions;
+using MediatR;
 
 namespace Application.Queries;
 
@@ -12,14 +9,8 @@ public sealed record GetAllMenusQuery(Guid GroupId) : IRequest<List<MenuForList>
 
 internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuForList>>
 {
-    private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
-    
-    public GetAllMenusHandler(IRepositoryManager repository, IMapper mapper)
-    {
-        _repository = repository;
-        _mapper = mapper;
-    }
+    private readonly IRepositoryManager _repository;
 
     public async Task<List<MenuForList>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
     {
@@ -35,5 +26,11 @@ internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuF
         }
 
         return listMenus;
+    }
+
+    public GetAllMenusHandler(IRepositoryManager repository, IMapper mapper)
+    {
+        _repository = repository;
+        _mapper = mapper;
     }
 }

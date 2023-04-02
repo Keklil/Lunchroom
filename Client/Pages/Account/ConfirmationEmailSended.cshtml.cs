@@ -6,6 +6,5 @@ public class ConfirmationEmailSended : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

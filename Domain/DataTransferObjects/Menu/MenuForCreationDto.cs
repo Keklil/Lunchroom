@@ -1,8 +1,7 @@
-﻿namespace Domain.DataTransferObjects.Menu
+﻿namespace Domain.DataTransferObjects.Menu;
+
+public class MenuForCreationDto
 {
-    public class MenuForCreationDto
-    {
-        public List<LunchSetForCreationDto> LunchSets { get; set; }
-        public List<OptionForCreationDto> Options { get; set; }
-    }
+    public List<LunchSetForCreationDto> LunchSets { get; set; }
+    public List<OptionForCreationDto> Options { get; set; }
 }
