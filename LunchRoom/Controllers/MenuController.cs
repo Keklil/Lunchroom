@@ -1,10 +1,10 @@
 ﻿using Application.Notifications;
 using Application.Queries;
-using Domain.DataTransferObjects.Menu;
 using Domain.ErrorModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DataTransferObjects.Menu;
 
 namespace LunchRoom.Controllers;
 

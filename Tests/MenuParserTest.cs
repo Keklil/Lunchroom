@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using Domain.DataTransferObjects.Menu;
 using Services.MailService;
+using Shared.DataTransferObjects.Menu;
 using Xunit;
 using Xunit.Abstractions;
 

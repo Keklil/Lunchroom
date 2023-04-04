@@ -1,7 +1,7 @@
 ﻿using Contracts.Repositories;
-using Domain.DataTransferObjects.Group;
 using Domain.Exceptions;
 using MediatR;
+using Shared.DataTransferObjects.Group;
 
 namespace Application.Queries.Groups;
 

@@ -1,10 +1,9 @@
 ﻿using Application.Commands;
-using Application.Commands.Users;
-using Domain.DataTransferObjects.User;
 using LunchRoom.Controllers.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DataTransferObjects.User;
 
 namespace LunchRoom.Controllers;
 
@@ -14,23 +13,7 @@ namespace LunchRoom.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IPublisher _publisher;
     private readonly ISender _sender;
-
-    /// <summary>
-    ///     Регистрация администратора.
-    /// </summary>
-    /// <param name="login"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(AuthErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UserDto>> RegisterAdmin([FromBody] UserRegisterDto login)
-    {
-        var admin = await _sender.Send(new CreateAdminCommand(login));
-
-        return admin;
-    }
 
     /// <summary>
     ///     Регистрация пользователя.
@@ -79,10 +62,8 @@ public class AuthController : ControllerBase
         return Ok(new { Email = email });
     }
 
-    public AuthController(ISender sender,
-        IPublisher publisher)
+    public AuthController(ISender sender)
     {
         _sender = sender;
-        _publisher = publisher;
     }
 }

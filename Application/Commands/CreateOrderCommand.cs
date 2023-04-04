@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using Contracts.Repositories;
-using Domain.DataTransferObjects.Order;
+﻿using Contracts.Repositories;
 using Domain.Models;
 using MediatR;
+using Shared.DataTransferObjects.Order;
 
 namespace Application.Commands;
 
@@ -28,7 +27,7 @@ internal sealed class CreateOrderHandler : IRequestHandler<CreateOrderCommand, O
 
         foreach (var item in orderOptions)
         {
-            var option = menu.Options.Where(x => x.Id == item.OptionId).SingleOrDefault();
+            var option = menu.Options.SingleOrDefault(x => x.Id == item.OptionId);
             orderEntity.AddOption(option, item.Units);
         }
 

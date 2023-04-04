@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Contracts.Repositories;
-using Domain.DataTransferObjects.Menu;
-using Domain.DataTransferObjects.Order;
+﻿using Contracts.Repositories;
 using Domain.Exceptions;
 using MediatR;
+using Shared.DataTransferObjects.Order;
 
 namespace Application.Queries;
 
@@ -11,7 +9,6 @@ public sealed record GetOrderQuery(Guid OrderId) : IRequest<OrderDto>;
 
 internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
 {
-    private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
 
     public async Task<OrderDto> Handle(GetOrderQuery request, CancellationToken cancellationToken)
@@ -22,33 +19,13 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
 
         var menu = await _repository.Menu.GetMenuAsync(orderEntity.MenuId, false);
 
-        var order = _mapper.Map<OrderDto>(orderEntity);
-
-        if (orderEntity.LunchSetId != default)
-        {
-            var lunchSet = menu.LunchSets
-                .Where(x => x.Id == orderEntity.LunchSetId)
-                .SingleOrDefault();
-
-            order.LunchSet = _mapper.Map<LunchSetDto>(lunchSet);
-            order.LunchSet.LunchSetUnits = orderEntity.LunchSetUnits;
-        }
-
-        foreach (var option in order.Options)
-        {
-            var optionFromMenu = menu.Options
-                .Where(x => x.Id == option.OptionId)
-                .SingleOrDefault();
-
-            option.Option = _mapper.Map<OptionDto>(optionFromMenu);
-        }
+        var order = orderEntity.Map();
 
         return order;
     }
 
-    public GetOrderHandler(IRepositoryManager repository, IMapper mapper)
+    public GetOrderHandler(IRepositoryManager repository)
     {
         _repository = repository;
-        _mapper = mapper;
     }
 }

@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using Contracts.Repositories;
-using Domain.DataTransferObjects.User;
+﻿using Contracts.Repositories;
 using Domain.Exceptions;
 using MediatR;
+using Shared.DataTransferObjects.User;
 
 namespace Application.Commands;
 
@@ -14,7 +13,7 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
 
     public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var userEntity = await _repository.User.GetUserAsync(request.UserId, true);
+        var userEntity = await _repository.User.GetUserAsync(request.UserId);
         if (userEntity is null)
             throw new NotFoundException("User not found");
 

@@ -1,4 +1,4 @@
-﻿using Domain.DataTransferObjects.User;
+﻿using Shared.DataTransferObjects.User;
 using Domain.Models;
 
 namespace Contracts.Security;

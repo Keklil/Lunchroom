@@ -13,7 +13,7 @@
         public IReadOnlyCollection<Group> Groups => _groups;
         private List<Group> _groups = new();
 
-        public User(string name, string surname, string patronymic, string email, string password)
+        private User(string name, string surname, string patronymic, string email, string password)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -21,11 +21,11 @@
             Patronymic = patronymic;
             Email = email;
             IsEmailChecked = false;
-            Role = Role.User;
+            Role = Role.Customer;
             Password = password;
         }
-        
-        public User(string email, string password)
+
+        private User(string email, string password, Role role)
         {
             Id = Guid.NewGuid();
             Name = string.Empty;
@@ -33,19 +33,7 @@
             Patronymic = string.Empty;
             Email = email;
             IsEmailChecked = false;
-            Role = Role.User;
-            Password = password;
-        }
-        
-        public User(string email, string password, bool isAdmin)
-        {
-            Id = Guid.NewGuid();
-            Name = string.Empty;
-            Surname = string.Empty;
-            Patronymic = string.Empty;
-            Email = email;
-            IsEmailChecked = false;
-            Role = isAdmin ? Role.Admin : Role.User;
+            Role = role;
             Password = password;
         }
 
@@ -61,9 +49,18 @@
             Patronymic = patronymic;
         }
 
-        // public void AddInGroup(Group group)
-        // {
-        //     _groups.Add(group);
-        // }
+        public static User CreateCustomer(string email, string password)
+        {
+            return new User(email, password, Role.Customer);
+        }
+        
+        public static User CreateKitchenOperator(string email, string password)
+        {
+            return new User(email, password, Role.KitchenOperator);
+        }
+        public static User CreateAdmin(string email, string password)
+        {
+            return new User(email, password, Role.Admin);
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Repository;
 
 namespace LunchRoom;
 
@@ -14,7 +14,7 @@ public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryCo
             .Build();
         var builder = new DbContextOptionsBuilder<RepositoryContext>()
             .UseNpgsql(configuration.GetConnectionString("DbConnection"),
-                x => x.MigrationsAssembly(nameof(Repository)));
+                x => x.MigrationsAssembly(nameof(Data)));
         return new RepositoryContext(builder.Options);
     }
 }

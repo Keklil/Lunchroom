@@ -1,6 +1,6 @@
 ﻿using Contracts.Repositories;
-using Domain.DataTransferObjects.User;
 using MediatR;
+using Shared.DataTransferObjects.User;
 
 namespace Application.Queries;
 

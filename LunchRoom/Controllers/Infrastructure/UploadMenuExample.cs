@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using Domain.DataTransferObjects.Menu;
 using NSwag.Examples;
+using Shared.DataTransferObjects.Menu;
 
 namespace LunchRoom.Controllers.Infrastructure;
 

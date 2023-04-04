@@ -6,13 +6,13 @@ namespace Application.Commands;
 
 public sealed record ConfirmPaymentCommand(Guid orderId) : IRequest;
 
-internal sealed class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand, Unit>
+internal sealed class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand>
 {
     private readonly IRepositoryManager _repository;
 
-    public async Task<Unit> Handle(ConfirmPaymentCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ConfirmPaymentCommand request, CancellationToken cancellationToken)
     {
-        var orderEntity = await _repository.Order.GetOrderAsync(request.orderId, true);
+        var orderEntity = await _repository.Order.GetOrderAsync(request.orderId);
         if (orderEntity is null)
             throw new NotFoundException("Подтверждаемы заказ не найден");
 
@@ -21,8 +21,6 @@ internal sealed class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentComm
         _repository.Order.UpdateOrder(orderEntity);
 
         await _repository.SaveAsync();
-
-        return Unit.Value;
     }
 
     public ConfirmPaymentHandler(IRepositoryManager repository)

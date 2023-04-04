@@ -1,13 +1,13 @@
 ﻿using Contracts.Repositories;
 using Contracts.Security;
-using Domain.DataTransferObjects.User;
 using MediatR;
+using Shared.DataTransferObjects.User;
 
 namespace Application.Commands;
 
 public sealed record CreateUserCommand(UserRegisterDto User) : IRequest<UserDto>;
 
-internal sealed class CreateCompanyHandler : IRequestHandler<CreateUserCommand, UserDto>
+internal sealed class CreateUserHandler : IRequestHandler<CreateUserCommand, UserDto>
 {
     private readonly IAuthService _authService;
     private readonly IRepositoryManager _repository;
@@ -19,7 +19,7 @@ internal sealed class CreateCompanyHandler : IRequestHandler<CreateUserCommand, 
         return user.Map();
     }
 
-    public CreateCompanyHandler(IRepositoryManager repository, IAuthService authService)
+    public CreateUserHandler(IRepositoryManager repository, IAuthService authService)
     {
         _repository = repository;
         _authService = authService;

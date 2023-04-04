@@ -1,12 +1,12 @@
 ﻿using Application.Commands;
+using Shared.DataTransferObjects;
 using Application.Queries;
-using Domain.DataTransferObjects;
-using Domain.DataTransferObjects.Order;
-using Domain.DataTransferObjects.User;
 using Domain.ErrorModel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DataTransferObjects.Order;
+using Shared.DataTransferObjects.User;
 
 namespace LunchRoom.Controllers;
 
@@ -92,7 +92,7 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteOrder(Guid orderId)
     {
-        var result = await _sender.Send(new DeleteOrderCommand(orderId));
+        await _sender.Send(new DeleteOrderCommand(orderId));
 
         return Ok();
     }
@@ -102,7 +102,7 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ConfirmPayment(Guid orderId)
     {
-        var result = await _sender.Send(new ConfirmPaymentCommand(orderId));
+        await _sender.Send(new ConfirmPaymentCommand(orderId));
 
         return Ok();
     }

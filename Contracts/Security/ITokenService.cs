@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 
-namespace Contracts;
+namespace Contracts.Security;
 
 public interface ITokenService
 {

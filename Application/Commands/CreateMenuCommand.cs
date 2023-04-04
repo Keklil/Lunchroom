@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using Contracts.Repositories;
-using Domain.DataTransferObjects.Menu;
+﻿using Contracts.Repositories;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.DataTransferObjects.Menu;
 
 namespace Application.Commands;
 
@@ -12,7 +11,6 @@ public sealed record CreateMenuCommand(MenuForCreationDto Menu, Guid GroupId) : 
 internal sealed class CreateMenuHandler : IRequestHandler<CreateMenuCommand, MenuDto>
 {
     private readonly ILogger<CreateMenuHandler> _logger;
-    private readonly IMapper _mapper;
     private readonly IRepositoryManager _repository;
 
     public async Task<MenuDto> Handle(CreateMenuCommand request, CancellationToken cancellationToken)
@@ -32,15 +30,14 @@ internal sealed class CreateMenuHandler : IRequestHandler<CreateMenuCommand, Men
         _repository.Menu.CreateMenu(menuEntity);
         await _repository.SaveAsync();
 
-        var menuToReturn = _mapper.Map<MenuDto>(menuEntity);
+        var menuToReturn = menuEntity.Map();
 
         return menuToReturn;
     }
 
-    public CreateMenuHandler(IRepositoryManager repository, IMapper mapper, ILogger<CreateMenuHandler> logger)
+    public CreateMenuHandler(IRepositoryManager repository, ILogger<CreateMenuHandler> logger)
     {
         _repository = repository;
-        _mapper = mapper;
         _logger = logger;
     }
 }

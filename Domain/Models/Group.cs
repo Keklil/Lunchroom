@@ -22,7 +22,7 @@ public class Group
     
     public Group(User admin, string organizationName, string address)
     {
-        if (admin.Role is not Role.Admin)
+        if (admin.Role is not Role.KitchenOperator)
             throw new AttemptCreateGroupByNonAdminException();
         
         Id = Guid.NewGuid();

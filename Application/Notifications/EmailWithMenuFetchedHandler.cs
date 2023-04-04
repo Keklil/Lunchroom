@@ -32,7 +32,7 @@ internal sealed class EmailWithMenuFetchedHandler : INotificationHandler<EmailWi
         text = JsonSerializer.Serialize(menuDto, options);
         _logger.LogInformation("Меню считано: {ParsedMenu}", text);
 
-        var menu = await _sender.Send(new CreateMenuCommand(menuDto, notification.GroupId));
+        var menu = await _sender.Send(new CreateMenuCommand(menuDto, notification.GroupId), token);
     }
 
     public EmailWithMenuFetchedHandler(ILogger<EmailWithMenuFetchedHandler> logger, ISender sender, IMailParser mailService)

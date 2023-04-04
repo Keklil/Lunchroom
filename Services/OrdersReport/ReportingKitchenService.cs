@@ -1,15 +1,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Quartz;
 
 namespace Services.OrdersReport;
 
-[DisallowConcurrentExecution]
 public class ReportingKitchenService : BackgroundService
 {
     private readonly IConfiguration _configuration;
-    private readonly ILogger _logger;
+    private readonly ILogger<ReportingKitchenService> _logger;
     private readonly IServiceProvider _provider;
 
     private int hour, minute;
@@ -82,7 +80,7 @@ public class ReportingKitchenService : BackgroundService
         // }
     }
 
-    public ReportingKitchenService(ILogger logger, IServiceProvider provider,
+    public ReportingKitchenService(ILogger<ReportingKitchenService> logger, IServiceProvider provider,
         IConfiguration configuration)
     {
         _logger = logger;

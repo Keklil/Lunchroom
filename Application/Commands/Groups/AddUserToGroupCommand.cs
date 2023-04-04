@@ -14,11 +14,11 @@ internal sealed class AddUserToGroupHandler : IRequestHandler<AddUserToGroupComm
 
     public async Task<Unit> Handle(AddUserToGroupCommand request, CancellationToken cancellationToken)
     {
-        var group = await _repository.Groups.GetGroupAsync(request.GroupId, true);
+        var group = await _repository.Groups.GetGroupAsync(request.GroupId);
         if (group is null)
             throw new NotFoundException("Запрашиваемая группа не найдена");
 
-        var user = await _repository.User.GetUserAsync(request.UserId, true);
+        var user = await _repository.User.GetUserAsync(request.UserId);
         if (user is null)
             throw new NotFoundException("Не удалось найти пользователя по заданному id");
 

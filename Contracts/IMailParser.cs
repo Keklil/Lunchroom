@@ -1,4 +1,4 @@
-﻿using Domain.DataTransferObjects.Menu;
+﻿using Shared.DataTransferObjects.Menu;
 
 namespace Contracts;
 

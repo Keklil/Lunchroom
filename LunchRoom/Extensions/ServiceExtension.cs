@@ -2,19 +2,21 @@
 using Application;
 using Contracts;
 using Contracts.Repositories;
+using Data;
 using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
+using Identity;
 using LoggerService;
 using LunchRoom.Controllers.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Examples;
 using NSwag.Generation.Processors.Security;
-using Repository;
 using Services.MailService;
 
 namespace LunchRoom.Extensions;
@@ -54,7 +56,7 @@ public static class ServiceExtension
     {
         services.AddDbContext<RepositoryContext>(options =>
             options.UseNpgsql(config.GetConnectionString("DbConnection"),
-                x => x.MigrationsAssembly(nameof(Repository))));
+                x => x.MigrationsAssembly(nameof(Data))));
     }
 
     public static void ConfigureValidator(this IServiceCollection services)
@@ -105,6 +107,8 @@ public static class ServiceExtension
                 ValidateAudience = false
             };
         });
+
+        services.AddScoped<IAuthorizationHandler, GroupAuthHandler>();
     }
 
     public static void ConfigureSwagger(this IServiceCollection services)

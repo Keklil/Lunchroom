@@ -4,13 +4,13 @@ using System.Text;
 using Contracts;
 using Contracts.Repositories;
 using Contracts.Security;
-using Domain.DataTransferObjects.User;
 using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Models;
 using Domain.SecurityModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Shared.DataTransferObjects.User;
 
 namespace Services.AuthService;
 
@@ -21,13 +21,12 @@ public class AuthService : IAuthService
     private readonly IRepositoryManager _repository;
     private readonly ITokenService _tokenService;
     private readonly string hostLink = "http://localhost:5097/EmailConfirmation?token=";
-
     private readonly string subject = "Подтверждение почты";
 
     public async Task<string> Auth(UserLogin login)
     {
         var user = await _repository.User.GetUserByEmailAsync(login.Email);
-        if (user is null) throw new UserNotFoundException(login.Email);
+        if (user is null) throw new WrongUserCredentialsException();
 
         if (user.IsEmailChecked is false)
         {
@@ -45,7 +44,7 @@ public class AuthService : IAuthService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
-        var email = string.Empty;
+        string email;
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -76,38 +75,31 @@ public class AuthService : IAuthService
         return email;
     }
 
-    public async Task<User> RegisterAdmin(UserRegisterDto user)
-    {
-        var userEntity = await _repository.User.GetUserByEmailAsync(user.email);
-        if (userEntity is not null) throw new UserExistsException();
-
-        var newUser = new User(user.email, user.password, true);
-        _repository.User.CreateUser(newUser);
-        await SendConfirmationEmail(user.email);
-        await _repository.SaveAsync();
-        return newUser;
-    }
-
     public async Task<User> RegisterUser(UserRegisterDto user)
     {
-        var userEntity = await _repository.User.GetUserByEmailAsync(user.email);
+        var userEntity = await _repository.User.GetUserByEmailAsync(user.Email);
         if (userEntity is not null) throw new UserExistsException();
 
-        var newUser = new User(user.email, user.password, false);
+        var newUser = user.RoleDto switch
+        {
+            RoleDto.Customer => User.CreateCustomer(user.Email, user.Password),
+            RoleDto.KitchenOperator => User.CreateKitchenOperator(user.Email, user.Password),
+            _ => throw new ArgumentOutOfRangeException()
+        };
         _repository.User.CreateUser(newUser);
-        await SendConfirmationEmail(user.email);
+        await SendConfirmationEmail(user.Email);
         await _repository.SaveAsync();
         return newUser;
     }
 
-    public async Task SendConfirmationEmail(string email)
+    private async Task SendConfirmationEmail(string email)
     {
         var token = GenerateJwtTokenForEmailConfirmation(email);
         var link = hostLink + token;
-        var body = string.Empty;
+        string body;
         using (var reader = new StreamReader(Directory.GetCurrentDirectory() + "/Html/email.html"))
         {
-            body = reader.ReadToEnd();
+            body = await reader.ReadToEndAsync();
         }
 
         body = body.Replace("{ConfirmationLink}", link);

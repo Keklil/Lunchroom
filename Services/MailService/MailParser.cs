@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Contracts;
-using Domain.DataTransferObjects.Menu;
+using Shared.DataTransferObjects.Menu;
 
 namespace Services.MailService;
 

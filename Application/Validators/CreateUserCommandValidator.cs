@@ -8,7 +8,7 @@ public class CreateUserCommandValidator :
 {
     public CreateUserCommandValidator()
     {
-        RuleFor(x => x.User.email).NotEmpty();
-        RuleFor(x => x.User.password).NotEmpty();
+        RuleFor(x => x.User.Email).NotEmpty();
+        RuleFor(x => x.User.Password).NotEmpty();
     }
 }

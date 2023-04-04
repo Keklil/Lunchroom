@@ -1,10 +1,11 @@
 ﻿using Contracts;
 using Contracts.Repositories;
-using Domain.DataTransferObjects.Group;
+using Contracts.Security;
 using Domain.Exceptions;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
@@ -20,8 +21,8 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
     {
         try
         {
-            var admin = await _repository.User.GetUserAsync(request.AdminId, true);
-            if (admin is null || admin.Role is not Role.Admin)
+            var admin = await _repository.User.GetUserAsync(request.AdminId);
+            if (admin is null || admin.Role is not Role.KitchenOperator)
                 throw new AttemptCreateGroupByNonAdminException();
 
             var group = new Group(admin, request.OrganizationName, request.Address);

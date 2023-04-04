@@ -1,8 +1,8 @@
 ﻿using Contracts.Repositories;
-using Domain.DataTransferObjects.Group;
 using Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
@@ -15,7 +15,7 @@ internal sealed class AddPaymentInfoToGroupHandler : IRequestHandler<AddPaymentI
     public async Task<Unit> Handle(AddPaymentInfoToGroupCommand request, CancellationToken cancellationToken)
     {
         var groupEntity = await _repository.Groups
-            .GetGroupAsync(request.PaymentInfo.GroupId, true);
+            .GetGroupAsync(request.PaymentInfo.GroupId);
 
         if (groupEntity is null)
             throw new NotFoundException($"Группа с id {request.PaymentInfo.GroupId} не найдена.");

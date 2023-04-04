@@ -1,8 +1,8 @@
 ﻿using Contracts.Repositories;
-using Domain.DataTransferObjects.Group;
 using Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
@@ -15,7 +15,7 @@ internal sealed class AddKitchenSettingsToGroupHandler : IRequestHandler<AddKitc
     public async Task<Unit> Handle(AddKitchenSettingsToGroupCommand request, CancellationToken cancellationToken)
     {
         var groupEntity = await _repository.Groups
-            .GetGroupAsync(request.Config.GroupId, true);
+            .GetGroupAsync(request.Config.GroupId);
 
         if (groupEntity is null)
             throw new NotFoundException($"Группа с id {request.Config.GroupId} не найдена.");

@@ -12,11 +12,11 @@ internal sealed class DeleteOrderHandler : IRequestHandler<DeleteOrderCommand>
     private readonly ILogger<DeleteOrderHandler> _logger;
     private readonly IRepositoryManager _repository;
 
-    public async Task<Unit> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var order = await _repository.Order.GetOrderAsync(request.orderId, true);
+            var order = await _repository.Order.GetOrderAsync(request.orderId);
             if (order is null)
                 throw new NotFoundException("Заказ для удаления не найден");
 
@@ -28,8 +28,6 @@ internal sealed class DeleteOrderHandler : IRequestHandler<DeleteOrderCommand>
             _logger.LogError(e, $"Ошибка при удалении заказа {request.orderId}");
             throw;
         }
-
-        return Unit.Value;
     }
 
     public DeleteOrderHandler(IRepositoryManager repository, ILogger<DeleteOrderHandler> logger)

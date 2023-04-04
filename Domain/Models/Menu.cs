@@ -6,7 +6,7 @@ namespace Domain.Models
     public class Menu
     {
         public Guid Id { get; set; }
-        public DateTime Date { get; private set; }
+        public DateTime Date { get; }
         public Guid GroupId { get; }
         public IReadOnlyCollection<LunchSet> LunchSets => _lunchSets;
         private List<LunchSet> _lunchSets;
@@ -48,18 +48,14 @@ namespace Domain.Models
             _options.Add(newOption);
         }
 
-        public LunchSet GetLunchSetById(Guid lunchSetId)
+        public LunchSet? GetLunchSetById(Guid lunchSetId)
         {
-            return LunchSets
-                .Where(lunchSet => lunchSet.Id == lunchSetId)
-                .SingleOrDefault();
+            return LunchSets.SingleOrDefault(lunchSet => lunchSet.Id == lunchSetId);
         }
 
-        public Option GetOptionById(Guid optionId)
+        public Option? GetOptionById(Guid optionId)
         {
-            return Options
-                .Where(option => option.Id == optionId)
-                .SingleOrDefault();
+            return Options.SingleOrDefault(option => option.Id == optionId);
         }
 
         public void Reported()

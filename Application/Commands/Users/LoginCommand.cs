@@ -1,6 +1,6 @@
 ﻿using Contracts.Security;
-using Domain.DataTransferObjects.User;
 using MediatR;
+using Shared.DataTransferObjects.User;
 
 namespace Application.Commands;
 

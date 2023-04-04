@@ -1,5 +1,5 @@
 ﻿using Contracts;
-using Domain.DataTransferObjects;
+using Shared.DataTransferObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
