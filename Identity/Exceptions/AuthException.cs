@@ -1,4 +1,6 @@
-﻿namespace Domain.Exceptions.AuthExceptions;
+﻿using Domain.Exceptions;
+
+namespace Identity.Exceptions;
 
 public class AuthException : BadRequestException
 {

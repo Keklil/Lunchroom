@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using Application;
+using Application.Behaviors;
 using Contracts;
 using Contracts.Repositories;
 using Data;
@@ -9,6 +11,9 @@ using Hangfire.PostgreSql;
 using Identity;
 using LoggerService;
 using LunchRoom.Controllers.Infrastructure;
+using MediatR;
+using MediatR.Behaviors.Authorization;
+using MediatR.Behaviors.Authorization.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -47,21 +52,26 @@ public static class ServiceExtension
         LoggerConfigurator.SetupSettings(configuration);
     }
 
-    public static void ConfigureRepositoryManager(this IServiceCollection services)
-    {
-        services.AddScoped<IRepositoryManager, RepositoryManager>();
-    }
-
-    public static void ConfigurePostgreSqlContext(this IServiceCollection services, IConfiguration config)
+    public static void ConfigureRepository(this IServiceCollection services, IConfiguration config)
     {
         services.AddDbContext<RepositoryContext>(options =>
             options.UseNpgsql(config.GetConnectionString("DbConnection"),
                 x => x.MigrationsAssembly(nameof(Data))));
+        
+        services.AddScoped<IRepositoryManager, RepositoryManager>();
     }
 
-    public static void ConfigureValidator(this IServiceCollection services)
+    public static void ConfigureMediatR(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssembly(typeof(AssemblyReference).Assembly);
+        services.AddMediatR(c =>
+        {
+            c.RegisterServicesFromAssembly(typeof(Application.AssemblyReference).Assembly);
+            c.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        });
+        
+        services.AddMediatorAuthorization(Assembly.GetAssembly(typeof(Application.AssemblyReference)));
+        services.AddAuthorizersFromAssembly(Assembly.GetAssembly(typeof(Application.AssemblyReference)));
+        
         ValidatorOptions.Global.LanguageManager.Enabled = false;
     }
 
@@ -107,8 +117,6 @@ public static class ServiceExtension
                 ValidateAudience = false
             };
         });
-
-        services.AddScoped<IAuthorizationHandler, GroupAuthHandler>();
     }
 
     public static void ConfigureSwagger(this IServiceCollection services)

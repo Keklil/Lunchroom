@@ -18,7 +18,12 @@
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Identity\Identity.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authorization\Group\Commands" />
   </ItemGroup>
 
 </Project>

@@ -9,7 +9,7 @@ using Shared.DataTransferObjects.Menu;
 namespace LunchRoom.Controllers;
 
 [Route("api/[controller]/[action]")]
-[Authorize(Roles = "Admin,User")]
+[Authorize(Roles = "Admin,Customer")]
 [ApiController]
 [Produces("application/json")]
 public class MenuController : ControllerBase

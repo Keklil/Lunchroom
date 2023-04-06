@@ -3,7 +3,9 @@ using Domain.ErrorModel;
 using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Exceptions.GroupExceptions;
+using Identity.Exceptions;
 using LunchRoom.Controllers.Infrastructure;
+using MediatR.Behaviors.Authorization.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace LunchRoom.Extensions;
@@ -23,10 +25,11 @@ public static class ExceptionMiddlewareExtensions
                 {
                     context.Response.StatusCode = contextFeature.Error switch
                     {
-                        NotFoundException => StatusCodes.Status404NotFound,
+                        NotFoundException => StatusCodes.Status400BadRequest,
                         BadRequestException => StatusCodes.Status400BadRequest,
                         ValidationAppException => StatusCodes.Status400BadRequest,
                         DomainException => StatusCodes.Status400BadRequest,
+                        UnauthorizedException => StatusCodes.Status403Forbidden,
                         _ => StatusCodes.Status500InternalServerError
                     };
 

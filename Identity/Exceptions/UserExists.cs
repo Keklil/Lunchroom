@@ -1,4 +1,4 @@
-﻿namespace Domain.Exceptions.AuthExceptions;
+﻿namespace Identity.Exceptions;
 
 public class UserExistsException : AuthException
 {

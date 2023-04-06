@@ -2,6 +2,7 @@
 using Contracts.Repositories;
 using Contracts.Security;
 using Domain.Exceptions;
+using Domain.Exceptions.AuthExceptions;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;

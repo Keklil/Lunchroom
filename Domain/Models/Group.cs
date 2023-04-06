@@ -1,4 +1,5 @@
 ﻿using Domain.Exceptions;
+using Domain.Exceptions.AuthExceptions;
 using Domain.Infrastructure;
 
 namespace Domain.Models;

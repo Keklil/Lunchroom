@@ -11,7 +11,7 @@ using Shared.DataTransferObjects.User;
 namespace LunchRoom.Controllers;
 
 [Route("api/[controller]/[action]")]
-[Authorize(Roles = "Admin,User")]
+[Authorize(Roles = "Admin,Customer")]
 [ApiController]
 [Produces("application/json")]
 public class OrdersController : ControllerBase
