@@ -2,7 +2,7 @@
 using NSwag.Examples;
 using Shared.DataTransferObjects.Menu;
 
-namespace LunchRoom.Controllers.Infrastructure;
+namespace LunchRoom.Controllers.Infrastructure.Examples;
 
 public class UploadMenuExamples : IExampleProvider<RawMenuDto>
 {

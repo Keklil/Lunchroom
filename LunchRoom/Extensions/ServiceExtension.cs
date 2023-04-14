@@ -8,17 +8,20 @@ using Data;
 using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
-using Identity;
 using LoggerService;
 using LunchRoom.Controllers.Infrastructure;
+using LunchRoom.Controllers.Infrastructure.Examples;
 using MediatR;
-using MediatR.Behaviors.Authorization;
 using MediatR.Behaviors.Authorization.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
+using NetTopologySuite.Swagger;
 using NSwag;
 using NSwag.Examples;
 using NSwag.Generation.Processors.Security;
@@ -48,16 +51,22 @@ public static class ServiceExtension
 
         services.AddSingleton<SeqConfig>(x =>
             x.GetRequiredService<IOptions<SeqConfig>>().Value);
-        
+
         LoggerConfigurator.SetupSettings(configuration);
     }
 
     public static void ConfigureRepository(this IServiceCollection services, IConfiguration config)
     {
         services.AddDbContext<RepositoryContext>(options =>
+        {
             options.UseNpgsql(config.GetConnectionString("DbConnection"),
-                x => x.MigrationsAssembly(nameof(Data))));
-        
+                x =>
+                {
+                    x.UseNetTopologySuite();
+                    x.MigrationsAssembly(nameof(Data));
+                });
+        });
+
         services.AddScoped<IRepositoryManager, RepositoryManager>();
     }
 
@@ -65,13 +74,13 @@ public static class ServiceExtension
     {
         services.AddMediatR(c =>
         {
-            c.RegisterServicesFromAssembly(typeof(Application.AssemblyReference).Assembly);
+            c.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly);
             c.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         });
-        
-        services.AddMediatorAuthorization(Assembly.GetAssembly(typeof(Application.AssemblyReference)));
-        services.AddAuthorizersFromAssembly(Assembly.GetAssembly(typeof(Application.AssemblyReference)));
-        
+
+        services.AddMediatorAuthorization(Assembly.GetAssembly(typeof(AssemblyReference)));
+        services.AddAuthorizersFromAssembly(Assembly.GetAssembly(typeof(AssemblyReference)));
+
         ValidatorOptions.Global.LanguageManager.Enabled = false;
     }
 
@@ -119,6 +128,18 @@ public static class ServiceExtension
         });
     }
 
+    public static void AddControllersCustom(this IServiceCollection services)
+    {
+        services
+            .AddControllers(options => options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Polygon))))
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory());
+            });
+        
+        services.AddSingleton(NtsGeometryServices.Instance);
+    }
+
     public static void ConfigureSwagger(this IServiceCollection services)
     {
         services.AddExampleProviders(typeof(UploadMenuExamples).Assembly);
@@ -138,6 +159,7 @@ public static class ServiceExtension
             settings.GenerateEnumMappingDescription = true;
 
             settings.AddExamples(serviceProvider);
+            settings.TypeMappers.AddGeometry(GeoSerializeType.Geojson);
         });
     }
 }

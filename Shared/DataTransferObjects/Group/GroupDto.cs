@@ -9,5 +9,5 @@ public record GroupDto(
     string Address,
     IEnumerable<Guid> Members,
     GroupReferral Referral,
-    KitchenSettingsDto Settings,
+    GroupKitchenSettingsDto Settings,
     PaymentInfoDto PaymentInfo);

@@ -17,12 +17,14 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
     private readonly ILogger<CreateGroupHandler> _logger;
     private readonly IRepositoryManager _repository;
     private readonly ITokenService _tokenService;
+    private readonly ICurrentUserService _currentUserService;
 
     public async Task<GroupDto> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var admin = await _repository.User.GetUserAsync(request.AdminId);
+            var currentUserId = _currentUserService.GetUserId();
+            var admin = await _repository.User.GetUserAsync(currentUserId);
             if (admin is null || admin.Role is not Role.KitchenOperator)
                 throw new AttemptCreateGroupByNonAdminException();
 
@@ -49,10 +51,11 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
         }
     }
 
-    public CreateGroupHandler(IRepositoryManager repository, ILogger<CreateGroupHandler> logger, ITokenService tokenService)
+    public CreateGroupHandler(IRepositoryManager repository, ILogger<CreateGroupHandler> logger, ITokenService tokenService, ICurrentUserService currentUserService)
     {
         _repository = repository;
         _logger = logger;
         _tokenService = tokenService;
+        _currentUserService = currentUserService;
     }
 }

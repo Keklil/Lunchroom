@@ -8,7 +8,7 @@ public class ShouldBeGroupMemberRequirement : IAuthorizationRequirement
     public Guid UserId { get; set; } 
     public Guid GroupId { get; set; }
 
-    class GroupAuthHandler : IAuthorizationHandler<ShouldBeGroupMemberRequirement>
+    private class ShouldBeGroupMemberHandler : IAuthorizationHandler<ShouldBeGroupMemberRequirement>
     {
         private readonly IRepositoryManager _repository; 
         
@@ -23,9 +23,9 @@ public class ShouldBeGroupMemberRequirement : IAuthorizationRequirement
             return AuthorizationResult.Succeed();
         }
 
-        public GroupAuthHandler(IRepositoryManager repository)
+        public ShouldBeGroupMemberHandler(IRepositoryManager repository)
         {
             _repository = repository;
-        } 
+        }
     }
 }

@@ -15,8 +15,6 @@ internal class GetUserHandler : IRequestHandler<GetUserQuery, UserDto>
     public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         var userEntity = await _repository.User.GetUserAsync(request.Id);
-        if (userEntity is null)
-            throw new UserNotFoundException(request.Id);
 
         var user = userEntity.Map();
 

@@ -2,7 +2,7 @@
 
 public class NotFoundException : Exception
 {
-    public NotFoundException(string massage) : base(massage)
+    public NotFoundException(string massage, params string[]? values) : base(massage)
     {
     }
 }

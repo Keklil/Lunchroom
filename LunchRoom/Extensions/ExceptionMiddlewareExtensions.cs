@@ -3,6 +3,7 @@ using Domain.ErrorModel;
 using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Exceptions.GroupExceptions;
+using Domain.Exceptions.KitchenExceptions;
 using Identity.Exceptions;
 using LunchRoom.Controllers.Infrastructure;
 using MediatR.Behaviors.Authorization.Exceptions;
@@ -84,6 +85,24 @@ public static class ExceptionMiddlewareExtensions
                                 {
                                     Code = GroupErrorResponse.ErrorCodes.AttemptCreateGroupByNonAdmin,
                                     ExceptionMessage = attemptCreateGroupByNonAdminException.Message
+                                }));
+                            break;
+                        
+                        case AttemptCreateKitchenByNonKitchenOperator attemptCreateKitchenByNonKitchenOperator:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new KitchenErrorResponse()
+                                {
+                                    Code = KitchenErrorResponse.ErrorCodes.AttemptCreateGroupByNonKitchenOperator,
+                                    ExceptionMessage = attemptCreateKitchenByNonKitchenOperator.Message
+                                }));
+                            break;
+                        
+                        case UserAlreadyInKitchenException attemptCreateKitchenByNonKitchenOperator:
+                            await context.Response
+                                .WriteAsync(JsonSerializer.Serialize(new KitchenErrorResponse()
+                                {
+                                    Code = KitchenErrorResponse.ErrorCodes.UserIsMember,
+                                    ExceptionMessage = attemptCreateKitchenByNonKitchenOperator.Message
                                 }));
                             break;
 

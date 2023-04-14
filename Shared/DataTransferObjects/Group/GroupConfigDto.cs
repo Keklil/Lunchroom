@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Models.Enums;
 
 namespace Shared.DataTransferObjects.Group;
 
@@ -7,6 +8,6 @@ public record GroupConfigDto(
     string KitchenName,
     int HourExpired,
     int MinuteExpired,
-    PeriodicRefresh Refresh,
+    MenuUpdatePeriod Refresh,
     MenuFormat MenuFormat,
     string TargetEmail);

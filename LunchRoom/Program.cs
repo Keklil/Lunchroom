@@ -1,12 +1,10 @@
-using Application;
-using Application.Behaviors;
 using Contracts;
 using Contracts.Security;
 using Data.EntitiesConfiguration;
 using Identity.Services;
 using LoggerService;
 using LunchRoom.Extensions;
-using MediatR;
+using NetTopologySuite.IO.Converters;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
 using Services.AuthService;
@@ -36,7 +34,7 @@ builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureReportingKitchenService();
 //builder.Services.ConfigureHangfire(builder.Configuration);
-builder.Services.AddControllers();
+builder.Services.AddControllersCustom();
 
 var app = builder.Build();
 
@@ -58,7 +56,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseOpenApi();
 app.UseSwaggerUi3(x => x.PersistAuthorization = true);
-//app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions

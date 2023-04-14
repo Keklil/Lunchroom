@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -12,15 +14,18 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230407182500_AddedKitchenAndKitchenSettings")]
+    partial class AddedKitchenAndKitchenSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Models.Group", b =>
@@ -43,9 +48,14 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("SettingsId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
+
+                    b.HasIndex("SettingsId");
 
                     b.ToTable("Groups");
                 });
@@ -55,35 +65,60 @@ namespace Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HourExpired")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("KitchenName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("MenuFormat")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MinuteExpired")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PeriodicRefresh")
-                        .HasColumnType("integer");
-
                     b.Property<string>("TargetEmail")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId")
-                        .IsUnique();
-
                     b.ToTable("GroupKitchenSettings");
+                });
+
+            modelBuilder.Entity("Domain.Models.Kitchen", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Inn")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Kitchens");
+                });
+
+            modelBuilder.Entity("Domain.Models.KitchenSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<TimeSpan>("LimitingTimeForOrder")
+                        .HasColumnType("interval");
+
+                    b.Property<int>("MenuFormat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MenuUpdatePeriod")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KitchenSettings");
                 });
 
             modelBuilder.Entity("Domain.Models.LunchSet", b =>
@@ -216,7 +251,6 @@ namespace Data.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("GroupId")
@@ -227,7 +261,6 @@ namespace Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Qr")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -305,6 +338,21 @@ namespace Data.Migrations
                     b.ToTable("GroupUser");
                 });
 
+            modelBuilder.Entity("KitchenUser", b =>
+                {
+                    b.Property<Guid>("KitchenId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ManagersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("KitchenId", "ManagersId");
+
+                    b.HasIndex("ManagersId");
+
+                    b.ToTable("KitchenUser");
+                });
+
             modelBuilder.Entity("Domain.Models.Group", b =>
                 {
                     b.HasOne("Domain.Models.User", "Admin")
@@ -313,16 +361,62 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Admin");
-                });
-
-            modelBuilder.Entity("Domain.Models.GroupKitchenSettings", b =>
-                {
-                    b.HasOne("Domain.Models.Group", null)
-                        .WithOne("Settings")
-                        .HasForeignKey("Domain.Models.GroupKitchenSettings", "GroupId")
+                    b.HasOne("Domain.Models.GroupKitchenSettings", "Settings")
+                        .WithMany()
+                        .HasForeignKey("SettingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Settings");
+                });
+
+            modelBuilder.Entity("Domain.Models.Kitchen", b =>
+                {
+                    b.OwnsOne("Domain.Models.Contacts", "Contacts", b1 =>
+                        {
+                            b1.Property<Guid>("KitchenId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("KitchenId");
+
+                            b1.ToTable("Kitchens");
+
+                            b1.WithOwner()
+                                .HasForeignKey("KitchenId");
+                        });
+
+                    b.Navigation("Contacts")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.KitchenSettings", b =>
+                {
+                    b.OwnsMany("Domain.Models.ShippingArea", "ShippingAreas", b1 =>
+                        {
+                            b1.Property<Guid>("KitchenSettingsId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<Polygon>("Polygon")
+                                .IsRequired()
+                                .HasColumnType("geometry (polygon)");
+
+                            b1.HasKey("KitchenSettingsId", "Id");
+
+                            b1.ToTable("ShippingArea");
+
+                            b1.WithOwner()
+                                .HasForeignKey("KitchenSettingsId");
+                        });
+
+                    b.Navigation("ShippingAreas");
                 });
 
             modelBuilder.Entity("Domain.Models.LunchSet", b =>
@@ -385,12 +479,24 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("KitchenUser", b =>
+                {
+                    b.HasOne("Domain.Models.Kitchen", null)
+                        .WithMany()
+                        .HasForeignKey("KitchenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("ManagersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Models.Group", b =>
                 {
                     b.Navigation("PaymentInfo")
-                        .IsRequired();
-
-                    b.Navigation("Settings")
                         .IsRequired();
                 });
 

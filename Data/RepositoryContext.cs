@@ -14,10 +14,13 @@ public class RepositoryContext : DbContext
     public DbSet<OrderOption> OrdersOptions { get; set; }
     public DbSet<EmailValidation> EmailValidations { get; set; }
     public DbSet<Group> Groups { get; set; }
+    public DbSet<Kitchen> Kitchens { get; set; }
+    public DbSet<KitchenSettings> KitchenSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(RepositoryContext).Assembly);
+        modelBuilder.HasPostgresExtension("postgis");
     }
 
     public RepositoryContext(DbContextOptions options) : base(options)

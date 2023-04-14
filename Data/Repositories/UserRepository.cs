@@ -1,4 +1,5 @@
 ﻿using Contracts.Repositories;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,11 +7,16 @@ namespace Data.Repositories;
 
 internal class UserRepository : RepositoryBase<User>, IUserRepository
 {
-    public async Task<User?> GetUserAsync(Guid userId, bool trackChanges = true)
+    public async Task<User> GetUserAsync(Guid userId, bool trackChanges = true)
     {
-        return await FindByCondition(x => x.Id.Equals(userId), trackChanges)
+        var user = await FindByCondition(x => x.Id.Equals(userId), trackChanges)
             .Include(x => x.Groups)
             .SingleOrDefaultAsync();
+        
+        if (user is null)
+            throw new UserNotFoundException(userId);
+        
+        return user;
     }
 
     public void CreateUser(User user)
@@ -28,7 +34,7 @@ internal class UserRepository : RepositoryBase<User>, IUserRepository
         Delete(user);
     }
 
-    public async Task<List<User>?> GetListUsersByIds(List<Guid> ids)
+    public async Task<List<User>> GetListUsersByIds(List<Guid> ids)
     {
         return await RepositoryContext.Users.Where(x => ids.Contains(x.Id))
             .ToListAsync();

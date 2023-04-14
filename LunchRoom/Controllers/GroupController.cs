@@ -3,6 +3,7 @@ using Application.Queries.Groups;
 using Domain.ErrorModel;
 using LunchRoom.Controllers.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DataTransferObjects.Group;
 
@@ -10,6 +11,7 @@ namespace LunchRoom.Controllers;
 
 [Route("api/[controller]/[action]")]
 [Produces("application/json")]
+[Authorize]
 [ApiController]
 public class GroupController : ControllerBase
 {

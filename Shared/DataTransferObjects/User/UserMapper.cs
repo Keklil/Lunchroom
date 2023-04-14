@@ -11,6 +11,7 @@ public static class UserMapper
             Name = source.Name,
             Patronymic = source.Patronymic,
             Email = source.Email,
+            IsEmailChecked = source.IsEmailChecked,
             Groups = source.Groups.Select(x => x.Id).ToList(),
             NameFill = !string.IsNullOrWhiteSpace(source.Name) && !string.IsNullOrWhiteSpace(source.Surname)
         };

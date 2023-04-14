@@ -3,7 +3,7 @@ using Application.Queries.Groups;
 using Contracts.Security;
 using MediatR.Behaviors.Authorization;
 
-namespace Application.Authorization.Group.Queries;
+namespace Application.Authorization.Group.Authorizer;
 
 public class ShouldBeGroupMember : AbstractRequestAuthorizer<GetGroupQuery>
 {

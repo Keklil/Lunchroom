@@ -7,5 +7,6 @@ public interface IRepositoryManager
     IOrderRepository Order { get; }
     ISecurityRepository Security { get; }
     IGroupRepository Groups { get; }
-    Task SaveAsync();
+    IKitchenRepository Kitchens { get; }
+    Task SaveAsync(CancellationToken cancellationToken = default);
 }

@@ -14,13 +14,8 @@ public static class GroupMapper
             source.Members.Select(sourceMember => sourceMember.Id),
             source.Referral,
             source.Settings != null
-                ? new KitchenSettingsDto(
-                    source.Settings.TargetEmail,
-                    source.Settings.KitchenName,
-                    source.Settings.HourExpired,
-                    source.Settings.MinuteExpired,
-                    source.Settings.PeriodicRefresh,
-                    source.Settings.MenuFormat)
+                ? new GroupKitchenSettingsDto(
+                    source.Settings.TargetEmail)
                 : null,
             source.PaymentInfo != null
                 ? new PaymentInfoDto
@@ -37,11 +32,6 @@ public static class GroupMapper
     {
         return new GroupKitchenSettings(
             source.GroupId,
-            source.KitchenName,
-            source.HourExpired,
-            source.MinuteExpired,
-            source.Refresh,
-            source.MenuFormat,
             source.TargetEmail);
     }
 
