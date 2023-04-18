@@ -9,7 +9,6 @@ using FluentValidation;
 using Hangfire;
 using Hangfire.PostgreSql;
 using LoggerService;
-using LunchRoom.Controllers.Infrastructure;
 using LunchRoom.Controllers.Infrastructure.Examples;
 using MediatR;
 using MediatR.Behaviors.Authorization.Extensions.DependencyInjection;
@@ -21,7 +20,6 @@ using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
-using NetTopologySuite.Swagger;
 using NSwag;
 using NSwag.Examples;
 using NSwag.Generation.Processors.Security;
@@ -134,7 +132,7 @@ public static class ServiceExtension
             .AddControllers(options => options.ModelMetadataDetailsProviders.Add(new SuppressChildValidationMetadataProvider(typeof(Polygon))))
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory());
+                options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory());
             });
         
         services.AddSingleton(NtsGeometryServices.Instance);
@@ -159,7 +157,7 @@ public static class ServiceExtension
             settings.GenerateEnumMappingDescription = true;
 
             settings.AddExamples(serviceProvider);
-            settings.TypeMappers.AddGeometry(GeoSerializeType.Geojson);
+            settings.TypeMappers.Add(CustomOpenApiSchemas.GetPolygonSchema());
         });
     }
 }

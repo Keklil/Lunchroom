@@ -1,32 +1,46 @@
-﻿namespace LunchRoom.Extensions;
+﻿using NetTopologySuite.Geometries;
+using NJsonSchema;
+using NJsonSchema.Generation.TypeMappers;
 
-public class CustomOpenApiSchemas
+namespace LunchRoom.Extensions;
+
+public static class CustomOpenApiSchemas
 {
-    // private static OpenApiSchema GetPolygonSchema()
-    // {
-    //     return new OpenApiSchema
-    //     {
-    //         Type = "object",
-    //         Required = new HashSet<string> { "type", "coordinates" },
-    //         Properties = new Dictionary<string, OpenApiSchema>
-    //         {
-    //             ["type"] = new() { Type = "string", Enum = { new OpenApiString("Polygon") } },
-    //             ["coordinates"] = new()
-    //             {
-    //                 Type = "array",
-    //                 Items = new OpenApiSchema
-    //                 {
-    //                     Type = "array",
-    //                     MinItems = 4,
-    //                     Items = new OpenApiSchema
-    //                     {
-    //                         Type = "array",
-    //                         MinItems = 2,
-    //                         Items = new OpenApiSchema { Type = "number" }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     };
-    // }
+    public static ObjectTypeMapper GetPolygonSchema()
+    {
+        return new ObjectTypeMapper(typeof(Polygon), new JsonSchema
+        {
+            Type = JsonObjectType.Object,
+            Properties =
+            {
+                {
+                    "type",
+                    new JsonSchemaProperty { IsRequired = true, Type = JsonObjectType.String, Default = "Polygon" }
+                },
+                {
+                    "coordinates", new JsonSchemaProperty
+                    {
+                        IsRequired = true,
+                        Type = JsonObjectType.Array,
+                        Item = new JsonSchemaProperty()
+                        {
+                            Type = JsonObjectType.Array,
+                            MinItems = 3,
+                            Item = new JsonSchemaProperty()
+                            {
+                                Type = JsonObjectType.Array,
+                                MinItems = 2,
+                                Example = new[] { 25.1m, 60m },
+                                Item = new JsonSchemaProperty()
+                                {
+                                    Type = JsonObjectType.Number,
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
