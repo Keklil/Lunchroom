@@ -7,7 +7,7 @@ namespace Domain.Models
     {
         public Guid Id { get; set; }
         public DateTime Date { get; }
-        public Guid GroupId { get; }
+        public Guid KitchenId { get; }
         public IReadOnlyCollection<LunchSet> LunchSets => _lunchSets;
         private List<LunchSet> _lunchSets;
 
@@ -18,11 +18,11 @@ namespace Domain.Models
 
         private Menu(){}
         
-        public Menu(Guid groupId)
+        public Menu(Guid kitchenId)
         {
             Id = Guid.NewGuid();
             Date = DateTime.UtcNow;
-            GroupId = groupId;
+            KitchenId = kitchenId;
             _lunchSets = new List<LunchSet>();
             _options = new List<Option>();
             IsReported = false;

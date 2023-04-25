@@ -158,6 +158,7 @@ public static class ServiceExtension
 
             settings.AddExamples(serviceProvider);
             settings.TypeMappers.Add(CustomOpenApiSchemas.GetPolygonSchema());
+            settings.TypeMappers.Add(CustomOpenApiSchemas.GetPointSchema());
         });
     }
 }

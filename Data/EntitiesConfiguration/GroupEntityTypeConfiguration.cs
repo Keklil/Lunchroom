@@ -25,6 +25,11 @@ internal class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
         groupConfiguration.HasOne<User>(x => x.Admin)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);
+        
+        groupConfiguration.HasOne<Kitchen>()
+            .WithMany()
+            .HasForeignKey(x => x.SelectedKitchenId)
+            .OnDelete(DeleteBehavior.SetNull);;
 
         groupConfiguration.Property(x => x.Referral)
             .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),

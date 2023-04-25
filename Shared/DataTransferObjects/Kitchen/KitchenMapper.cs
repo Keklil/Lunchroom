@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Shared.DataTransferObjects.Group;
 
 namespace Shared.DataTransferObjects.Kitchen;
 
@@ -52,5 +53,16 @@ public static class KitchenMapper
             kitchenSettings.EditLimitingTimeForOrder(source.LimitingTimeForOrder);
             return kitchenSettings;
         }
+    }
+
+    public static AvailableKitchensDto MapToAvailableKitchensDto(this Domain.Models.Kitchen kitchen)
+    {
+        return new AvailableKitchensDto
+        {
+            OrganizationName = kitchen.OrganizationName,
+            Address = kitchen.Address,
+            Contacts = kitchen.Contacts,
+            Settings = kitchen.Settings?.Map()
+        };
     }
 }

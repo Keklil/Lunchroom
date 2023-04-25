@@ -230,7 +230,7 @@ public class MailIdleClient : IMailIdleClient, IDisposable
                     _logger.LogInformation($"Mail recived: {mailText}");
 
                     //TODO: Заглушка для групп
-                    await _publisher.Publish(new EmailWithMenuFetched(mailText, Guid.Empty));
+                    await _publisher.Publish(new UploadMenu(mailText, Guid.Empty));
                 }
             }
         }

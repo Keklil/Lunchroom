@@ -4,9 +4,9 @@ namespace Contracts.Repositories;
 
 public interface IMenuRepository
 {
-    Task<Menu?> GetMenuAsync(Guid menuId, bool trackChanges = true);
-    Task<Menu?> GetMenuByDateAsync(DateTime date, Guid groupId);
-    Task<List<Menu>> GetMenuByGroup(Guid groupId);
+    Task<Menu> GetMenuAsync(Guid menuId, bool trackChanges = true);
+    Task<Menu> GetMenuByDateAsync(DateTime date, Guid kitchenId);
+    Task<List<Menu>> GetMenuByGroup(Guid kitchenId);
     void CreateMenu(Menu menu);
     void UpdateMenu(Menu menu);
 }

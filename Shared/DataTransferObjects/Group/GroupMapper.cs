@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Shared.DataTransferObjects.User;
 
 namespace Shared.DataTransferObjects.Group;
 
@@ -8,14 +9,14 @@ public static class GroupMapper
     {
         return new GroupDto(
             source.Id,
-            source.Admin.Id,
+            source.Admin.Map(),
             source.OrganizationName,
-            source.Address,
             source.Members.Select(sourceMember => sourceMember.Id),
             source.Referral,
             source.Settings != null
                 ? new GroupKitchenSettingsDto(
-                    source.Settings.TargetEmail)
+                    source.Settings.Address,
+                    source.Settings.Location)
                 : null,
             source.PaymentInfo != null
                 ? new PaymentInfoDto
@@ -25,14 +26,16 @@ public static class GroupMapper
                     Description = source.PaymentInfo.Description,
                     Qr = source.PaymentInfo.Qr
                 }
-                : null);
+                : null,
+            source.SelectedKitchenId);
     }
 
-    public static GroupKitchenSettings Map(this GroupConfigDto source)
+    public static GroupSettings Map(this GroupConfigDto source)
     {
-        return new GroupKitchenSettings(
+        return new GroupSettings(
             source.GroupId,
-            source.TargetEmail);
+            source.Address,
+            source.Location);
     }
 
     public static PaymentInfo Map(this PaymentInfoDto source)

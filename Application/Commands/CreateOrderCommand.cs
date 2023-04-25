@@ -34,7 +34,7 @@ internal sealed class CreateOrderHandler : IRequestHandler<CreateOrderCommand, O
         orderEntity.ChangeStatus(1);
 
         _repository.Order.CreateOrder(orderEntity);
-        await _repository.SaveAsync();
+        await _repository.SaveAsync(cancellationToken);
 
         var orderToReturn = orderEntity.Map();
 

@@ -19,7 +19,7 @@ internal sealed class CreateMenuHandler : IRequestHandler<CreateMenuCommand, Men
         var todayMenu = await _repository.Menu.GetMenuByDateAsync(dateToday, request.GroupId);
         if (todayMenu is not null)
         {
-            _logger.LogWarning("Menu has already been uploaded");
+            _logger.LogWarning("Меню на сегодня уже было загружено");
             return null;
         }
 
@@ -28,7 +28,7 @@ internal sealed class CreateMenuHandler : IRequestHandler<CreateMenuCommand, Men
         foreach (var item in request.Menu.Options) menuEntity.AddOption(item.Name, item.Price);
 
         _repository.Menu.CreateMenu(menuEntity);
-        await _repository.SaveAsync();
+        await _repository.SaveAsync(cancellationToken);
 
         var menuToReturn = menuEntity.Map();
 

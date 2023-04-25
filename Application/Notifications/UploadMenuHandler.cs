@@ -7,15 +7,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Notifications;
 
-public sealed record EmailWithMenuFetched(string MailBody, Guid GroupId) : INotification;
+public sealed record UploadMenu(string RawTextMenu, Guid GroupId) : INotification;
 
-internal sealed class EmailWithMenuFetchedHandler : INotificationHandler<EmailWithMenuFetched>
+internal sealed class UploadMenuHandler : INotificationHandler<UploadMenu>
 {
-    private readonly ILogger<EmailWithMenuFetchedHandler> _logger;
+    private readonly ILogger<UploadMenuHandler> _logger;
     private readonly IMailParser _mailParser;
     private readonly ISender _sender;
 
-    public async Task Handle(EmailWithMenuFetched notification, CancellationToken token)
+    public async Task Handle(UploadMenu notification, CancellationToken token)
     {
         var options = new JsonSerializerOptions
         {
@@ -23,7 +23,7 @@ internal sealed class EmailWithMenuFetchedHandler : INotificationHandler<EmailWi
             WriteIndented = true
         };
 
-        var mailBody = notification.MailBody;
+        var mailBody = notification.RawTextMenu;
         var menuRaw = _mailParser.NormalizeMenu(mailBody);
         var text = JsonSerializer.Serialize(menuRaw, options);
         _logger.LogInformation("Меню нормализовано: {NormalizedMenu}", text);
@@ -35,7 +35,7 @@ internal sealed class EmailWithMenuFetchedHandler : INotificationHandler<EmailWi
         var menu = await _sender.Send(new CreateMenuCommand(menuDto, notification.GroupId), token);
     }
 
-    public EmailWithMenuFetchedHandler(ILogger<EmailWithMenuFetchedHandler> logger, ISender sender, IMailParser mailService)
+    public UploadMenuHandler(ILogger<UploadMenuHandler> logger, ISender sender, IMailParser mailService)
     {
         _logger = logger;
         _sender = sender;

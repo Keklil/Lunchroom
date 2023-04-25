@@ -1,6 +1,7 @@
 ﻿using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Infrastructure;
+using NetTopologySuite.Geometries;
 
 namespace Domain.Models;
 
@@ -9,26 +10,12 @@ public class Group
     public Guid Id { get; private set; }
     public User Admin { get; private set; }
     public string OrganizationName { get; private set; }
-    public string Address { get; private set; }
     public IReadOnlyCollection<User> Members => _members;
     private List<User> _members = new();
     public GroupReferral Referral { get; private set; }
-    public GroupKitchenSettings Settings { get; private set; }
+    public GroupSettings Settings { get; private set; }
+    public Guid? SelectedKitchenId { get; private set; }
     public PaymentInfo PaymentInfo { get; set; }
-
-    private Group()
-    {
-        
-    }
-    
-    public Group(User admin, string organizationName, string address)
-    {
-        Id = Guid.NewGuid();
-        OrganizationName = organizationName;
-        Address = address;
-        Admin = admin;
-        _members.Add(admin);
-    }
 
     public void AddMember(User member)
     {
@@ -43,7 +30,7 @@ public class Group
         Referral = new(referToken);
     }
 
-    public void SetSettings(GroupKitchenSettings settings)
+    public void SetSettings(GroupSettings settings)
     {
         Settings = settings;
     }
@@ -52,4 +39,19 @@ public class Group
     {
         PaymentInfo = paymentInfo;
     }
+
+    public void SelectKitchen(Kitchen kitchen)
+    {
+        SelectedKitchenId = kitchen.Id;
+    }
+    
+    public Group(User admin, string organizationName)
+    {
+        Id = Guid.NewGuid();
+        OrganizationName = organizationName;
+        Admin = admin;
+        _members.Add(admin);
+    }
+    
+    private Group() { }
 }

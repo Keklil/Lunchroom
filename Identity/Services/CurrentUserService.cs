@@ -19,6 +19,6 @@ public class CurrentUserService : ICurrentUserService
         if (Guid.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue("UserID"), out var parsedGuid))
             return parsedGuid;
 
-        throw new AuthException("Invalid guid in token");
+        throw new AuthException("В токене не найден идентификатор пользователя");
     }
 }

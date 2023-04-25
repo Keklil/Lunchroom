@@ -1,4 +1,5 @@
 ﻿using Contracts.Repositories;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace Data.Repositories;
 
 internal class GroupRepository : RepositoryBase<Group>, IGroupRepository
 {
-    public async Task<Group?> GetGroupAsync(Guid groupId, bool trackChanges = true)
+    public async Task<Group> GetGroupAsync(Guid groupId, bool trackChanges = true)
     {
         var group = await RepositoryContext.Groups.Where(x => x.Id.Equals(groupId))
             .Include(x => x.Members)
@@ -14,6 +15,9 @@ internal class GroupRepository : RepositoryBase<Group>, IGroupRepository
             .Include(x => x.PaymentInfo)
             .Include(x => x.Settings)
             .SingleOrDefaultAsync();
+        
+        if (group is null)
+            throw new NotFoundException($"Группа с id {groupId} не найдена.");
 
         return group;
     }

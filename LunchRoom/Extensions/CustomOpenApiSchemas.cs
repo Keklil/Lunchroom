@@ -34,9 +34,36 @@ public static class CustomOpenApiSchemas
                                 Item = new JsonSchemaProperty()
                                 {
                                     Type = JsonObjectType.Number,
-                                    
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    public static ObjectTypeMapper GetPointSchema()
+    {
+        return new ObjectTypeMapper(typeof(Point), new JsonSchema
+        {
+            Type = JsonObjectType.Object,
+            Properties =
+            {
+                {
+                    "type",
+                    new JsonSchemaProperty { IsRequired = true, Type = JsonObjectType.String, Default = "Point" }
+                },
+                {
+                    "coordinates", new JsonSchemaProperty
+                    {
+                        IsRequired = true,
+                        Type = JsonObjectType.Array,
+                        MinItems = 2,
+                        Example = new[] { 30.1m, 10m },
+                        Item = new JsonSchemaProperty()
+                        {
+                            Type = JsonObjectType.Number,
                         }
                     }
                 }

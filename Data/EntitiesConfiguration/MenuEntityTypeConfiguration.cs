@@ -18,7 +18,5 @@ internal class MenuEntityTypeConfiguration : IEntityTypeConfiguration<Menu>
             .UsePropertyAccessMode(PropertyAccessMode.Field);  
         */
         menuConfiguration.Property(x => x.Date);
-
-        menuConfiguration.Property(x => x.GroupId);
     }
 }

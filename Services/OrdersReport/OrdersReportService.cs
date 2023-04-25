@@ -1,8 +1,10 @@
 ﻿using Contracts;
 using Contracts.Repositories;
+using Domain.Exceptions;
 using Shared.DataTransferObjects;
 using Domain.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Shared.DataTransferObjects.Order;
 
 namespace Services.OrdersReport;
@@ -10,6 +12,7 @@ namespace Services.OrdersReport;
 public class OrdersReportService : IOrdersReportService
 {
     private readonly IRepositoryManager _repository;
+    private readonly ILogger<OrdersReportService> _logger;
     private IMemoryCache _cache;
     private MemoryCacheEntryOptions cacheOptions;
 
@@ -56,7 +59,7 @@ public class OrdersReportService : IOrdersReportService
             foreach (var option in orderOptions)
             {
                 optionsPrice += option.o.Price;
-                if (menu.Options.Where(x => x.Price == option.o.Price).Count() > 1)
+                if (menu.Options.Count(x => x.Price == option.o.Price) > 1)
                     optionsPriceToString += "+" + option.o.Price + $"({option.o.Name})"; //
                 else
                     optionsPriceToString += "+" + option.o.Price;
@@ -109,16 +112,25 @@ public class OrdersReportService : IOrdersReportService
         return reportForSend;
     }
 
-    public async Task<Menu> GetMenu(DateTime date, Guid groupId)
+    private async Task<Menu?> GetMenu(DateTime date, Guid groupId)
     {
-        var menu = await _repository.Menu.GetMenuByDateAsync(date, groupId);
+        try
+        {
+            var menu = await _repository.Menu.GetMenuByDateAsync(date, groupId);
 
-        return menu;
+            return menu;
+        }
+        catch (NotFoundException e)
+        {
+            _logger.LogInformation(e, "");
+            return null;
+        }
     }
 
-    public OrdersReportService(IRepositoryManager repository)
+    public OrdersReportService(IRepositoryManager repository, ILogger<OrdersReportService> logger)
     {
         _repository = repository;
+        _logger = logger;
 
         cacheOptions = new MemoryCacheEntryOptions
         {

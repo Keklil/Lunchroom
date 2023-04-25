@@ -1,29 +1,28 @@
 ﻿using Contracts.Repositories;
+using Contracts.Security;
 using Domain.Exceptions;
 using MediatR;
 
 namespace Application.Queries;
 
-public sealed record GetUserGroupIdsQuery(Guid Id) :
+public sealed record GetUserGroupIdsQuery :
     IRequest<List<Guid>>;
 
 internal class GetUserGroupIdsHandler : IRequestHandler<GetUserGroupIdsQuery, List<Guid>>
 {
     private readonly IRepositoryManager _repository;
+    private readonly ICurrentUserService _currentUserService;
 
     public async Task<List<Guid>> Handle(GetUserGroupIdsQuery request, CancellationToken cancellationToken)
     {
-        var userEntity = await _repository.User.GetUserAsync(request.Id, true);
-        if (userEntity is null)
-            throw new UserNotFoundException(request.Id);
-
-        var userGroups = await _repository.User.GetUserGroupIdsAsync(request.Id);
+        var userGroups = await _repository.User.GetUserGroupIdsAsync(_currentUserService.GetUserId());
 
         return userGroups;
     }
 
-    public GetUserGroupIdsHandler(IRepositoryManager repository)
+    public GetUserGroupIdsHandler(IRepositoryManager repository, ICurrentUserService currentUserService)
     {
         _repository = repository;
+        _currentUserService = currentUserService;
     }
 }

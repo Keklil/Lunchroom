@@ -1,13 +1,10 @@
 ﻿using Domain.Models;
 using Domain.Models.Enums;
+using NetTopologySuite.Geometries;
 
 namespace Shared.DataTransferObjects.Group;
 
 public record GroupConfigDto(
     Guid GroupId,
-    string KitchenName,
-    int HourExpired,
-    int MinuteExpired,
-    MenuUpdatePeriod Refresh,
-    MenuFormat MenuFormat,
-    string TargetEmail);
+    string Address,
+    Point Location);

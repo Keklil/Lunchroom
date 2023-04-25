@@ -16,8 +16,6 @@ internal class GetOrdersReportQueryHandler : IRequestHandler<GetOrdersReportQuer
     public async Task<List<OrderReportDto>> Handle(GetOrdersReportQuery request, CancellationToken cancellationToken)
     {
         var report = await _reportService.GenerateOrdersReport(request.Date, request.GroupId, false);
-        if (report is null)
-            _logger.LogWarning($"Для группы {request.GroupId} на дату {request.Date} отчета вернулся пустым");
 
         return report;
     }

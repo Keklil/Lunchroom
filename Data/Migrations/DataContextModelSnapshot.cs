@@ -30,10 +30,6 @@ namespace Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("AdminId")
                         .HasColumnType("uuid");
 
@@ -45,6 +41,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("SelectedKitchenId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("SettingsId")
                         .HasColumnType("uuid");
 
@@ -52,23 +51,29 @@ namespace Data.Migrations
 
                     b.HasIndex("AdminId");
 
+                    b.HasIndex("SelectedKitchenId");
+
                     b.HasIndex("SettingsId");
 
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("Domain.Models.GroupKitchenSettings", b =>
+            modelBuilder.Entity("Domain.Models.GroupSettings", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("TargetEmail")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Point>("Location")
+                        .IsRequired()
+                        .HasColumnType("geometry (point)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("GroupKitchenSettings");
+                    b.ToTable("GroupSettings");
                 });
 
             modelBuilder.Entity("Domain.Models.Kitchen", b =>
@@ -152,9 +157,6 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsReported")
                         .HasColumnType("boolean");
@@ -295,6 +297,9 @@ namespace Data.Migrations
                     b.Property<string>("Patronymic")
                         .HasColumnType("text");
 
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
@@ -363,7 +368,12 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.GroupKitchenSettings", "Settings")
+                    b.HasOne("Domain.Models.Kitchen", null)
+                        .WithMany()
+                        .HasForeignKey("SelectedKitchenId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Models.GroupSettings", "Settings")
                         .WithMany()
                         .HasForeignKey("SettingsId")
                         .OnDelete(DeleteBehavior.Cascade)

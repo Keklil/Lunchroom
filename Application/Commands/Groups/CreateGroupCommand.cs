@@ -10,7 +10,7 @@ using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
-public sealed record CreateGroupCommand(Guid AdminId, string OrganizationName, string Address) : IRequest<GroupDto>;
+public sealed record CreateGroupCommand(string OrganizationName) : IRequest<GroupDto>;
 
 internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, GroupDto>
 {
@@ -28,14 +28,14 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
             if (admin is null || admin.Role is not Role.KitchenOperator)
                 throw new AttemptCreateGroupByNonAdminException();
 
-            var group = new Group(admin, request.OrganizationName, request.Address);
+            var group = new Group(admin, request.OrganizationName);
 
             var referToken = await _tokenService.GenerateReferral(group);
 
             group.SetReferralToken(referToken);
 
             _repository.Groups.CreateGroup(group);
-            await _repository.SaveAsync();
+            await _repository.SaveAsync(cancellationToken);
 
             return group.Map();
         }

@@ -54,7 +54,10 @@ internal class UserRepository : RepositoryBase<User>, IUserRepository
             .Select(x => x.Groups)
             .SingleOrDefaultAsync();
 
-        var userGroups = user?.Select(x => x.Id).ToList();
+        if (user is null)
+            throw new UserNotFoundException(userId);
+        
+        var userGroups = user.Select(x => x.Id).ToList();
         return userGroups;
     }
 

@@ -1,4 +1,5 @@
 ﻿using Contracts.Repositories;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,27 +7,37 @@ namespace Data.Repositories;
 
 internal class MenuRepository : RepositoryBase<Menu>, IMenuRepository
 {
-    public async Task<Menu?> GetMenuAsync(Guid menuId, bool trackChanges = true)
+    public async Task<Menu> GetMenuAsync(Guid menuId, bool trackChanges = true)
     {
-        return await FindByCondition(x => x.Id.Equals(menuId), trackChanges)
+        var menu = await FindByCondition(x => x.Id.Equals(menuId), trackChanges)
             .Include(x => x.LunchSets)
             .Include(x => x.Options)
             .SingleOrDefaultAsync();
+        
+        if (menu is null)
+            throw new NotFoundException($"Меню не найдено для идентификатора: {menuId}");
+        
+        return menu;
     }
 
-    public async Task<Menu?> GetMenuByDateAsync(DateTime date, Guid groupId)
+    public async Task<Menu> GetMenuByDateAsync(DateTime date, Guid kitchenId)
     {
         var dateSearch = date.ToUniversalTime().Date;
-        return await FindByCondition(x => x.Date.Date.Equals(dateSearch) && x.GroupId.Equals(groupId), false)
+        var menu = await FindByCondition(x => x.Date.Date.Equals(dateSearch) && x.KitchenId.Equals(kitchenId), false)
             .Include(x => x.LunchSets)
             .Include(x => x.Options)
             .FirstOrDefaultAsync();
+
+        if (menu is null)
+            throw new NotFoundException($"Меню не найдено для даты: {date.Date}");
+        
+        return menu;
     }
 
-    public async Task<List<Menu>> GetMenuByGroup(Guid groupId)
+    public async Task<List<Menu>> GetMenuByGroup(Guid kitchenId)
     {
         var menus = await RepositoryContext.Menu
-            .Where(x => x.GroupId.Equals(groupId))
+            .Where(x => x.KitchenId.Equals(kitchenId))
             .OrderByDescending(x => x.Date)
             .ToListAsync();
         return menus;

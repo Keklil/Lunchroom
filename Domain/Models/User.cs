@@ -10,6 +10,7 @@
         public bool IsEmailChecked { get; private set; }
         public Role Role { get; private set; }
         public string Password { get; private set; }
+        public string? Phone { get; private set; }
         public IReadOnlyCollection<Group> Groups => _groups;
         private List<Group> _groups = new();
 
@@ -47,6 +48,11 @@
             Surname = surname;
             Name = name;
             Patronymic = patronymic;
+        }
+        
+        public void ChangePhone(string phone)
+        {
+            Phone = phone;
         }
 
         public static User CreateCustomer(string email, string password)

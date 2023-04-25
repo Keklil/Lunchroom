@@ -13,6 +13,8 @@ internal class KitchenSettingsEntityTypeConfiguration : IEntityTypeConfiguration
         builder.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        builder.OwnsMany(x => x.ShippingAreas).Property(x => x.Polygon).HasColumnType("geometry (polygon)");
+        builder.OwnsMany(x => x.ShippingAreas)
+            .Property(x => x.Polygon)
+            .HasColumnType("geometry (polygon)");
     }
 }

@@ -17,8 +17,6 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
         if (orderEntity is null)
             throw new NotFoundException("Order not found");
 
-        var menu = await _repository.Menu.GetMenuAsync(orderEntity.MenuId, false);
-
         var order = orderEntity.Map();
 
         return order;

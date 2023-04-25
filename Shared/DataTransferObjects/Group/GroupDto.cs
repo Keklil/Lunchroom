@@ -1,13 +1,14 @@
 ﻿using Domain.Infrastructure;
+using Shared.DataTransferObjects.User;
 
 namespace Shared.DataTransferObjects.Group;
 
 public record GroupDto(
     Guid Id,
-    Guid AdminId,
+    UserDto Admin,
     string OrganizationName,
-    string Address,
     IEnumerable<Guid> Members,
     GroupReferral Referral,
     GroupKitchenSettingsDto Settings,
-    PaymentInfoDto PaymentInfo);
+    PaymentInfoDto PaymentInfo,
+    Guid? SelectedKitchenId);

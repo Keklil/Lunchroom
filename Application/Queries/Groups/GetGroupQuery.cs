@@ -14,8 +14,6 @@ internal class GetGroupHandler : IRequestHandler<GetGroupQuery, GroupDto>
     public async Task<GroupDto> Handle(GetGroupQuery request, CancellationToken cancellationToken)
     {
         var group = await _repository.Groups.GetGroupAsync(request.Id, false);
-        if (group is null)
-            throw new NotFoundException("Группа не найдена");
 
         return group.Map();
     }

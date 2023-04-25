@@ -61,10 +61,10 @@ public class MenuController : ControllerBase
     /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> UploadMenu([FromBody] RawMenuDto request)
+    public async Task<ActionResult> UploadMenu(Guid kitchenId, [FromBody] RawMenuDto request)
     {
         var rawMenu = string.Join("\n", request.Menu);
-        await _publisher.Publish(new EmailWithMenuFetched(rawMenu, request.GroupId));
+        await _publisher.Publish(new UploadMenu(rawMenu, request.GroupId));
 
         return Ok();
     }

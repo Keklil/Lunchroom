@@ -13,7 +13,8 @@ public static class UserMapper
             Email = source.Email,
             IsEmailChecked = source.IsEmailChecked,
             Groups = source.Groups.Select(x => x.Id).ToList(),
-            NameFill = !string.IsNullOrWhiteSpace(source.Name) && !string.IsNullOrWhiteSpace(source.Surname)
+            NameFill = !string.IsNullOrWhiteSpace(source.Name) && !string.IsNullOrWhiteSpace(source.Surname),
+            Phone = source.Phone
         };
     }
 }

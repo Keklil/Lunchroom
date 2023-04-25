@@ -15,9 +15,7 @@ internal class GetMenuQueryHandler : IRequestHandler<GetMenuQuery, MenuDto>
     public async Task<MenuDto> Handle(GetMenuQuery request, CancellationToken cancellationToken)
     {
         var menu = await _repository.Menu.GetMenuByDateAsync(request.Date, request.GroupId);
-        if (menu is null)
-            throw new NotFoundException($"Меню не найдено для даты: {request.Date.Date}");
-        
+
         return menu.Map();
     }
 
