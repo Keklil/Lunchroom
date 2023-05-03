@@ -4,13 +4,13 @@ using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
-public sealed record AddPaymentInfoToGroupCommand(PaymentInfoDto PaymentInfo) : IRequest<Unit>;
+public sealed record AddPaymentInfoToGroupCommand(PaymentInfoDto PaymentInfo) : IRequest;
 
-internal sealed class AddPaymentInfoToGroupHandler : IRequestHandler<AddPaymentInfoToGroupCommand, Unit>
+internal sealed class AddPaymentInfoToGroupHandler : IRequestHandler<AddPaymentInfoToGroupCommand>
 {
     private readonly IRepositoryManager _repository;
 
-    public async Task<Unit> Handle(AddPaymentInfoToGroupCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AddPaymentInfoToGroupCommand request, CancellationToken cancellationToken)
     {
         var groupEntity = await _repository.Groups.GetGroupAsync(request.PaymentInfo.GroupId);
 
@@ -18,9 +18,7 @@ internal sealed class AddPaymentInfoToGroupHandler : IRequestHandler<AddPaymentI
 
         groupEntity.SetPaymentInfo(payment);
         _repository.Groups.UpdateGroup(groupEntity);
-        await _repository.SaveAsync();
-
-        return Unit.Value;
+        await _repository.SaveAsync(cancellationToken);
     }
 
     public AddPaymentInfoToGroupHandler(IRepositoryManager repository)

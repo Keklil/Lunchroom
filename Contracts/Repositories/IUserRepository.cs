@@ -11,4 +11,5 @@ public interface IUserRepository : IRepositoryBase<User>
     void UpdateUser(User user);
     Task<User?> GetUserByEmailAsync(string email);
     Task<List<Guid>> GetUserGroupIdsAsync(Guid userId);
+    Task<IReadOnlyCollection<Group>> GetUserGroupAsync(Guid userId);
 }

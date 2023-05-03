@@ -93,9 +93,11 @@ public class GroupController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-    public async Task GetAllowedKitchens(Guid groupId)
+    public async Task<List<AvailableKitchensDto>> GetAllowedKitchens(Guid groupId)
     {
-        await _sender.Send(new GetAvailableKitchensQuery(groupId));
+        var groups = await _sender.Send(new GetAvailableKitchensQuery(groupId));
+
+        return groups;
     }
 
     public GroupController(ISender sender,

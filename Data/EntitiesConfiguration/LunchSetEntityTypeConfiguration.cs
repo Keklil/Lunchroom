@@ -12,9 +12,5 @@ internal class LunchSetEntityTypeConfiguration : IEntityTypeConfiguration<LunchS
 
         lunchSetConfiguration.Property(x => x.Id)
             .ValueGeneratedNever();
-
-        lunchSetConfiguration.Property(x => x.Price);
-
-        lunchSetConfiguration.Property(x => x.LunchSetList);
     }
 }

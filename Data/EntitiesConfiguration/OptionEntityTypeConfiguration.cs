@@ -16,5 +16,7 @@ internal class OptionEntityTypeConfiguration : IEntityTypeConfiguration<Option>
         optionConfiguraion.Property<string>(x => x.Name);
 
         optionConfiguraion.Property(x => x.Price);
+
+        optionConfiguraion.HasOne(x => x.Dish);
     }
 }

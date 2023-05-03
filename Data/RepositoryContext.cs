@@ -16,6 +16,8 @@ public class RepositoryContext : DbContext
     public DbSet<Group> Groups { get; set; }
     public DbSet<Kitchen> Kitchens { get; set; }
     public DbSet<KitchenSettings> KitchenSettings { get; set; }
+    public DbSet<Dish> Dishes { get; set; }
+    public DbSet<DishType> DishTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

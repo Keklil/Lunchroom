@@ -9,15 +9,14 @@ namespace Domain.Models
         public DateTime Date { get; }
         public Guid KitchenId { get; }
         public IReadOnlyCollection<LunchSet> LunchSets => _lunchSets;
-        private List<LunchSet> _lunchSets;
+        private readonly List<LunchSet> _lunchSets;
 
         public IReadOnlyCollection<Option> Options => _options;
-        private List<Option> _options;
-
+        private readonly List<Option> _options;
+        
+        public List<Dish> Dishes { get; }
         public bool IsReported { get; private set; }
 
-        private Menu(){}
-        
         public Menu(Guid kitchenId)
         {
             Id = Guid.NewGuid();
@@ -25,27 +24,47 @@ namespace Domain.Models
             KitchenId = kitchenId;
             _lunchSets = new List<LunchSet>();
             _options = new List<Option>();
+            Dishes = new List<Dish>();
             IsReported = false;
         }
 
-        public void AddLunchSet(decimal price, List<string> lunchSet)
+        public void AddLunchSet(decimal price, List<Dish> dishes)
         {
-            if (lunchSet is null || lunchSet.Count == 0)
+            var dishIds = Dishes.Select(x => x.Id).ToHashSet();
+            foreach (var dish in dishes)
             {
-                throw new DomainException("List of lunch set items is empty");
+                if (!dishIds.Contains(dish.Id))
+                    throw new DomainException($"Попытка добавить в меню ланч-сет с блюдом ({dish.Id}), не принадлежащем к меню");
             }
-            LunchSet newLunchSet = new LunchSet(price, lunchSet);
+            
+            if (price < 0)
+                throw new DomainException("Попытка установить отрицательную цену для опции");
+
+            var newLunchSet = new LunchSet(price, dishes);
             _lunchSets.Add(newLunchSet);
         }
 
-        public void AddOption(string name, decimal price)
+        public void AddOption(Dish dish, string? name = null, decimal? price = null)
+        {
+            var dishIds = Dishes.Select(x => x.Id).ToHashSet();
+            if (!dishIds.Contains(dish.Id))
+                throw new DomainException($"Попытка добавить в меню опцию с блюдом ({dish.Id}), не принадлежащем к меню");
+            
+            if (price < 0)
+                throw new DomainException("Попытка установить отрицательную цену для опции");
+
+            
+            var newOption = new Option(dish, name, price);
+            _options.Add(newOption);
+        }
+
+        public void AddDish(string name, decimal price, DishType? type = null)
         {
             if (price < 0)
-            {
-                throw new DomainException("Invalid price");
-            }
-            Option newOption = new Option(name, price);
-            _options.Add(newOption);
+                throw new DomainException("Попытка установить отрицательную цену для блюда");
+
+            var newDish = new Dish(name, price, type);
+            Dishes.Add(newDish);
         }
 
         public LunchSet? GetLunchSetById(Guid lunchSetId)
@@ -62,5 +81,7 @@ namespace Domain.Models
         {
             IsReported = true;
         }
+        
+        private Menu(){}
     }
 }

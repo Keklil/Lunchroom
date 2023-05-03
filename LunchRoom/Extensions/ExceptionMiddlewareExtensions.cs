@@ -79,7 +79,7 @@ public static class ExceptionMiddlewareExtensions
                                 }));
                             break;
 
-                        case AttemptCreateGroupByNonAdminException attemptCreateGroupByNonAdminException:
+                        case AttemptCreateGroupByNonCustomerException attemptCreateGroupByNonAdminException:
                             await context.Response
                                 .WriteAsync(JsonSerializer.Serialize(new GroupErrorResponse
                                 {

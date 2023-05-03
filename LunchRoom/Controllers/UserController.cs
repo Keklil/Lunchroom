@@ -38,9 +38,9 @@ public class UserController : ControllerBase
     [Authorize(Roles = "Admin,Customer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<List<Guid>> GetUserGroupIds()
+    public async Task<List<UserGroupDto>> GetUserGroup()
     {
-        var groups = await _sender.Send(new GetUserGroupIdsQuery());
+        var groups = await _sender.Send(new GetUserGroupsQuery());
 
         return groups;
     }

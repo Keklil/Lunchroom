@@ -24,8 +24,8 @@ internal sealed class CreateMenuHandler : IRequestHandler<CreateMenuCommand, Men
         }
 
         var menuEntity = new Menu(request.GroupId);
-        foreach (var item in request.Menu.LunchSets) menuEntity.AddLunchSet(item.Price, item.LunchSetList);
-        foreach (var item in request.Menu.Options) menuEntity.AddOption(item.Name, item.Price);
+        //foreach (var item in request.Menu.LunchSets) menuEntity.AddLunchSet(item.Price, item.LunchSetList);
+        //foreach (var item in request.Menu.Options) menuEntity.AddOption(item.Name, item.Price);
 
         _repository.Menu.CreateMenu(menuEntity);
         await _repository.SaveAsync(cancellationToken);

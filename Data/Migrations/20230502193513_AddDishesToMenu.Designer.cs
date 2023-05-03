@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230502193513_AddDishesToMenu")]
+    partial class AddDishesToMenu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,7 +86,7 @@ namespace Data.Migrations
                     b.Property<Guid?>("SelectedKitchenId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SettingsId")
+                    b.Property<Guid>("SettingsId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -426,7 +429,9 @@ namespace Data.Migrations
 
                     b.HasOne("Domain.Models.GroupSettings", "Settings")
                         .WithMany()
-                        .HasForeignKey("SettingsId");
+                        .HasForeignKey("SettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Admin");
 

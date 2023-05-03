@@ -4,12 +4,14 @@ using Data.EntitiesConfiguration;
 using Identity.Services;
 using LoggerService;
 using LunchRoom.Extensions;
-using NetTopologySuite.IO.Converters;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
+using Services;
 using Services.AuthService;
 using Services.MailService;
 using Services.OrdersReport;
+
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureLoggerService(builder.Configuration);
@@ -29,6 +31,7 @@ builder.Services.AddScoped<IMailSender, MailSender>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IMenuImportService, MenuImportService>();
 builder.Services.AddScoped<DbInitializer>();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthentication(builder.Configuration);
@@ -44,7 +47,7 @@ app.ConfigureExceptionHandler(logger);
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using (var scope = scopeFactory.CreateScope())
 {
-    var dbInitializer = scope.ServiceProvider.GetService<DbInitializer>();
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
     dbInitializer.Initialize();
     dbInitializer.SeedData();
 }

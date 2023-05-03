@@ -2,22 +2,25 @@
 using Contracts.Security;
 using Domain.Exceptions;
 using MediatR;
+using Shared.DataTransferObjects.User;
 
 namespace Application.Queries;
 
-public sealed record GetUserGroupIdsQuery :
-    IRequest<List<Guid>>;
+public sealed record GetUserGroupsQuery :
+    IRequest<List<UserGroupDto>>;
 
-internal class GetUserGroupIdsHandler : IRequestHandler<GetUserGroupIdsQuery, List<Guid>>
+internal class GetUserGroupIdsHandler : IRequestHandler<GetUserGroupsQuery, List<UserGroupDto>>
 {
     private readonly IRepositoryManager _repository;
     private readonly ICurrentUserService _currentUserService;
 
-    public async Task<List<Guid>> Handle(GetUserGroupIdsQuery request, CancellationToken cancellationToken)
+    public async Task<List<UserGroupDto>> Handle(GetUserGroupsQuery request, CancellationToken cancellationToken)
     {
-        var userGroups = await _repository.User.GetUserGroupIdsAsync(_currentUserService.GetUserId());
+        var userGroups = await _repository.User.GetUserGroupAsync(_currentUserService.GetUserId());
 
-        return userGroups;
+        var userGroupsDto = userGroups.Select(x => new UserGroupDto(x.Id, x.OrganizationName)).ToList();
+
+        return userGroupsDto;
     }
 
     public GetUserGroupIdsHandler(IRepositoryManager repository, ICurrentUserService currentUserService)

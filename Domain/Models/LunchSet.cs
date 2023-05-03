@@ -6,15 +6,18 @@ namespace Domain.Models
     public class LunchSet
     {
         public Guid Id { get; set; }
-        public decimal Price { get; private set; }
-        public List<string> LunchSetList { get; private set; }
+        public decimal Price { get; }
+        public string? Name { get; }
+        public IReadOnlyCollection<Dish> Dishes { get; }
 
-        public LunchSet(decimal price, List<string> lunchSetList)
+        public LunchSet(decimal price, List<Dish> dishes, string? name = null)
         {
             Id = Guid.NewGuid();
             Price = price;
-            LunchSetList = lunchSetList;
+            Dishes = dishes;
+            Name = name;
         }
         
+        private LunchSet() { }
     }
 }

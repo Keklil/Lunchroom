@@ -25,8 +25,8 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
         {
             var currentUserId = _currentUserService.GetUserId();
             var admin = await _repository.User.GetUserAsync(currentUserId);
-            if (admin is null || admin.Role is not Role.KitchenOperator)
-                throw new AttemptCreateGroupByNonAdminException();
+            if (admin is null || admin.Role is not Role.Customer)
+                throw new AttemptCreateGroupByNonCustomerException();
 
             var group = new Group(admin, request.OrganizationName);
 
@@ -39,7 +39,7 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
 
             return group.Map();
         }
-        catch (AttemptCreateGroupByNonAdminException ex)
+        catch (AttemptCreateGroupByNonCustomerException ex)
         {
             _logger.LogError(ex.ToString());
             throw;

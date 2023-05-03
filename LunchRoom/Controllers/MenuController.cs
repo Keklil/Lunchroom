@@ -1,4 +1,5 @@
-﻿using Application.Notifications;
+﻿using Application.Commands.Groups;
+using Application.Notifications;
 using Application.Queries;
 using Domain.ErrorModel;
 using MediatR;
@@ -65,6 +66,21 @@ public class MenuController : ControllerBase
     {
         var rawMenu = string.Join("\n", request.Menu);
         await _publisher.Publish(new UploadMenu(rawMenu, request.GroupId));
+
+        return Ok();
+    }
+
+    /// <summary>
+    ///     Загрузка меню из файла
+    /// </summary>
+    /// <param name="kitchenId"></param>
+    /// <param name="menu"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> UploadMenuFromFile(Guid kitchenId, IFormFile menu)
+    {
+        await _sender.Send(new UploadMenuFromFile(kitchenId, menu));
 
         return Ok();
     }

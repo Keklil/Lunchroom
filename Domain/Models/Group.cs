@@ -11,11 +11,11 @@ public class Group
     public User Admin { get; private set; }
     public string OrganizationName { get; private set; }
     public IReadOnlyCollection<User> Members => _members;
-    private List<User> _members = new();
+    private readonly List<User> _members = new();
     public GroupReferral Referral { get; private set; }
-    public GroupSettings Settings { get; private set; }
+    public GroupSettings? Settings { get; private set; }
     public Guid? SelectedKitchenId { get; private set; }
-    public PaymentInfo PaymentInfo { get; set; }
+    public PaymentInfo? PaymentInfo { get; set; }
 
     public void AddMember(User member)
     {
@@ -51,6 +51,7 @@ public class Group
         OrganizationName = organizationName;
         Admin = admin;
         _members.Add(admin);
+        PaymentInfo = new PaymentInfo();
     }
     
     private Group() { }

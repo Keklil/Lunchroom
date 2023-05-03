@@ -1,4 +1,5 @@
 ﻿using Contracts.Repositories;
+using Domain.Exceptions;
 using MediatR;
 using Shared.DataTransferObjects.Group;
 using Shared.DataTransferObjects.Kitchen;
@@ -13,9 +14,12 @@ internal class GetAllowedKitchenQueryHandler : IRequestHandler<GetAvailableKitch
     
     public async Task<List<AvailableKitchensDto>> Handle(GetAvailableKitchensQuery request, CancellationToken cancellationToken)
     {
-        var groupLocation = (await _repository.Groups.GetGroupAsync(request.GroupId)).Settings.Location;
+        var groupLocation = await _repository.Groups.GetGroupAsync(request.GroupId);
         
-        var kitchens = await _repository.Kitchens.GetKitchensByLocationAsync(groupLocation);
+        if (groupLocation.Settings is null)
+            throw new NotFoundException($"Группа с id {request.GroupId} не найдена.");
+        
+        var kitchens = await _repository.Kitchens.GetKitchensByLocationAsync(groupLocation.Settings.Location);
         
         return kitchens.Select(kitchen => kitchen.MapToAvailableKitchensDto()).ToList();
     }

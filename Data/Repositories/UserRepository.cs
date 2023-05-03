@@ -60,6 +60,20 @@ internal class UserRepository : RepositoryBase<User>, IUserRepository
         var userGroups = user.Select(x => x.Id).ToList();
         return userGroups;
     }
+    
+    public async Task<IReadOnlyCollection<Group>> GetUserGroupAsync(Guid userId)
+    {
+        var user = await RepositoryContext.Users
+            .Include(x => x.Groups)
+            .Where(x => x.Id.Equals(userId))
+            .Select(x => x.Groups)
+            .SingleOrDefaultAsync();
+
+        if (user is null)
+            throw new UserNotFoundException(userId);
+        
+        return user;
+    }
 
     public UserRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)

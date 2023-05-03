@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿
 using Contracts.Repositories;
 using Contracts.Security;
 using Domain.Exceptions.AuthExceptions;
@@ -20,8 +20,8 @@ internal sealed class CreateKitchenHandler : IRequestHandler<CreateKitchenComman
         var currentUserId = _currentUserService.GetUserId();
         var user = await _repository.User.GetUserAsync(currentUserId);
         
-        if (user.Role != Role.KitchenOperator)
-            throw new AttemptCreateGroupByNonAdminException();
+        if (user.Role != Role.Customer)
+            throw new AttemptCreateGroupByNonCustomerException();
 
         var kitchen = new Kitchen(request.Kitchen.OrganizationName, request.Kitchen.Address, request.Kitchen.Inn, request.Kitchen.Contacts.Email, request.Kitchen.Contacts.Phone);
         kitchen.AddManager(user);

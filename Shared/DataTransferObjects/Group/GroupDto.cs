@@ -9,6 +9,6 @@ public record GroupDto(
     string OrganizationName,
     IEnumerable<Guid> Members,
     GroupReferral Referral,
-    GroupKitchenSettingsDto Settings,
-    PaymentInfoDto PaymentInfo,
+    GroupKitchenSettingsDto? Settings,
+    PaymentInfoDto? PaymentInfo,
     Guid? SelectedKitchenId);

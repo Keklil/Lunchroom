@@ -15,7 +15,8 @@ public static class OrderMapper
                 {
                     Id = source.LunchSet.Id,
                     Price = source.LunchSet.Price,
-                    LunchSetList = source.LunchSet.LunchSetList,
+                    // TODO: Переработать под новые требования
+                    LunchSetList = new List<string>(),
                     LunchSetUnits = source.LunchSetUnits
                 }
                 : null,
