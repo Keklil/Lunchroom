@@ -1,5 +1,6 @@
 ﻿using Contracts.Repositories;
 using Domain.Exceptions;
+using Domain.Infrastructure;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
@@ -55,6 +56,12 @@ internal class KitchenRepository : RepositoryBase<Kitchen>, IKitchenRepository
             .ToListAsync();
         
         return kitchens;
+    }
+
+    public async Task SaveVerifyStamp(KitchenVerificationStamp stamp)
+    {
+        RepositoryContext.KitchenVerificationStamps
+            .Add(stamp);
     }
 
     public KitchenRepository(RepositoryContext repositoryContext)

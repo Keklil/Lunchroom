@@ -49,6 +49,11 @@ public class Kitchen
     {
         _managers.Add(manager);
     }
+
+    public void VerifyKitchen()
+    {
+        IsApproved = true;
+    }
     
     public Kitchen(string organizationName, string address, string inn, string? email, string? phone)
     {

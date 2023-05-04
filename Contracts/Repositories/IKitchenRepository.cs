@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Infrastructure;
+using Domain.Models;
 using NetTopologySuite.Geometries;
 
 namespace Contracts.Repositories;
@@ -11,4 +12,5 @@ public interface IKitchenRepository
     void UpdateKitchen(Kitchen kitchen);
     void DeleteKitchen(Kitchen kitchen);
     Task<List<Kitchen>> GetKitchensByLocationAsync(Point location, bool trackChanges = true);
+    Task SaveVerifyStamp(KitchenVerificationStamp stamp);
 }

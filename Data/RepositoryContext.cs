@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Infrastructure;
+using Domain.Models;
 using Domain.SecurityModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ public class RepositoryContext : DbContext
     public DbSet<KitchenSettings> KitchenSettings { get; set; }
     public DbSet<Dish> Dishes { get; set; }
     public DbSet<DishType> DishTypes { get; set; }
+    public DbSet<KitchenVerificationStamp> KitchenVerificationStamps { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

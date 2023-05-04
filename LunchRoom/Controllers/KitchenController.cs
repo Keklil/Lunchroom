@@ -3,6 +3,7 @@ using Application.Queries.Kitchen;
 using Domain.ErrorModel;
 using LunchRoom.Controllers.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetTopologySuite.Geometries;
 using Shared.DataTransferObjects.Kitchen;
@@ -89,6 +90,20 @@ public class KitchenController : ControllerBase
     public async Task ConfigureShippingAreas(Guid kitchenId, [FromBody] List<Polygon> areas)
     {
         await _sender.Send(new EditKitchenShippingAreasCommand(kitchenId, areas));
+    }
+    
+    /// <summary>
+    ///  Подтвердить, что столовая проверена модератером.
+    /// </summary>
+    /// <param name="kitchenId"></param>
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    public async Task KitchenIsVerify(Guid kitchenId)
+    {
+        await _sender.Send(new VerifyKitchenCommand(kitchenId));
     }
     
 

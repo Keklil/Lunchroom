@@ -21,13 +21,6 @@ public class DataTableDataTableParser : IDataTableParser
         if (!ValidateFile(file, out var reader))
             return Report;
         
-        var readerConfiguration = new ExcelDataSetConfiguration()
-        {
-            ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
-            {
-                
-            }
-        };
         var table = reader.AsDataSet().Tables[0];
 
         var menu = new Domain.Models.Menu(kitchenId);
@@ -99,7 +92,7 @@ public class DataTableDataTableParser : IDataTableParser
                 
         if (positionTypeColumnIndex.IsMapped)
         {
-            if (TryGetValueFromRange(row, positionTypeColumnIndex, out var typeValue))
+            if (TryGetValueFromCellsRange(row, positionTypeColumnIndex, out var typeValue))
             {
                 if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Dish].Contains(typeValue))
                     parsedResult.Type = RowType.Dish;
@@ -123,7 +116,7 @@ public class DataTableDataTableParser : IDataTableParser
         var nameColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Name];
         if (nameColumnIndex.IsMapped)
         {
-            if (TryGetValueFromRange(row, nameColumnIndex, out var nameValue))
+            if (TryGetValueFromCellsRange(row, nameColumnIndex, out var nameValue))
                 if (nameValue != null)
                     parsedResult.Name = nameValue;
         }
@@ -141,7 +134,7 @@ public class DataTableDataTableParser : IDataTableParser
         var priceColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Price];
         if (priceColumnIndex.IsMapped)
         {
-            if (TryGetValueFromRange(row, priceColumnIndex, out var priceValue))
+            if (TryGetValueFromCellsRange(row, priceColumnIndex, out var priceValue))
                     parsedResult.Price = priceValue;
         }
         else
@@ -157,7 +150,7 @@ public class DataTableDataTableParser : IDataTableParser
         var unitColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Units];
         if (unitColumnIndex.IsMapped)
         {
-            if (TryGetValueFromRange(row, unitColumnIndex, out var unitValue))
+            if (TryGetValueFromCellsRange(row, unitColumnIndex, out var unitValue))
                 if (unitValue != null && MenuUnitsMap.AllowedTokens.Contains(unitValue))
                     parsedResult.Units = unitValue;
         }
@@ -174,7 +167,7 @@ public class DataTableDataTableParser : IDataTableParser
         var vendorCodeColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.VendorCode];
         if (vendorCodeColumnIndex.IsMapped)
         {
-            if (TryGetValueFromRange(row, vendorCodeColumnIndex, out var articleValue))
+            if (TryGetValueFromCellsRange(row, vendorCodeColumnIndex, out var articleValue))
                 parsedResult.VendorCode = articleValue;
         }
         else
@@ -188,7 +181,7 @@ public class DataTableDataTableParser : IDataTableParser
         return true;
     }
 
-    private bool TryGetValueFromRange(DataRow row, TableColumnsMap.ColumnTypeIndex columnTypeIndex, out string? result)
+    private bool TryGetValueFromCellsRange(DataRow row, TableColumnsMap.ColumnTypeIndex columnTypeIndex, out string? result)
     {
         result = null;
         for (var i = columnTypeIndex.StartIndex; i <= columnTypeIndex.EndIndex; i++)
@@ -288,11 +281,6 @@ internal static class MenuUnitsMap
 {
     public static readonly HashSet<string> AllowedTokens =
         new () { "Ед", "Шт", "Ед.", "Шт.", "Порц", "Порц.", "Порция", "Единица товара", "Штука" };
-    
-    internal enum TokenName
-    {
-        Unit
-    }
 }
 
 internal class TableColumnsMap
@@ -365,7 +353,7 @@ internal class TableColumnsMap
         }
         
         if (!this[ColumnTypes.PositionType].IsMapped && !this[ColumnTypes.Name].IsMapped)
-            throw new DomainException("Не удалось прочитать таблицу: столбцы позиция или название не найдены");
+            throw new DomainException("Не удалось прочитать таблицу: столбцы \"Тип\" или \"Название\" не найдены");
     }
 
     internal class ColumnTypeIndex
