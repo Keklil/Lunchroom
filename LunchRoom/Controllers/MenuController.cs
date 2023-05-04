@@ -10,7 +10,7 @@ using Shared.DataTransferObjects.Menu;
 namespace LunchRoom.Controllers;
 
 [Route("api/[controller]/[action]")]
-[Authorize(Roles = "Admin,Customer")]
+[Authorize]
 [ApiController]
 [Produces("application/json")]
 public class MenuController : ControllerBase
@@ -48,7 +48,7 @@ public class MenuController : ControllerBase
     /// <returns>Возвращает список идентификаторов и дат загрузки меню</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<MenuForList>>> GetAllMenus(Guid groupId)
+    public async Task<ActionResult<List<MenuForHistoryDto>>> GetAllMenus(Guid groupId)
     {
         var menus = await _sender.Send(new GetAllMenusQuery(groupId));
 
@@ -60,6 +60,7 @@ public class MenuController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
+    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> UploadMenu(Guid kitchenId, [FromBody] RawMenuDto request)
@@ -80,7 +81,7 @@ public class MenuController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> UploadMenuFromFile(Guid kitchenId, IFormFile menu)
     {
-        await _sender.Send(new UploadMenuFromFile(kitchenId, menu));
+        await _publisher.Publish(new UploadMenuFromFile(kitchenId, menu));
 
         return Ok();
     }

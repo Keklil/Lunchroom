@@ -10,8 +10,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 
-namespace Services.MailService;
+namespace Application.Services.Mail;
 
+[Obsolete]
 public class InboxIdleService : BackgroundService
 {
     private readonly ILogger _logger;

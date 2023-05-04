@@ -3,7 +3,7 @@ using Shared;
 
 namespace Contracts;
 
-public interface IMenuImportService
+public interface IDataTableParser
 {
     public Task<ImportReport> ImportMenuAsync(Guid kitchenId, IFormFile file);
 }

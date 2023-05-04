@@ -1,14 +1,16 @@
 ﻿using System.Data;
 using Contracts;
 using Contracts.Repositories;
+using Domain.Exceptions;
 using Domain.Models;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
+using Services.OrdersReport;
 using Shared;
 
-namespace Services;
+namespace Services.Menu;
 
-public class MenuImportService : IMenuImportService
+public class DataTableDataTableParser : IDataTableParser
 {
     private readonly IRepositoryManager _repository;
 
@@ -18,9 +20,17 @@ public class MenuImportService : IMenuImportService
     {
         if (!ValidateFile(file, out var reader))
             return Report;
-
+        
+        var readerConfiguration = new ExcelDataSetConfiguration()
+        {
+            ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
+            {
+                
+            }
+        };
         var table = reader.AsDataSet().Tables[0];
-        var menu = new Menu(kitchenId);
+
+        var menu = new Domain.Models.Menu(kitchenId);
         
         await ReadTable(table, menu);
         
@@ -29,23 +39,21 @@ public class MenuImportService : IMenuImportService
         return Report;
     }
 
-    private async Task ReadTable(DataTable table, Menu menu)
+    private async Task ReadTable(DataTable table, Domain.Models.Menu menu)
     {
         var mappedTableColumns = await ResolveColumns(table);
 
-        for (var i = 1; i < table.Rows.Count; i++)
+        for (var i = mappedTableColumns.TitleRowIndex + 1; i <= table.Rows.Count - 1; i++)
         {
             if (TryParseRow(table.Rows[i], i, mappedTableColumns, out var parsedResult))
             {
                 if (parsedResult.Type == RowType.Group)
                 {
                     var dishType = new DishType(parsedResult.Name);
-                    var j = i;
+                    var j = i + 1;
 
-                    while (true)
+                    while (j <= table.Rows.Count - 2)
                     {
-                        j++;
-                        
                         var isSuccessParse = TryParseRow(table.Rows[j], j, mappedTableColumns,
                             out var parsedResultInternal);
 
@@ -57,7 +65,6 @@ public class MenuImportService : IMenuImportService
 
                         if (parsedResultInternal.Type != RowType.Dish)
                         {
-                            j++;
                             break;
                         }
                         
@@ -66,6 +73,8 @@ public class MenuImportService : IMenuImportService
                             parsedResultInternal.Name,
                             dishPrice,
                             dishType);
+
+                        j++;
                     }
 
                     i = j - 1;
@@ -88,15 +97,17 @@ public class MenuImportService : IMenuImportService
 
         var positionTypeColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.PositionType];
                 
-        if (positionTypeColumnIndex.IsMapped && !row.IsNull(positionTypeColumnIndex.Index))
+        if (positionTypeColumnIndex.IsMapped)
         {
-            var typeValue = Convert.ToString(row[positionTypeColumnIndex.Index]);
+            if (TryGetValueFromRange(row, positionTypeColumnIndex, out var typeValue))
+            {
+                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Dish].Contains(typeValue))
+                    parsedResult.Type = RowType.Dish;
+                            
+                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Group].Contains(typeValue))
+                    parsedResult.Type = RowType.Group;
+            }
             
-            if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Dish].Contains(typeValue))
-                parsedResult.Type = RowType.Dish;
-            
-            if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Group].Contains(typeValue))
-                parsedResult.Type = RowType.Group;
         }
         else
         {
@@ -110,10 +121,11 @@ public class MenuImportService : IMenuImportService
         #region Поиск названия позиции в записи
 
         var nameColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Name];
-        if (nameColumnIndex.IsMapped && !row.IsNull(nameColumnIndex.Index))
+        if (nameColumnIndex.IsMapped)
         {
-            var nameValue = Convert.ToString(row[nameColumnIndex.Index]);
-            parsedResult.Name = nameValue;
+            if (TryGetValueFromRange(row, nameColumnIndex, out var nameValue))
+                if (nameValue != null)
+                    parsedResult.Name = nameValue;
         }
         else
         {
@@ -127,10 +139,10 @@ public class MenuImportService : IMenuImportService
         #region Поиск цены позиции в записи
 
         var priceColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Price];
-        if (priceColumnIndex.IsMapped && !row.IsNull(priceColumnIndex.Index))
+        if (priceColumnIndex.IsMapped)
         {
-            var priceValue = Convert.ToString(row[priceColumnIndex.Index]);
-            parsedResult.Price = priceValue;
+            if (TryGetValueFromRange(row, priceColumnIndex, out var priceValue))
+                    parsedResult.Price = priceValue;
         }
         else
         {
@@ -143,11 +155,11 @@ public class MenuImportService : IMenuImportService
         #region Поиск единиц измерения позиции в записи 
 
         var unitColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Units];
-        if (unitColumnIndex.IsMapped && !row.IsNull(unitColumnIndex.Index))
+        if (unitColumnIndex.IsMapped)
         {
-            var unitValue = Convert.ToString(row[unitColumnIndex.Index]);
-            if (MenuUnitsMap.AllowedTokens.Contains(unitValue))
-                parsedResult.Units = unitValue;
+            if (TryGetValueFromRange(row, unitColumnIndex, out var unitValue))
+                if (unitValue != null && MenuUnitsMap.AllowedTokens.Contains(unitValue))
+                    parsedResult.Units = unitValue;
         }
         else
         {
@@ -160,10 +172,10 @@ public class MenuImportService : IMenuImportService
         #region Поиск артикула позиции в записи
 
         var vendorCodeColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.VendorCode];
-        if (vendorCodeColumnIndex.IsMapped && !row.IsNull(vendorCodeColumnIndex.Index))
+        if (vendorCodeColumnIndex.IsMapped)
         {
-            var articleValue = Convert.ToString(row[vendorCodeColumnIndex.Index]);
-            parsedResult.VendorCode = articleValue;
+            if (TryGetValueFromRange(row, vendorCodeColumnIndex, out var articleValue))
+                parsedResult.VendorCode = articleValue;
         }
         else
         {
@@ -174,6 +186,21 @@ public class MenuImportService : IMenuImportService
         #endregion
         
         return true;
+    }
+
+    private bool TryGetValueFromRange(DataRow row, TableColumnsMap.ColumnTypeIndex columnTypeIndex, out string? result)
+    {
+        result = null;
+        for (var i = columnTypeIndex.StartIndex; i <= columnTypeIndex.EndIndex; i++)
+        {
+            var valueIsNotNull = !row.IsNull(i);
+            if (valueIsNotNull)
+            {
+                result = Convert.ToString(row[i]);
+                return valueIsNotNull;
+            }
+        }
+        return false;
     }
 
     private Task<TableColumnsMap> ResolveColumns(DataTable table)
@@ -214,10 +241,12 @@ public class MenuImportService : IMenuImportService
             return false;
         }
 
+        reader = new MergeCellsReader(reader);
+        
         return true;
     }
 
-    public MenuImportService(IRepositoryManager repository)
+    public DataTableDataTableParser(IRepositoryManager repository)
     {
         _repository = repository;
     }
@@ -271,47 +300,85 @@ internal class TableColumnsMap
     private readonly Dictionary<ColumnTypes, ColumnTypeIndex> _map = new();    
     
     public ColumnTypeIndex this[ColumnTypes columnTypes] => 
-        _map.GetValueOrDefault(columnTypes, new ColumnTypeIndex(false, -1));
+        _map.GetValueOrDefault(columnTypes, new ColumnTypeIndex(false, -1, -1));
+
+    public int TitleRowIndex { get; set; } = -1;
     
     private static readonly Dictionary<ColumnTypes, HashSet<string>> ColumnsForSearch = new ()
     {
-        { ColumnTypes.Name, new HashSet<string> { "Название", "Наименование" } },
-        { ColumnTypes.VendorCode, new HashSet<string> { "Артикул", "Номер" } },
-        { ColumnTypes.Price, new HashSet<string> { "Цена", "Стоимость" } },
-        { ColumnTypes.PositionType, new HashSet<string> { "Тип" } },
-        { ColumnTypes.Units, new HashSet<string> { "Единицы измерения", "Ед. измерения" } }
+        { ColumnTypes.Name, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Название", "Наименование" } },
+        { ColumnTypes.VendorCode, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Артикул", "Номер" } },
+        { ColumnTypes.Price, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Цена", "Стоимость" } },
+        { ColumnTypes.PositionType, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Тип" } },
+        { ColumnTypes.Units, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Единицы измерения", "Ед. измерения" } }
     };
 
     public TableColumnsMap(DataTable table)
     {
-        foreach (var column in ColumnsForSearch)
+        const int searchDepth = 4;
+        for (var i = 0; i <= searchDepth; i++)
         {
-            foreach (var columnName in column.Value)
+            foreach (var column in ColumnsForSearch)
             {
-                var index = table.Columns.IndexOf(columnName);
-                if (index != -1)
+                var startIndex = -1;
+                var endIndex = -1;
+                for (var j = 0; j <= table.Columns.Count - 1; j++)
                 {
-                    _map.Add(column.Key, new ColumnTypeIndex(true, index));
-                    break;
+                    var value = table.Rows[i][j] as string;
+                    if (value is null) continue;
+                    
+                    if (column.Value.Contains(value) || column.Value.Any(x => value.Contains(x)))
+                    {
+                        if (startIndex == -1)
+                        {
+                            startIndex = j;
+                            endIndex = j;
+                        }
+                        else
+                        {
+                            endIndex = j;
+                        }
+                    }
+                    else
+                    {
+                        if (startIndex != -1)
+                            break;
+                    }
                 }
+                if (startIndex != -1 && endIndex != -1)
+                    _map.Add(column.Key, new ColumnTypeIndex(true, startIndex, endIndex));
             }
 
-            if (!_map.ContainsKey(column.Key))
+            if (_map.Any())
             {
-                _map.Add(column.Key, new ColumnTypeIndex(false, -1));
+                TitleRowIndex = i;
+                break;
             }
         }
+        
+        foreach (var column in ColumnsForSearch)
+        {
+            if (!_map.ContainsKey(column.Key))
+            {
+                _map.Add(column.Key, new ColumnTypeIndex(false, -1, -1));
+            }
+        }
+        
+        if (!this[ColumnTypes.PositionType].IsMapped && !this[ColumnTypes.Name].IsMapped)
+            throw new DomainException("Не удалось прочитать таблицу: столбцы позиция или название не найдены");
     }
 
     internal class ColumnTypeIndex
     {
         public bool IsMapped { get; }
-        public int Index { get; }
+        public int StartIndex { get; }
+        public int EndIndex { get;}
 
-        public ColumnTypeIndex(bool isMapped, int index)
+        public ColumnTypeIndex(bool isMapped, int startIndex, int endIndex)
         {
             IsMapped = isMapped;
-            Index = index;
+            StartIndex = startIndex;
+            EndIndex = endIndex;
         }
     }
 

@@ -112,7 +112,7 @@ public class OrdersReportService : IOrdersReportService
         return reportForSend;
     }
 
-    private async Task<Menu?> GetMenu(DateTime date, Guid groupId)
+    private async Task<Domain.Models.Menu?> GetMenu(DateTime date, Guid groupId)
     {
         try
         {

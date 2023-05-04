@@ -12,18 +12,18 @@ public sealed record UploadMenuFromFile(Guid KitchenId, IFormFile Menu) : INotif
 internal sealed class UploadMenuFromFileHandler : INotificationHandler<UploadMenuFromFile>
 {
     private readonly ILogger<UploadMenuFromFileHandler> _logger;
-    private readonly IMenuImportService _menuImportService;
+    private readonly IDataTableParser _dataTableParser;
     private readonly ISender _sender;
 
     public async Task Handle(UploadMenuFromFile command, CancellationToken token)
     {
-        var report = await _menuImportService.ImportMenuAsync(command.KitchenId, command.Menu);
+        var report = await _dataTableParser.ImportMenuAsync(command.KitchenId, command.Menu);
     }
 
-    public UploadMenuFromFileHandler(ILogger<UploadMenuFromFileHandler> logger, ISender sender, IMenuImportService menuImportService)
+    public UploadMenuFromFileHandler(ILogger<UploadMenuFromFileHandler> logger, ISender sender, IDataTableParser dataTableParser)
     {
         _logger = logger;
         _sender = sender;
-        _menuImportService = menuImportService;
+        _dataTableParser = dataTableParser;
     }
 }

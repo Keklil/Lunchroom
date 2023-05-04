@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shared.DataTransferObjects.User;
 
-namespace Services.AuthService;
+namespace Application.Services.Auth;
 
 public class AuthService : IAuthService
 {

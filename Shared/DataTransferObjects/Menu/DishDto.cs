@@ -9,3 +9,17 @@ public record DishDto
     public decimal Price { get; init; }
     public DishTypeDto? Type { get; init; }
 }
+
+public static class DishMapper
+{
+    public static DishDto Map(this Dish dish)
+    {
+        return new DishDto
+        {
+            Id = dish.Id,
+            Name = dish.Name,
+            Price = dish.Price,
+            Type = dish.Type?.Map()
+        };
+    }
+}

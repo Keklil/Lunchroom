@@ -3,8 +3,9 @@
 public class OptionDto
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public decimal Price { get; set; }
+    public Guid DishId { get; set; }
 }
 
 public static class OptionMapper
@@ -15,7 +16,8 @@ public static class OptionMapper
         {
             Id = option.Id,
             Name = option.Name,
-            Price = option.Price
+            Price = option.Price,
+            DishId = option.Dish.Id
         };
     }
 }

@@ -4,6 +4,7 @@ public class MenuDto
 {
     public Guid Id { get; set; }
     public DateTime Date { get; set; }
+    public List<DishDto> Dishes { get; set; }
     public List<LunchSetDto> LunchSets { get; set; }
     public List<OptionDto> Options { get; set; }
 }
@@ -16,6 +17,7 @@ public static class MenuDtoMapper
         {
             Id = menu.Id,
             Date = menu.Date,
+            Dishes = menu.Dishes.Select(dish => dish.Map()).ToList(),
             LunchSets = menu.LunchSets.Select(lunchSet => lunchSet.Map()).ToList(),
             Options = menu.Options.Select(option => option.Map()).ToList()
         };

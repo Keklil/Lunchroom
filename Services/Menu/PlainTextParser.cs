@@ -2,9 +2,10 @@
 using Contracts;
 using Shared.DataTransferObjects.Menu;
 
-namespace Services.MailService;
+namespace Services.Menu;
 
-public class MailParser : IMailParser
+[Obsolete]
+public class PlainTextParser : IPlainTextParser
 {
     private readonly Regex containPrice = new(@"\w*[0-9]{0,3}₽");
     private readonly Regex matchLostString = new(@"^[а-я«».,-].+");

@@ -2,6 +2,7 @@
 using System.Text;
 using Application;
 using Application.Behaviors;
+using Application.Services.Mail;
 using Contracts;
 using Contracts.Repositories;
 using Data;
@@ -23,7 +24,6 @@ using NetTopologySuite.IO.Converters;
 using NSwag;
 using NSwag.Examples;
 using NSwag.Generation.Processors.Security;
-using Services.MailService;
 
 namespace LunchRoom.Extensions;
 

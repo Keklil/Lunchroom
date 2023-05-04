@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MimeKit.Text;
 
-namespace Services.MailService;
+namespace Application.Services.Mail;
 
-public class MailSender : IMailSender
+public class Sender : IMailSender
 {
     private readonly int _port;
     private readonly string _serviceAccount;
@@ -36,7 +36,7 @@ public class MailSender : IMailSender
         }
     }
 
-    public MailSender(IConfiguration configuration)
+    public Sender(IConfiguration configuration)
     {
         _serviceAccount = configuration.GetValue<string>("MailServer:ServiceAccount");
         _password = configuration.GetValue<string>("MailServer:Password");
@@ -44,27 +44,4 @@ public class MailSender : IMailSender
         _host = configuration.GetValue<string>("MailServer:HostSmtp");
         _port = configuration.GetValue<int>("MailServer:PortSmtp");
     }
-
-    /*
-    public async Task SendEmailAsync(string email, string subject, string message)
-    {
-        var emailMessage = new MimeMessage();
- 
-        emailMessage.From.Add(new MailboxAddress("Lunchroom", serviceAccount+"@yandex.ru"));
-        emailMessage.To.Add(new MailboxAddress("", email));
-        emailMessage.Subject = subject;
-        emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-        {
-            Text = message
-        };
-             
-        using (var client = new SmtpClient())
-        {
-            await client.ConnectAsync("localhost", 1025);
-            //await client.AuthenticateAsync(serviceAccount, password);
-            await client.SendAsync(emailMessage);
- 
-            await client.DisconnectAsync(true);
-        }
-    }*/
 }

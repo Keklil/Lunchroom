@@ -2,13 +2,12 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using Contracts;
 using Contracts.Security;
 using Domain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Services.AuthService;
+namespace Application.Services.Auth;
 
 public class TokenService : ITokenService
 {

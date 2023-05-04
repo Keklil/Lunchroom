@@ -15,6 +15,7 @@ public class DishType
     
     public DishType(string name)
     {
+        Id = Guid.NewGuid();
         Name = name;
         Dishes = new Collection<Dish>();
     }

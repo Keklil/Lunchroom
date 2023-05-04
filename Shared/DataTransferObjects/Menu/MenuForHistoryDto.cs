@@ -1,6 +1,6 @@
 ﻿namespace Shared.DataTransferObjects.Menu;
 
-public class MenuForList
+public class MenuForHistoryDto
 {
     public Guid Id { get; set; }
     public DateTime Date { get; set; }
@@ -8,9 +8,9 @@ public class MenuForList
 
 public static class MenuForListMapper
 {
-    public static MenuForList MapToMenuForList(this Domain.Models.Menu menu)
+    public static MenuForHistoryDto MapToMenuForList(this Domain.Models.Menu menu)
     {
-        return new MenuForList
+        return new MenuForHistoryDto
         {
             Id = menu.Id,
             Date = menu.Date

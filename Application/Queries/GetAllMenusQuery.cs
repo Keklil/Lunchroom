@@ -4,19 +4,19 @@ using Shared.DataTransferObjects.Menu;
 
 namespace Application.Queries;
 
-public sealed record GetAllMenusQuery(Guid GroupId) : IRequest<List<MenuForList>>;
+public sealed record GetAllMenusQuery(Guid GroupId) : IRequest<List<MenuForHistoryDto>>;
 
-internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuForList>>
+internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuForHistoryDto>>
 {
     private readonly IRepositoryManager _repository;
 
-    public async Task<List<MenuForList>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
+    public async Task<List<MenuForHistoryDto>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
     {
         var menuEntities = await _repository.Menu.GetMenuByGroup(request.GroupId);
         if (menuEntities.Count == 0)
-            return new List<MenuForList>();
+            return new List<MenuForHistoryDto>();
         
-        var listMenus = new List<MenuForList>();
+        var listMenus = new List<MenuForHistoryDto>();
         foreach (var menuEntity in menuEntities)
         {
             var menu = menuEntity.MapToMenuForList();
