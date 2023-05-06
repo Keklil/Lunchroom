@@ -5,25 +5,9 @@ namespace Domain.Models;
 
 public class OrderOption : Entity
 {
-    private Option Option { get; set; }
-    public Guid OptionId => _optionId;
-    private Guid _optionId;
-
-    public int OptionUnits => _optionUnits;
-    private int _optionUnits;
-
-    private OrderOption(int optionUnits)
-    {
-        Id = Guid.NewGuid();
-        _optionUnits = optionUnits;
-    }
-    public OrderOption(Option option, int optionUnits)
-    {
-        Id = Guid.NewGuid();
-        _optionId = option.Id;
-        Option = option;
-        _optionUnits = optionUnits;
-    }
+    private Option Option { get; }
+    public Guid OptionId { get; }
+    public int OptionUnits { get; private set; }
 
     public void AddUnits(int units)
     {
@@ -31,11 +15,21 @@ public class OrderOption : Entity
         {
             throw new DomainException("Invalid units");
         }
-        _optionUnits += units;
+        OptionUnits += units;
     }
 
     public decimal GetPrice()
     {
         return Option.Price;
     }
+    
+    public OrderOption(Option option, int optionUnits)
+    {
+        Id = Guid.NewGuid();
+        OptionId = option.Id;
+        Option = option;
+        OptionUnits = optionUnits;
+    }
+    
+    private OrderOption() { }
 }

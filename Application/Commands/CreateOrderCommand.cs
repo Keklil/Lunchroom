@@ -1,4 +1,5 @@
 ﻿using Contracts.Repositories;
+using Contracts.Security;
 using Domain.Models;
 using MediatR;
 using Shared.DataTransferObjects.Order;
@@ -10,10 +11,12 @@ public sealed record CreateOrderCommand(OrderForCreationDto Order) : IRequest<Or
 internal sealed class CreateOrderHandler : IRequestHandler<CreateOrderCommand, OrderDto>
 {
     private readonly IRepositoryManager _repository;
+    private readonly ICurrentUserService _currentUserService;
 
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var orderEntity = new Order(request.Order.CustomerId, request.Order.MenuId, request.Order.GroupId);
+        var customerId = _currentUserService.GetUserId();
+        var orderEntity = new Order(customerId, request.Order.MenuId, request.Order.GroupId);
 
         var menu = await _repository.Menu.GetMenuAsync(request.Order.MenuId, false);
 
@@ -31,8 +34,6 @@ internal sealed class CreateOrderHandler : IRequestHandler<CreateOrderCommand, O
             orderEntity.AddOption(option, item.Units);
         }
 
-        orderEntity.ChangeStatus(1);
-
         _repository.Order.CreateOrder(orderEntity);
         await _repository.SaveAsync(cancellationToken);
 
@@ -41,8 +42,9 @@ internal sealed class CreateOrderHandler : IRequestHandler<CreateOrderCommand, O
         return orderToReturn;
     }
 
-    public CreateOrderHandler(IRepositoryManager repository)
+    public CreateOrderHandler(IRepositoryManager repository, ICurrentUserService currentUserService)
     {
         _repository = repository;
+        _currentUserService = currentUserService;
     }
 }

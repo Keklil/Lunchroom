@@ -14,22 +14,8 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .ValueGeneratedNever();
 
         orderConfiguration.Property(x => x.GroupId);
-
-        orderConfiguration.Property(x => x.CustomerId)
-            .HasField("_customerId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        orderConfiguration.Property(x => x.LunchSetId)
-            .HasField("_lunchSetId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        orderConfiguration.Property(x => x.MenuId)
-            .HasField("_menuId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        orderConfiguration.Property(x => x.OrderDate)
-            .HasField("_orderDate")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
+        
+        orderConfiguration.Property(x => x.OrderDate);
 
         orderConfiguration.HasOne<User>()
             .WithMany()
@@ -40,7 +26,5 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey(x => x.MenuId)
             .OnDelete(DeleteBehavior.NoAction);
-
-        orderConfiguration.Ignore(x => x.LunchSet);
     }
 }

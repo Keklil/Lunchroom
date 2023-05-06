@@ -1,10 +1,9 @@
 using Contracts.Repositories;
-using Domain.Exceptions;
 using MediatR;
 
-namespace Application.Commands;
+namespace Application.Commands.Groups;
 
-public sealed record ConfirmPaymentCommand(Guid orderId) : IRequest;
+public sealed record ConfirmPaymentCommand(Guid OrderId) : IRequest;
 
 internal sealed class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentCommand>
 {
@@ -12,15 +11,13 @@ internal sealed class ConfirmPaymentHandler : IRequestHandler<ConfirmPaymentComm
 
     public async Task Handle(ConfirmPaymentCommand request, CancellationToken cancellationToken)
     {
-        var orderEntity = await _repository.Order.GetOrderAsync(request.orderId);
-        if (orderEntity is null)
-            throw new NotFoundException("Подтверждаемы заказ не найден");
+        var orderEntity = await _repository.Order.GetOrderAsync(request.OrderId);
 
         orderEntity.ConfirmPayment();
 
         _repository.Order.UpdateOrder(orderEntity);
 
-        await _repository.SaveAsync();
+        await _repository.SaveAsync(cancellationToken);
     }
 
     public ConfirmPaymentHandler(IRepositoryManager repository)

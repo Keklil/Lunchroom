@@ -1,4 +1,5 @@
 ﻿using Application.Commands;
+using Application.Commands.Users;
 using Application.Queries;
 using Domain.ErrorModel;
 using MediatR;

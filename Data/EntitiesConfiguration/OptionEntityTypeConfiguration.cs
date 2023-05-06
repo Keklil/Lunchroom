@@ -6,17 +6,19 @@ namespace Data.EntitiesConfiguration;
 
 internal class OptionEntityTypeConfiguration : IEntityTypeConfiguration<Option>
 {
-    public void Configure(EntityTypeBuilder<Option> optionConfiguraion)
+    public void Configure(EntityTypeBuilder<Option> builder)
     {
-        optionConfiguraion.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-        optionConfiguraion.Property(x => x.Id)
+        builder.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        optionConfiguraion.Property<string>(x => x.Name);
+        builder.Property(x => x.Price);
+        
+        builder.HasOne(x => x.Dish);
 
-        optionConfiguraion.Property(x => x.Price);
-
-        optionConfiguraion.HasOne(x => x.Dish);
+        builder.Property(x => x.Name)
+            .HasField("_name")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

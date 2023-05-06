@@ -6,10 +6,10 @@ namespace Domain.Models;
 public class Kitchen : Entity
 {
     public string OrganizationName { get; private set; }
-
     public string Address { get; private set; }
     public string Inn { get; private set; }
     public Contacts Contacts { get; private set; }
+    public KitchenSettings? Settings { get; private set; }
     
     // Флаг, указывающий, что столовая столовая доступна для заказов
     public bool AllowForOrders => IsActive && IsApproved;
@@ -17,10 +17,9 @@ public class Kitchen : Entity
     public bool IsActive { get; private set; }
     // Флаг, указывающий, что столовая прошла проверку по юридическим данным и контактам
     public bool IsApproved { get; private set; }
-    public IReadOnlyCollection<User> Managers => _managers;
-    private List<User> _managers = new();
     
-    public KitchenSettings? Settings { get; private set; }
+    public IReadOnlyCollection<User> Managers => _managers;
+    private readonly List<User> _managers = new();
 
     public void ChangeName(string organizationName)
     {
@@ -53,6 +52,11 @@ public class Kitchen : Entity
     public void VerifyKitchen()
     {
         IsApproved = true;
+    }
+    
+    public void ActivateKitchen()
+    {
+        IsActive = true;
     }
     
     public Kitchen(string organizationName, string address, string inn, string? email, string? phone)

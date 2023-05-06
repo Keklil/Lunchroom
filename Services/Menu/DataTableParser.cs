@@ -10,7 +10,7 @@ using Shared;
 
 namespace Services.Menu;
 
-public class DataTableDataTableParser : IDataTableParser
+public class DataTableParser : IDataTableParser
 {
     private readonly IRepositoryManager _repository;
 
@@ -35,6 +35,7 @@ public class DataTableDataTableParser : IDataTableParser
     private async Task ReadTable(DataTable table, Domain.Models.Menu menu)
     {
         var mappedTableColumns = await ResolveColumns(table);
+        var parseResults = new List<ParseResult>();
 
         for (var i = mappedTableColumns.TitleRowIndex + 1; i <= table.Rows.Count - 1; i++)
         {
@@ -42,6 +43,7 @@ public class DataTableDataTableParser : IDataTableParser
             {
                 if (parsedResult.Type == RowType.Group)
                 {
+                    parseResults.Add(parsedResult);
                     var dishType = new DishType(parsedResult.Name);
                     var j = i + 1;
 
@@ -53,7 +55,7 @@ public class DataTableDataTableParser : IDataTableParser
                         if (!isSuccessParse)
                         {
                             j++;
-                            break;
+                            continue;
                         }
 
                         if (parsedResultInternal.Type != RowType.Dish)
@@ -66,6 +68,7 @@ public class DataTableDataTableParser : IDataTableParser
                             parsedResultInternal.Name,
                             dishPrice,
                             dishType);
+                        parseResults.Add(parsedResultInternal);
 
                         j++;
                     }
@@ -76,6 +79,43 @@ public class DataTableDataTableParser : IDataTableParser
                 if (parsedResult.Type == RowType.Dish)
                 {
                     menu.AddDish(parsedResult.Name, decimal.Parse(parsedResult.Price ?? "0"));
+                    parseResults.Add(parsedResult);
+                }
+
+                if (parsedResult.Type == RowType.LunchSet)
+                {
+                    var lunchSetDishes = new List<Dish>();
+                    var j = i + 1;
+
+                    while (j <= table.Rows.Count - 2)
+                    {
+                        var isSuccessParse = TryParseRow(table.Rows[j], j, mappedTableColumns,
+                            out var parsedResultInternal);
+
+                        if (!isSuccessParse)
+                        {
+                            j++;
+                            continue;
+                        }
+
+                        if (parsedResultInternal.Type != RowType.Dish)
+                        {
+                            break;
+                        }
+
+                        var parsedDish = parseResults.FirstOrDefault(x => x.VendorCode == parsedResultInternal.VendorCode);
+                        if (parsedDish != null)
+                        {
+                            var dishEntity = menu.Dishes.FirstOrDefault(x => x.Name.Contains(parsedDish.Name));
+                            if (dishEntity != null)
+                                lunchSetDishes.Add(dishEntity);
+                        }
+                        
+                        j++;
+                    }
+
+                    menu.AddLunchSet(lunchSetDishes, decimal.Parse(parsedResult.Price ?? "0"), parsedResult.Name);
+                    i = j - 1;
                 }
             }
         }
@@ -99,6 +139,12 @@ public class DataTableDataTableParser : IDataTableParser
                             
                 if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Group].Contains(typeValue))
                     parsedResult.Type = RowType.Group;
+                
+                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.LunchSet].Contains(typeValue))
+                    parsedResult.Type = RowType.LunchSet;
+                
+                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Option].Contains(typeValue))
+                    parsedResult.Type = RowType.Option;
             }
             
         }
@@ -124,7 +170,6 @@ public class DataTableDataTableParser : IDataTableParser
         {
             badRow.Errors.Add("не задано название позиции в строке");
             Report.AddBadRowError(badRow);
-            return false;
         }
 
         #endregion
@@ -239,7 +284,7 @@ public class DataTableDataTableParser : IDataTableParser
         return true;
     }
 
-    public DataTableDataTableParser(IRepositoryManager repository)
+    public DataTableParser(IRepositoryManager repository)
     {
         _repository = repository;
     }
@@ -267,13 +312,17 @@ internal static class MenuPositionTypeMap
     public static readonly Dictionary<TokenName, HashSet<string>> AllowedTokens = new()
     {
         { TokenName.Group, new HashSet<string>() { "Группа" } },
-        { TokenName.Dish, new HashSet<string>() { "Товар", "Блюдо" } }
+        { TokenName.Dish, new HashSet<string>() { "Товар", "Блюдо" } },
+        { TokenName.LunchSet, new HashSet<string>() { "Комбо-набор", "Ланч" } },
+        { TokenName.Option, new HashSet<string>() { "Опция" } }
     };
 
     internal enum TokenName
     {
         Group,
-        Dish
+        Dish,
+        LunchSet,
+        Option
     }
 }
 

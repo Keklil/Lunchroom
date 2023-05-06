@@ -1,4 +1,5 @@
 ﻿using Contracts.Repositories;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Shared.DataTransferObjects.User;
@@ -9,9 +10,15 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
 {
     public async Task<Order> GetOrderAsync(Guid orderId, bool trackChanges = true)
     {
-        return await FindByCondition(x => x.Id.Equals(orderId), trackChanges)
+        var order = await FindByCondition(x => x.Id.Equals(orderId), trackChanges)
             .Include(x => x.Options)
+            .Include(x => x.LunchSet)
             .SingleOrDefaultAsync();
+        
+        if (order is null)
+            throw new NotFoundException("Заказ не найден");
+
+        return order;
     }
 
     public void CreateOrder(Order order)
@@ -29,8 +36,6 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
         var orders = RepositoryContext.Orders
             .Where(x => x.OrderDate.Date == date.Date && x.GroupId == groupId)
             .Include(x => x.Options);
-
-        var ordersStr = orders.ToQueryString();
 
         return await orders.ToListAsync();
     }

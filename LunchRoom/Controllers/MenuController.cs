@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Groups;
+using Application.Commands.Menu;
 using Application.Notifications;
 using Application.Queries;
 using Domain.ErrorModel;
@@ -58,6 +59,7 @@ public class MenuController : ControllerBase
     /// <summary>
     ///     Загрузка меню
     /// </summary>
+    /// <param name="kitchenId"></param>
     /// <param name="request"></param>
     /// <returns></returns>
     [ApiExplorerSettings(IgnoreApi = true)]

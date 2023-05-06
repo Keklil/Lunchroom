@@ -15,7 +15,7 @@ namespace Data.Migrations
     [Migration("20220914082938_AddMenuReportedCheck")]
     partial class AddMenuReportedCheck
     {
-        protected void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

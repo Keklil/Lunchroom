@@ -36,6 +36,6 @@ internal class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
 
         builder.Property(x => x.Referral)
             .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
-                x => JsonSerializer.Deserialize<GroupReferral>(x, JsonSerializerOptions.Default));
+                x => JsonSerializer.Deserialize<GroupReferral>(x, JsonSerializerOptions.Default)!);
     }
 }

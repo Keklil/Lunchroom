@@ -33,7 +33,7 @@ builder.Services.AddScoped<IMailSender, Sender>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-builder.Services.AddScoped<IDataTableParser, DataTableDataTableParser>();
+builder.Services.AddScoped<IDataTableParser, DataTableParser>();
 builder.Services.AddScoped<DbInitializer>();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthentication(builder.Configuration);

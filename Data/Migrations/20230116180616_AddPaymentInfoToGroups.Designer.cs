@@ -16,7 +16,7 @@ namespace Data.Migrations
     partial class AddPaymentInfoToGroups
     {
         /// <inheritdoc />
-        protected void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

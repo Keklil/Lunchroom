@@ -13,12 +13,6 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         userConfiguration.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        userConfiguration.Property(x => x.Name);
-
-        userConfiguration.Property(x => x.Surname);
-
-        userConfiguration.Property(x => x.Patronymic);
-
         userConfiguration.HasMany(x => x.Groups)
             .WithMany(x => x.Members);
     }

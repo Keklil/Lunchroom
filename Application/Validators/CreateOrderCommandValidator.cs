@@ -8,8 +8,6 @@ public class CreateOrderCommandValidator :
 {
     public CreateOrderCommandValidator()
     {
-        RuleFor(x => x.Order.CustomerId).NotEmpty();
-
         RuleFor(x => x.Order.MenuId).NotEmpty();
 
         RuleFor(x => x.Order.Options)

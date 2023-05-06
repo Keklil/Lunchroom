@@ -23,7 +23,7 @@ public class DbInitializer
         using var context = serviceScope.ServiceProvider.GetRequiredService<RepositoryContext>();
         if (!context.Users.Any())
         {
-            var adminUser = User.CreateAdmin(adminEmail, "asdfg123");
+            var adminUser = User.CreateAdmin(adminEmail, "string");
             adminUser.CheckEmail();
             context.Users.Add(adminUser);
         }

@@ -38,7 +38,7 @@ public class OrdersReportService : IOrdersReportService
                 u => u.Id,
                 (o, u) => new { o, u })
             .Join(menu.LunchSets,
-                lo => lo.o.LunchSetId,
+                lo => lo.o.LunchSet.Id,
                 ls => ls.Id,
                 (lo, ls) => new { lo.o, lo.u, ls })
             .OrderBy(c => c.ls.Price);

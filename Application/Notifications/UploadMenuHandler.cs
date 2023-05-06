@@ -1,6 +1,7 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using Application.Commands;
+using Application.Commands.Menu;
 using Contracts;
 using MediatR;
 using Microsoft.Extensions.Logging;

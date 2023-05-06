@@ -1,10 +1,9 @@
 ﻿using Contracts.Repositories;
-using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared.DataTransferObjects.Menu;
 
-namespace Application.Commands;
+namespace Application.Commands.Menu;
 
 public sealed record CreateMenuCommand(MenuForCreationDto Menu, Guid GroupId) : IRequest<MenuDto>;
 
@@ -23,9 +22,7 @@ internal sealed class CreateMenuHandler : IRequestHandler<CreateMenuCommand, Men
             return null;
         }
 
-        var menuEntity = new Menu(request.GroupId);
-        //foreach (var item in request.Menu.LunchSets) menuEntity.AddLunchSet(item.Price, item.LunchSetList);
-        //foreach (var item in request.Menu.Options) menuEntity.AddOption(item.Name, item.Price);
+        var menuEntity = new Domain.Models.Menu(request.GroupId);
 
         _repository.Menu.CreateMenu(menuEntity);
         await _repository.SaveAsync(cancellationToken);

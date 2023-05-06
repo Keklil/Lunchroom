@@ -1,7 +1,7 @@
 ﻿using Contracts.Security;
 using MediatR;
 
-namespace Application.Commands;
+namespace Application.Commands.Users;
 
 public sealed record ConfirmEmailCommand(string Token)
     : IRequest<string>;

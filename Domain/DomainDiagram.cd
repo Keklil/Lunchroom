@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Domain.Models.Contacts">
+    <Position X="18.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAIAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Models\Contacts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Models.Dish">
+    <Position X="31.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Dish.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Domain.Models.DishType" Collapsed="true">
+    <Position X="34" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAQAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\DishType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Models.Group">
+    <Position X="22.75" Y="6.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CCCAAACAAIAAAABAAAAAAQCAAYAAAAAAgAEEAAAAAAA=</HashCode>
+      <FileName>Models\Group.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Settings" />
+      <Property Name="PaymentInfo" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Domain.Models.GroupSettings">
+    <Position X="25.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAIAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\GroupSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Models.Kitchen">
+    <Position X="15.25" Y="14" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAIAIAAAAEAAgAQgAAAACAAACgAAAAEIgACA=</HashCode>
+      <FileName>Models\Kitchen.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Contacts" />
+      <Property Name="Settings" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Domain.Models.KitchenSettings">
+    <Position X="12.25" Y="16.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAIFAAAEYAAAAAABAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\KitchenSettings.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MenuUpdatePeriod" />
+      <Property Name="MenuFormat" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ShippingAreas" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Models.LunchSet">
+    <Position X="36" Y="14" Width="1.5" />
+    <AssociationLine Name="Dishes" Type="Domain.Models.Dish" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="36" Y="15.812" />
+        <Point X="32.75" Y="15.812" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAQAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\LunchSet.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Dishes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Models.Menu">
+    <Position X="28.75" Y="14.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAABAAEAAQCAAAAAAAQAABCFAAAAACABAAAAAAJAIAA=</HashCode>
+      <FileName>Models\Menu.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="LunchSets" />
+      <Property Name="Options" />
+      <Property Name="Dishes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Models.Option">
+    <Position X="36" Y="17.5" Width="1.5" />
+    <AssociationLine Name="Dish" Type="Domain.Models.Dish" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="36" Y="17.688" />
+        <Point X="36" Y="17.507" />
+        <Point X="32.75" Y="17.507" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAQAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Models\Option.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Dish" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Domain.Models.Order">
+    <Position X="13.75" Y="6.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAAADCAEQAACAAAAAJAAgAAVAAgABDACAAAgAABAAAQ=</HashCode>
+      <FileName>Models\Order.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Status" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Options" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Domain.Models.OrderOption">
+    <Position X="16.5" Y="8.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAEQAICAAAAAAAAAAIAIAAAAAAAAA=</HashCode>
+      <FileName>Models\OrderOption.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Models.PaymentInfo">
+    <Position X="25.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAIAAAAAAAAAAAAAAAgAAAQAAAAAA=</HashCode>
+      <FileName>Models\PaymentInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Models.ShippingArea">
+    <Position X="9.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Models\ShippingArea.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Models.User">
+    <Position X="23.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAGAQACCAAAAAEAAAAIQABAAAAAACAAAAIEEAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Role" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Domain.Models.Enums.MenuFormat">
+    <Position X="11.25" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAAAA=</HashCode>
+      <FileName>Models\Enums\MenuFormat.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Domain.Models.Enums.MenuUpdatePeriod">
+    <Position X="14" Y="20.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Models\Enums\MenuUpdatePeriod.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Domain.Models.OrderStatus">
+    <Position X="16.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAgAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Models\Order.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Domain.Models.Role">
+    <Position X="23.75" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQEAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Role.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

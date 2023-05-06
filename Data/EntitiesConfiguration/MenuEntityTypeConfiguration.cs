@@ -12,11 +12,7 @@ internal class MenuEntityTypeConfiguration : IEntityTypeConfiguration<Menu>
 
         menuConfiguration.Property(x => x.Id)
             .ValueGeneratedNever();
-
-        /*menuConfiguration
-            .Property<DateTime>("_date")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);  
-        */
+        
         menuConfiguration.Property(x => x.Date);
     }
 }

@@ -1,11 +1,9 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-using Contracts;
+﻿using Contracts;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Commands.Groups;
+namespace Application.Commands.Menu;
 
 public sealed record UploadMenuFromFile(Guid KitchenId, IFormFile Menu) : INotification;
 

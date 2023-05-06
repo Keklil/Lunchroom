@@ -20,7 +20,7 @@ internal sealed class VerifyKitchenHandler : IRequestHandler<VerifyKitchenComman
         var checker = await _repository.User.GetUserAsync(_currentUserService.GetUserId());
         
         kitchen.VerifyKitchen();
-        await _repository.Kitchens.SaveVerifyStamp(new KitchenVerificationStamp(checker));
+        _repository.Kitchens.SaveVerifyStamp(new KitchenVerificationStamp(checker));
 
         _repository.Kitchens.UpdateKitchen(kitchen);
         await _repository.SaveAsync(cancellationToken);

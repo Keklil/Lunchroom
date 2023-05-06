@@ -5,46 +5,32 @@ namespace Domain.Models;
 
 public class Order : Entity
 {
-    public DateTime OrderDate => _orderDate.ToLocalTime();
-    private DateTime _orderDate;
-
-    public Guid CustomerId => _customerId;
-    private Guid _customerId;
-
-    public Guid MenuId => _menuId;
-    private Guid _menuId;
-        
+    public DateTime OrderDate { get; }
+    public Guid CustomerId { get; }
+    public Guid MenuId { get; }
     public Guid GroupId { get; set; }
-        
-    public string OrderStatus { get; private set; }
-    private int _orderStatusId;
-
+    public OrderStatus Status { get; private set; }
     public bool Payment { get; private set; }
-        
-    public LunchSet LunchSet { get; private set; }
-    public Guid LunchSetId => _lunchSetId;
-    private Guid _lunchSetId;
-        
+    public LunchSet? LunchSet { get; private set; }
     public int LunchSetUnits { get; private set; }
-
     public IReadOnlyCollection<OrderOption> Options => _orderOptions;
-    private List<OrderOption> _orderOptions = new();
+    private readonly List<OrderOption> _orderOptions = new();
 
     public Order(Guid customerId, Guid menuId, Guid groupId)
     {
         Id = Guid.NewGuid();
-        _customerId = customerId;
-        _menuId = menuId;
-        _orderDate = DateTime.UtcNow;
+        CustomerId = customerId;
+        MenuId = menuId;
+        OrderDate = DateTime.UtcNow;
         GroupId = groupId;
+        Status = OrderStatus.New;
     }
 
     public void AddLunchSet(LunchSet lunchSet, int units)
     {
         if (units < 1)
             throw new DomainException("Попытка установить некорректное количество");
-            
-        _lunchSetId = lunchSet.Id;
+        
         LunchSet = lunchSet;
         LunchSetUnits = units;
     }
@@ -54,8 +40,8 @@ public class Order : Entity
         if (units < 1)
             throw new DomainException("Попытка установить некорректное количество");
 
-        var existingOption = _orderOptions.Where(o => o.OptionId == option.Id)
-            .FirstOrDefault();
+        var existingOption = _orderOptions
+            .FirstOrDefault(o => o.OptionId == option.Id);
 
         if (existingOption == null)
         {
@@ -66,26 +52,30 @@ public class Order : Entity
 
     public decimal GetTotal()
     {
-        return LunchSet.Price + _orderOptions.Sum(o => o.GetPrice() * o.OptionUnits);
-    }
-
-    public decimal GetLunchSetPrice()
-    {
-        return LunchSet.Price;
+        var lunchSetPrice = LunchSet?.Price ?? 0;
+        return lunchSetPrice + _orderOptions.Sum(o => o.GetPrice() * o.OptionUnits);
     }
 
     public decimal[] GetOptionsPrice()
     {
         return Options.Select(x => x.GetPrice()).ToArray();
     }
-    //Not usage
-    public void ChangeStatus(int status)
-    {
-        OrderStatus = status.ToString();
-    }
 
     public void ConfirmPayment()
     {
+        Status = OrderStatus.Confirmed;
         Payment = true;
     }
+
+    public void Cancel()
+    {
+        Status = OrderStatus.Canceled;
+    }
+}
+
+public enum OrderStatus
+{
+    New,
+    Confirmed,
+    Canceled
 }

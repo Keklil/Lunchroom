@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using ExcelDataReader;
 
-namespace Services.OrdersReport
+namespace Services.Menu
 {
     public class MergeCellsReader : IExcelDataReader
     {
@@ -13,7 +13,7 @@ namespace Services.OrdersReport
 
         public double GetColumnWidth(int i)
         {
-            throw new NotImplementedException();
+            return BaseReader.GetColumnWidth(i);
         }
 
         public string Name => BaseReader.Name;
@@ -27,7 +27,7 @@ namespace Services.OrdersReport
         public CellRange[] MergeCells => BaseReader.MergeCells;
 
         public int ResultsCount => BaseReader.ResultsCount;
-        public int RowCount { get; }
+        public int RowCount => BaseReader.RowCount;
 
         public double RowHeight => BaseReader.RowHeight;
 

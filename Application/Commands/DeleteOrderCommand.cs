@@ -1,11 +1,10 @@
 using Contracts.Repositories;
-using Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Commands;
 
-public record DeleteOrderCommand(Guid orderId) : IRequest;
+public record DeleteOrderCommand(Guid OrderId) : IRequest;
 
 internal sealed class DeleteOrderHandler : IRequestHandler<DeleteOrderCommand>
 {
@@ -16,16 +15,15 @@ internal sealed class DeleteOrderHandler : IRequestHandler<DeleteOrderCommand>
     {
         try
         {
-            var order = await _repository.Order.GetOrderAsync(request.orderId);
-            if (order is null)
-                throw new NotFoundException("Заказ для удаления не найден");
-
+            var order = await _repository.Order.GetOrderAsync(request.OrderId);
+            
             _repository.Order.DeleteOrder(order);
-            await _repository.SaveAsync();
+            
+            await _repository.SaveAsync(cancellationToken);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Ошибка при удалении заказа {request.orderId}");
+            _logger.LogError(e, $"Ошибка при удалении заказа {request.OrderId}");
             throw;
         }
     }

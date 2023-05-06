@@ -1,4 +1,5 @@
 ﻿using Application.Commands;
+using Application.Commands.Menu;
 using FluentValidation;
 
 namespace Application.Validators;

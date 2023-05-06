@@ -52,13 +52,13 @@ internal class KitchenRepository : RepositoryBase<Kitchen>, IKitchenRepository
         var kitchens = await RepositoryContext.Kitchens
             .Include(x => x.Settings)
             .Where(x => x.Settings != null)
-            .Where(x => x.Settings.ShippingAreas.Any(s => s.Polygon.Contains(location)))
+            .Where(x => x.Settings!.ShippingAreas.Any(s => s.Polygon.Contains(location)))
             .ToListAsync();
         
         return kitchens;
     }
 
-    public async Task SaveVerifyStamp(KitchenVerificationStamp stamp)
+    public void SaveVerifyStamp(KitchenVerificationStamp stamp)
     {
         RepositoryContext.KitchenVerificationStamps
             .Add(stamp);

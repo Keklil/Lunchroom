@@ -15,7 +15,7 @@ namespace Data.Migrations
     [Migration("20220922064840_AddPaymentFlagToOrder")]
     partial class AddPaymentFlagToOrder
     {
-        protected void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -8,14 +8,16 @@ public class Menu : Entity
 {
     public DateTime Date { get; }
     public Guid KitchenId { get; }
+    public bool IsReported { get; private set; }
+    
     public IReadOnlyCollection<LunchSet> LunchSets => _lunchSets;
     private readonly List<LunchSet> _lunchSets;
 
     public IReadOnlyCollection<Option> Options => _options;
     private readonly List<Option> _options;
         
-    public List<Dish> Dishes { get; }
-    public bool IsReported { get; private set; }
+    public IReadOnlyCollection<Dish> Dishes => _dishes;
+    private readonly List<Dish> _dishes;
 
     public Menu(Guid kitchenId)
     {
@@ -24,11 +26,11 @@ public class Menu : Entity
         KitchenId = kitchenId;
         _lunchSets = new List<LunchSet>();
         _options = new List<Option>();
-        Dishes = new List<Dish>();
+        _dishes = new List<Dish>();
         IsReported = false;
     }
 
-    public void AddLunchSet(decimal price, List<Dish> dishes)
+    public void AddLunchSet(List<Dish> dishes, decimal price, string? name = null)
     {
         var dishIds = Dishes.Select(x => x.Id).ToHashSet();
         foreach (var dish in dishes)
@@ -40,7 +42,7 @@ public class Menu : Entity
         if (price < 0)
             throw new DomainException("Попытка установить отрицательную цену для опции");
 
-        var newLunchSet = new LunchSet(price, dishes);
+        var newLunchSet = new LunchSet(dishes, price, name);
         _lunchSets.Add(newLunchSet);
     }
 
@@ -64,7 +66,7 @@ public class Menu : Entity
             throw new DomainException("Попытка установить отрицательную цену для блюда");
 
         var newDish = new Dish(name, price, type);
-        Dishes.Add(newDish);
+        _dishes.Add(newDish);
     }
 
     public LunchSet? GetLunchSetById(Guid lunchSetId)

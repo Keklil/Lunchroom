@@ -10,7 +10,7 @@ public class LunchSet : Entity
     public string? Name { get; }
     public IReadOnlyCollection<Dish> Dishes { get; }
 
-    public LunchSet(decimal price, List<Dish> dishes, string? name = null)
+    public LunchSet(List<Dish> dishes, decimal price, string? name = null)
     {
         Id = Guid.NewGuid();
         Price = price;

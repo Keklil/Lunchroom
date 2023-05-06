@@ -4,7 +4,7 @@ using Domain.Exceptions;
 using MediatR;
 using Shared.DataTransferObjects.User;
 
-namespace Application.Commands;
+namespace Application.Commands.Users;
 
 public sealed record UpdateUserCommand(UserForCreationDto User) : IRequest<UserDto>;
 
