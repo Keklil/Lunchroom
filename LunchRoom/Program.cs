@@ -1,10 +1,9 @@
 using Application.Services;
 using Application.Services.Auth;
-using Application.Services.Mail;
+using Application.Services.Notifications;
 using Contracts;
 using Contracts.Security;
 using Data.EntitiesConfiguration;
-using Identity.Services;
 using LoggerService;
 using LunchRoom.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Services;
 using Services.Menu;
 using Services.OrdersReport;
+using Sender = Application.Services.Mail.Sender;
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 

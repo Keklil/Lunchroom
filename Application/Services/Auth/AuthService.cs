@@ -1,13 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Authorization.Exceptions;
 using Contracts;
 using Contracts.Repositories;
 using Contracts.Security;
 using Domain.Exceptions;
 using Domain.Models;
 using Domain.SecurityModels;
-using Identity.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shared.DataTransferObjects.User;

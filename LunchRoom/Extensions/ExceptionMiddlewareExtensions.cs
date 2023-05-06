@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
+using Application.Authorization.Exceptions;
 using Domain.ErrorModel;
 using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Exceptions.GroupExceptions;
 using Domain.Exceptions.KitchenExceptions;
-using Identity.Exceptions;
 using LunchRoom.Controllers.Infrastructure;
 using MediatR.Behaviors.Authorization.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
