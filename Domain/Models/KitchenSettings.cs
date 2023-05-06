@@ -1,12 +1,12 @@
 ﻿using Domain.Exceptions;
+using Domain.Models.Base;
 using Domain.Models.Enums;
 using NetTopologySuite.Geometries;
 
 namespace Domain.Models;
 
-public class KitchenSettings
+public class KitchenSettings : Entity
 {
-    public Guid Id { get; }
     public Guid KitchenId { get; }
     public TimeSpan LimitingTimeForOrder { get; private set; }
     public MenuUpdatePeriod MenuUpdatePeriod { get; private set; }

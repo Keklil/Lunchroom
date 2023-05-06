@@ -1,10 +1,10 @@
-﻿using NetTopologySuite.Geometries;
+﻿using Domain.Models.Base;
+using NetTopologySuite.Geometries;
 
 namespace Domain.Models;
 
-public class GroupSettings
+public class GroupSettings : Entity
 {
-    public Guid Id { get; }
     public Guid GroupId { get; }
     public string Address { get; private set; }
     public Point Location { get; private set; }

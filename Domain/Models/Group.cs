@@ -1,13 +1,13 @@
 ﻿using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Infrastructure;
+using Domain.Models.Base;
 using NetTopologySuite.Geometries;
 
 namespace Domain.Models;
 
-public class Group
+public class Group : Entity
 {
-    public Guid Id { get; private set; }
     public User Admin { get; private set; }
     public string OrganizationName { get; private set; }
     public IReadOnlyCollection<User> Members => _members;
@@ -51,7 +51,6 @@ public class Group
         OrganizationName = organizationName;
         Admin = admin;
         _members.Add(admin);
-        PaymentInfo = new PaymentInfo();
     }
     
     private Group() { }

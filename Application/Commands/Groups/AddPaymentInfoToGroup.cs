@@ -4,7 +4,7 @@ using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
-public sealed record AddPaymentInfoToGroupCommand(PaymentInfoDto PaymentInfo) : IRequest;
+public sealed record AddPaymentInfoToGroupCommand(Guid GroupId, PaymentInfoDto PaymentInfo) : IRequest;
 
 internal sealed class AddPaymentInfoToGroupHandler : IRequestHandler<AddPaymentInfoToGroupCommand>
 {
@@ -12,7 +12,7 @@ internal sealed class AddPaymentInfoToGroupHandler : IRequestHandler<AddPaymentI
 
     public async Task Handle(AddPaymentInfoToGroupCommand request, CancellationToken cancellationToken)
     {
-        var groupEntity = await _repository.Groups.GetGroupAsync(request.PaymentInfo.GroupId);
+        var groupEntity = await _repository.Groups.GetGroupAsync(request.GroupId);
 
         var payment = request.PaymentInfo.Map();
 

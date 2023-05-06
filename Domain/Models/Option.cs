@@ -1,8 +1,9 @@
-﻿namespace Domain.Models;
+﻿using Domain.Models.Base;
 
-public class Option
+namespace Domain.Models;
+
+public class Option : Entity
 {
-    public Guid Id { get; }
     public string? Name { get; }
     public decimal Price { get; }
     public Dish Dish { get; }

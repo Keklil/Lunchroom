@@ -21,7 +21,6 @@ public static class GroupMapper
             source.PaymentInfo != null
                 ? new PaymentInfoDto
                 {
-                    GroupId = source.PaymentInfo.GroupId,
                     Link = source.PaymentInfo.Link,
                     Description = source.PaymentInfo.Description,
                     Qr = source.PaymentInfo.Qr
@@ -40,12 +39,6 @@ public static class GroupMapper
 
     public static PaymentInfo Map(this PaymentInfoDto source)
     {
-        return new PaymentInfo
-        {
-            GroupId = source.GroupId,
-            Link = source.Link,
-            Description = source.Description,
-            Qr = source.Qr
-        };
+        return new PaymentInfo (source.Link, source.Description, source.Qr);
     }
 }

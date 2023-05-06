@@ -10,28 +10,31 @@ namespace Data.EntitiesConfiguration;
 
 internal class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
 {
-    public void Configure(EntityTypeBuilder<Group> groupConfiguration)
+    public void Configure(EntityTypeBuilder<Group> builder)
     {
-        var options = new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-        };
+        builder.HasKey(x => x.Id);
 
-        groupConfiguration.HasKey(x => x.Id);
-
-        groupConfiguration.Property(x => x.Id)
+        builder.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        groupConfiguration.HasOne<User>(x => x.Admin)
+        builder.HasOne<User>(x => x.Admin)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);
         
-        groupConfiguration.HasOne<Kitchen>()
+        builder.HasOne<Kitchen>()
             .WithMany()
             .HasForeignKey(x => x.SelectedKitchenId)
-            .OnDelete(DeleteBehavior.SetNull);;
+            .OnDelete(DeleteBehavior.NoAction);
 
-        groupConfiguration.Property(x => x.Referral)
+        builder.OwnsOne(x => x.PaymentInfo, m =>
+        {
+            m.Property(p => p.Description);
+            m.Property(p => p.Qr);
+            m.Property(p => p.Link);
+            m.ToTable(nameof(PaymentInfo));
+        });
+
+        builder.Property(x => x.Referral)
             .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
                 x => JsonSerializer.Deserialize<GroupReferral>(x, JsonSerializerOptions.Default));
     }

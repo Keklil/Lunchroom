@@ -2,9 +2,8 @@
 
 namespace Domain.Models;
 
-public class Dish
+public class Dish : Entity
 {
-    public Guid Id { get; }
     public string Name { get; }
     public decimal Price { get; }
     public DishType? Type { get; }

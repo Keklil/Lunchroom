@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
+using Domain.Models.Base;
 
 namespace Domain.Models;
 
-public class DishType
+public class DishType : Entity
 {
-    public Guid Id { get; set; }
     public string Name { get; private set; }
     public IReadOnlyCollection<Dish> Dishes { get; }
 

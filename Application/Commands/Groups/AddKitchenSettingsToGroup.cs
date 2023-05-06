@@ -4,13 +4,13 @@ using Shared.DataTransferObjects.Group;
 
 namespace Application.Commands.Groups;
 
-public sealed record AddKitchenSettingsToGroupCommand(GroupConfigDto Config) : IRequest;
+public sealed record AddLocationInfoToGroupCommand(GroupConfigDto Config) : IRequest;
 
-internal sealed class AddKitchenSettingsToGroupHandler : IRequestHandler<AddKitchenSettingsToGroupCommand>
+internal sealed class AddLocationInfoToGroupHandler : IRequestHandler<AddLocationInfoToGroupCommand>
 {
     private readonly IRepositoryManager _repository;
 
-    public async Task Handle(AddKitchenSettingsToGroupCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AddLocationInfoToGroupCommand request, CancellationToken cancellationToken)
     {
         var groupEntity = await _repository.Groups.GetGroupAsync(request.Config.GroupId);
 
@@ -21,7 +21,7 @@ internal sealed class AddKitchenSettingsToGroupHandler : IRequestHandler<AddKitc
         await _repository.SaveAsync(cancellationToken);
     }
 
-    public AddKitchenSettingsToGroupHandler(IRepositoryManager repository)
+    public AddLocationInfoToGroupHandler(IRepositoryManager repository)
     {
         _repository = repository;
     }

@@ -1,9 +1,8 @@
 ﻿namespace Shared.DataTransferObjects.Group;
 
-public class PaymentInfoDto
+public record PaymentInfoDto
 {
-    public Guid GroupId { get; set; }
-    public string Link { get; set; }
-    public string? Description { get; set; }
-    public string? Qr { get; set; }
+    public string Link { get; init; } = null!;
+    public string? Description { get; init; }
+    public string? Qr { get; init; }
 }

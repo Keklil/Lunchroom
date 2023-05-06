@@ -1,10 +1,10 @@
 ﻿using Domain.Exceptions;
+using Domain.Models.Base;
 
 namespace Domain.Models;
 
-public class Kitchen
+public class Kitchen : Entity
 {
-    public Guid Id { get; }
     public string OrganizationName { get; private set; }
 
     public string Address { get; private set; }

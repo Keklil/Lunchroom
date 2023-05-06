@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230506110407_FixPaymentInfoSchema")]
+    partial class FixPaymentInfoSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -432,25 +435,15 @@ namespace Data.Migrations
 
                     b.OwnsOne("Domain.Models.PaymentInfo", "PaymentInfo", b1 =>
                         {
-                            b1.Property<Guid>("GroupId")
+                            b1.Property<Guid>("GroupId1")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("Description")
-                                .HasColumnType("text");
+                            b1.HasKey("GroupId1");
 
-                            b1.Property<string>("Link")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Qr")
-                                .HasColumnType("text");
-
-                            b1.HasKey("GroupId");
-
-                            b1.ToTable("PaymentInfo", (string)null);
+                            b1.ToTable("Groups");
 
                             b1.WithOwner()
-                                .HasForeignKey("GroupId");
+                                .HasForeignKey("GroupId1");
                         });
 
                     b.Navigation("Admin");
@@ -471,15 +464,9 @@ namespace Data.Migrations
                             b1.Property<Guid>("KitchenId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("Email")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Phone")
-                                .HasColumnType("text");
-
                             b1.HasKey("KitchenId");
 
-                            b1.ToTable("Contacts", (string)null);
+                            b1.ToTable("Kitchens");
 
                             b1.WithOwner()
                                 .HasForeignKey("KitchenId");

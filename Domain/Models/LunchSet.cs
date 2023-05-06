@@ -1,23 +1,22 @@
 ﻿using Domain.Exceptions;
 using System;
+using Domain.Models.Base;
 
-namespace Domain.Models
+namespace Domain.Models;
+
+public class LunchSet : Entity
 {
-    public class LunchSet
-    {
-        public Guid Id { get; set; }
-        public decimal Price { get; }
-        public string? Name { get; }
-        public IReadOnlyCollection<Dish> Dishes { get; }
+    public decimal Price { get; }
+    public string? Name { get; }
+    public IReadOnlyCollection<Dish> Dishes { get; }
 
-        public LunchSet(decimal price, List<Dish> dishes, string? name = null)
-        {
-            Id = Guid.NewGuid();
-            Price = price;
-            Dishes = dishes;
-            Name = name;
-        }
-        
-        private LunchSet() { }
+    public LunchSet(decimal price, List<Dish> dishes, string? name = null)
+    {
+        Id = Guid.NewGuid();
+        Price = price;
+        Dishes = dishes;
+        Name = name;
     }
+        
+    private LunchSet() { }
 }

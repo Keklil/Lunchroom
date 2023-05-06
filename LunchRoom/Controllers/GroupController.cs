@@ -63,15 +63,24 @@ public class GroupController : ControllerBase
         return group;
     }
 
+    /// <summary>
+    ///     Установить данные локации для группы.
+    /// </summary>
+    /// <param name="config"></param>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-    public async Task ConfigureKitchen([FromBody] GroupConfigDto config)
+    public async Task ConfigureGroupLocation([FromBody] GroupConfigDto config)
     {
-        await _sender.Send(new AddKitchenSettingsToGroupCommand(config));
+        await _sender.Send(new AddLocationInfoToGroupCommand(config));
     }
     
+    /// <summary>
+    ///     Привязать столовую к группе, в которой будет происходить заказ
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="kitchenId"></param>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
@@ -81,15 +90,25 @@ public class GroupController : ControllerBase
         await _sender.Send(new SetActiveKitchenCommand(groupId, kitchenId));
     }
 
+    /// <summary>
+    ///     Установить информацию для платежей, которая будет отображаться у заказчиков.
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="paymentInfoDto"></param>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-    public async Task ConfigurePaymentInfo([FromBody] PaymentInfoDto paymentInfoDto)
+    public async Task ConfigurePaymentInfo(Guid groupId, [FromBody] PaymentInfoDto paymentInfoDto)
     {
-        await _sender.Send(new AddPaymentInfoToGroupCommand(paymentInfoDto));
+        await _sender.Send(new AddPaymentInfoToGroupCommand(groupId, paymentInfoDto));
     }
 
+    /// <summary>
+    ///     Получить список столовых, в зоне доставки которых находится группа.
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <returns></returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
