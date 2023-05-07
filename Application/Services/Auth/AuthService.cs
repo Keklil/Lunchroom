@@ -75,15 +75,15 @@ public class AuthService : IAuthService
         return email;
     }
 
-    public async Task<User> RegisterUser(UserRegisterDto user)
+    public async Task<Domain.Models.User> RegisterUser(UserRegisterDto user)
     {
         var userEntity = await _repository.User.GetUserByEmailAsync(user.Email);
         if (userEntity is not null) throw new UserExistsException();
 
         var newUser = user.RoleDto switch
         {
-            RoleDto.Customer => User.CreateCustomer(user.Email, user.Password),
-            RoleDto.KitchenOperator => User.CreateKitchenOperator(user.Email, user.Password),
+            RoleDto.Customer => Domain.Models.User.CreateCustomer(user.Email, user.Password),
+            RoleDto.KitchenOperator => Domain.Models.User.CreateKitchenOperator(user.Email, user.Password),
             _ => throw new ArgumentOutOfRangeException()
         };
         _repository.User.CreateUser(newUser);

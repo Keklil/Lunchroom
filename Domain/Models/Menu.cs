@@ -9,6 +9,7 @@ public class Menu : Entity
     public DateTime Date { get; }
     public Guid KitchenId { get; }
     public bool IsReported { get; private set; }
+    public bool IsPublished { get; private set; }
     
     public IReadOnlyCollection<LunchSet> LunchSets => _lunchSets;
     private readonly List<LunchSet> _lunchSets;
@@ -77,6 +78,11 @@ public class Menu : Entity
     public Option? GetOptionById(Guid optionId)
     {
         return Options.SingleOrDefault(option => option.Id == optionId);
+    }
+    
+    public void Publish()
+    {
+        IsPublished = true;
     }
 
     public void Reported()

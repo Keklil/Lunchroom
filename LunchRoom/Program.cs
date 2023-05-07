@@ -1,6 +1,7 @@
 using Application.Services;
 using Application.Services.Auth;
 using Application.Services.Notifications;
+using Application.Services.User;
 using Contracts;
 using Contracts.Security;
 using Data.EntitiesConfiguration;

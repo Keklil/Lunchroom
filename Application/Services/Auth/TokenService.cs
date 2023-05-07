@@ -85,7 +85,7 @@ public class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    public async Task<string> Generate(User user)
+    public async Task<string> Generate(Domain.Models.User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);

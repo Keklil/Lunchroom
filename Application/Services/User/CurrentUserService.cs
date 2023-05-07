@@ -3,7 +3,7 @@ using Application.Authorization.Exceptions;
 using Contracts.Security;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Services.Notifications;
+namespace Application.Services.User;
 
 public class CurrentUserService : ICurrentUserService
 {
