@@ -12,5 +12,13 @@ internal class DishEntityTypeConfiguration : IEntityTypeConfiguration<Dish>
 
         builder.Property(x => x.Id)
             .ValueGeneratedNever();
+
+        builder.Property<DateTime>("CreatedAt")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("now()");
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }

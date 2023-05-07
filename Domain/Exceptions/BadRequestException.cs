@@ -5,8 +5,8 @@ namespace Domain.Exceptions;
 
 public abstract class BadRequestException : StructuredException
 {
-    protected BadRequestException(string massageTemplate, params object[]? args)
-        : base(massageTemplate, args)
+    protected BadRequestException(string messageTemplate, params object[]? args)
+        : base(messageTemplate, args)
     {
     }    
     

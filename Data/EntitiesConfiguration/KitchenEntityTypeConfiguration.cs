@@ -24,5 +24,13 @@ internal class KitchenEntityTypeConfiguration : IEntityTypeConfiguration<Kitchen
 
         builder.HasMany(x => x.Managers)
             .WithMany();
+        
+        builder.Property<DateTime>("CreatedAt")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("now()");
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }

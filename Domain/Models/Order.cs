@@ -5,7 +5,7 @@ namespace Domain.Models;
 
 public class Order : Entity
 {
-    public DateTime OrderDate { get; }
+    public DateTime CreateAt { get; }
     public Guid CustomerId { get; }
     public Guid MenuId { get; }
     public Guid GroupId { get; set; }
@@ -21,7 +21,7 @@ public class Order : Entity
         Id = Guid.NewGuid();
         CustomerId = customerId;
         MenuId = menuId;
-        OrderDate = DateTime.UtcNow;
+        CreateAt = DateTime.UtcNow;
         GroupId = groupId;
         Status = OrderStatus.New;
     }

@@ -6,14 +6,22 @@ namespace Data.EntitiesConfiguration;
 
 internal class GroupSettingsEntityTypeConfiguration : IEntityTypeConfiguration<GroupSettings>
 {
-    public void Configure(EntityTypeBuilder<GroupSettings> groupConfiguration)
+    public void Configure(EntityTypeBuilder<GroupSettings> builder)
     {
-        groupConfiguration.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-        groupConfiguration.Property(x => x.Id)
+        builder.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        groupConfiguration.Property(x => x.Location)
+        builder.Property(x => x.Location)
             .HasColumnType("geometry (point)");
+        
+        builder.Property<DateTime>("CreatedAt")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("now()");
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }

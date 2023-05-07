@@ -6,25 +6,29 @@ namespace Data.EntitiesConfiguration;
 
 internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 {
-    public void Configure(EntityTypeBuilder<Order> orderConfiguration)
+    public void Configure(EntityTypeBuilder<Order> builder)
     {
-        orderConfiguration.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-        orderConfiguration.Property(x => x.Id)
+        builder.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        orderConfiguration.Property(x => x.GroupId);
+        builder.Property(x => x.GroupId);
         
-        orderConfiguration.Property(x => x.OrderDate);
+        builder.Property(x => x.CreateAt);
 
-        orderConfiguration.HasOne<User>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.CustomerId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        orderConfiguration.HasOne<Menu>()
+        builder.HasOne<Menu>()
             .WithMany()
             .HasForeignKey(x => x.MenuId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }

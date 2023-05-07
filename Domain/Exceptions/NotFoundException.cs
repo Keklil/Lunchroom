@@ -10,8 +10,8 @@ public class NotFoundException : StructuredException
     {
     }
     
-    public NotFoundException(string massage)
-        : base(massage)
+    public NotFoundException(string message)
+        : base(message)
     {
     }
 }

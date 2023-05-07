@@ -6,11 +6,19 @@ namespace Data.EntitiesConfiguration;
 
 internal class LunchSetEntityTypeConfiguration : IEntityTypeConfiguration<LunchSet>
 {
-    public void Configure(EntityTypeBuilder<LunchSet> lunchSetConfiguration)
+    public void Configure(EntityTypeBuilder<LunchSet> builder)
     {
-        lunchSetConfiguration.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-        lunchSetConfiguration.Property(x => x.Id)
+        builder.Property(x => x.Id)
             .ValueGeneratedNever();
+        
+        builder.Property<DateTime>("CreatedAt")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("now()");
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }

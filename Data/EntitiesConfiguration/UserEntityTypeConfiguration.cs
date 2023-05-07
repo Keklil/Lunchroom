@@ -6,14 +6,22 @@ namespace Data.EntitiesConfiguration;
 
 internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<User> userConfiguration)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        userConfiguration.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-        userConfiguration.Property(x => x.Id)
+        builder.Property(x => x.Id)
             .ValueGeneratedNever();
 
-        userConfiguration.HasMany(x => x.Groups)
+        builder.HasMany(x => x.Groups)
             .WithMany(x => x.Members);
+        
+        builder.Property<DateTime>("CreatedAt")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("now()");
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }

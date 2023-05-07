@@ -16,5 +16,13 @@ internal class KitchenSettingsEntityTypeConfiguration : IEntityTypeConfiguration
         builder.OwnsMany(x => x.ShippingAreas)
             .Property(x => x.Polygon)
             .HasColumnType("geometry (polygon)");
+        
+        builder.Property<DateTime>("CreatedAt")
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("now()");
+
+        builder.Property<DateTime>("UpdatedAt")
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValueSql("now()");
     }
 }
