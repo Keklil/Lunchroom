@@ -16,7 +16,7 @@ public static class MenuDtoMapper
         return new MenuDto
         {
             Id = menu.Id,
-            Date = menu.Date,
+            Date = menu.CreatedAt,
             Dishes = menu.Dishes.Select(dish => dish.Map()).ToList(),
             LunchSets = menu.LunchSets.Select(lunchSet => lunchSet.Map()).ToList(),
             Options = menu.Options.Select(option => option.Map()).ToList()

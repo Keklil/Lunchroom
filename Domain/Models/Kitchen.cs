@@ -72,7 +72,6 @@ public class Kitchen : Entity
         
         Contacts = new Contacts(email, phone);
         
-        Id = Guid.NewGuid();
         OrganizationName = organizationName;
         Address = address;
         Inn = inn;

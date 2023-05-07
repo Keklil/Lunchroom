@@ -47,7 +47,6 @@ public class Group : Entity
     
     public Group(User admin, string organizationName)
     {
-        Id = Guid.NewGuid();
         OrganizationName = organizationName;
         Admin = admin;
         _members.Add(admin);

@@ -4,6 +4,7 @@ using Contracts.Security;
 using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Models;
+using Domain.Models.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared.DataTransferObjects.Group;

@@ -4,24 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class GroupSettingsEntityTypeConfiguration : IEntityTypeConfiguration<GroupSettings>
+internal class GroupSettingsEntityTypeConfiguration : BaseEntityTypeConfiguration<GroupSettings>
 {
-    public void Configure(EntityTypeBuilder<GroupSettings> builder)
+    public override void Configure(EntityTypeBuilder<GroupSettings> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
-
+        base.Configure(builder);
+        
         builder.Property(x => x.Location)
             .HasColumnType("geometry (point)");
-        
-        builder.Property<DateTime>("CreatedAt")
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("now()");
-
-        builder.Property<DateTime>("UpdatedAt")
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql("now()");
     }
 }

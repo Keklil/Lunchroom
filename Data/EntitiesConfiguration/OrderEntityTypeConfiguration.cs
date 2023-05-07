@@ -4,18 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
+internal class OrderEntityTypeConfiguration : BaseEntityTypeConfiguration<Order>
 {
-    public void Configure(EntityTypeBuilder<Order> builder)
+    public override void Configure(EntityTypeBuilder<Order> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
-
+        base.Configure(builder);
+        
         builder.Property(x => x.GroupId);
         
-        builder.Property(x => x.CreateAt);
+        builder.Property(x => x.CreatedAt);
 
         builder.HasOne<User>()
             .WithMany()
@@ -26,9 +23,5 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey(x => x.MenuId)
             .OnDelete(DeleteBehavior.NoAction);
-
-        builder.Property<DateTime>("UpdatedAt")
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql("now()");
     }
 }

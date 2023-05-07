@@ -1,6 +1,6 @@
 ﻿namespace Domain.Notifications;
 
-public class TimeToOrderWillExpireSoon
+public class TimeToOrderWillExpireSoon : DomainNotification
 {
     
 }

@@ -45,7 +45,6 @@ public class KitchenSettings : Entity
         MenuUpdatePeriod menuUpdatePeriod, 
         MenuFormat menuFormat)
     {
-        Id = Guid.NewGuid();
         KitchenId = kitchenId;
         LimitingTimeForOrder = limitingTimeForOrder;
         MenuUpdatePeriod = menuUpdatePeriod;

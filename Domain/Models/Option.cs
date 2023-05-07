@@ -16,7 +16,6 @@ public class Option : Entity
 
     public Option(Dish dish, string? name = null, decimal? price = null)
     {
-        Id = Guid.NewGuid();
         _name = name;
         Price = price ?? dish.Price;
         Dish = dish;

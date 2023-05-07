@@ -4,15 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class OptionEntityTypeConfiguration : IEntityTypeConfiguration<Option>
+internal class OptionEntityTypeConfiguration : BaseEntityTypeConfiguration<Option>
 {
-    public void Configure(EntityTypeBuilder<Option> builder)
+    public override void Configure(EntityTypeBuilder<Option> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
-
+        base.Configure(builder);
+        
         builder.Property(x => x.Price);
         
         builder.HasOne(x => x.Dish);

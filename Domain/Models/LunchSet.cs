@@ -12,7 +12,6 @@ public class LunchSet : Entity
 
     public LunchSet(List<Dish> dishes, decimal price, string? name = null)
     {
-        Id = Guid.NewGuid();
         Price = price;
         Dishes = dishes;
         Name = name;

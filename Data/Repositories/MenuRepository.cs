@@ -23,7 +23,7 @@ internal class MenuRepository : RepositoryBase<Menu>, IMenuRepository
     public async Task<Menu> GetMenuByDateAsync(DateTime date, Guid kitchenId)
     {
         var dateSearch = date.ToUniversalTime().Date;
-        var menu = await FindByCondition(x => x.Date.Date.Equals(dateSearch) && x.KitchenId.Equals(kitchenId), false)
+        var menu = await FindByCondition(x => x.CreatedAt.Date.Equals(dateSearch) && x.KitchenId.Equals(kitchenId), false)
             .Include(x => x.LunchSets)
             .Include(x => x.Options)
             .FirstOrDefaultAsync();
@@ -38,7 +38,7 @@ internal class MenuRepository : RepositoryBase<Menu>, IMenuRepository
     {
         var menus = await RepositoryContext.Menu
             .Where(x => x.KitchenId.Equals(kitchenId))
-            .OrderByDescending(x => x.Date)
+            .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
         return menus;
     }

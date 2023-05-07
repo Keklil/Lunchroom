@@ -1,27 +1,15 @@
 ﻿using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
+internal class UserEntityTypeConfiguration : BaseEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public override void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
+        base.Configure(builder);
 
         builder.HasMany(x => x.Groups)
             .WithMany(x => x.Members);
-        
-        builder.Property<DateTime>("CreatedAt")
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("now()");
-
-        builder.Property<DateTime>("UpdatedAt")
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql("now()");
     }
 }

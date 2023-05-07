@@ -16,7 +16,6 @@ public class GroupSettings : Entity
         string address,
         Point location)
     {
-        Id = Guid.NewGuid();
         GroupId = groupId;
         Address = address;
         Location = location;

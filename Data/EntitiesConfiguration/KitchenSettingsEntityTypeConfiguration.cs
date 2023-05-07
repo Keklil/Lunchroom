@@ -4,25 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class KitchenSettingsEntityTypeConfiguration : IEntityTypeConfiguration<KitchenSettings>
+internal class KitchenSettingsEntityTypeConfiguration : BaseEntityTypeConfiguration<KitchenSettings>
 {
-    public void Configure(EntityTypeBuilder<KitchenSettings> builder)
+    public override void Configure(EntityTypeBuilder<KitchenSettings> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
-
+        base.Configure(builder);
+        
         builder.OwnsMany(x => x.ShippingAreas)
             .Property(x => x.Polygon)
             .HasColumnType("geometry (polygon)");
-        
-        builder.Property<DateTime>("CreatedAt")
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("now()");
-
-        builder.Property<DateTime>("UpdatedAt")
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql("now()");
     }
 }

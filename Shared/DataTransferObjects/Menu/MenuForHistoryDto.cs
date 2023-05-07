@@ -13,7 +13,7 @@ public static class MenuForListMapper
         return new MenuForHistoryDto
         {
             Id = menu.Id,
-            Date = menu.Date
+            Date = menu.CreatedAt
         };
     }
     

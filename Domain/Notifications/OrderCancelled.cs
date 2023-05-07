@@ -1,6 +1,6 @@
 ﻿namespace Domain.Notifications;
 
-public class OrderCancelled
+public class OrderCancelled : DomainNotification
 {
     
 }

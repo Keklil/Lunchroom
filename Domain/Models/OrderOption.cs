@@ -16,7 +16,6 @@ public class OrderOption : Entity
     
     public OrderOption(Option option, int optionUnits)
     {
-        Id = Guid.NewGuid();
         OptionId = option.Id;
         Option = option;
         OptionUnits = optionUnits;

@@ -1,6 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
+﻿using System.Text.Json;
 using Domain.Infrastructure;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,14 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
+internal class GroupEntityTypeConfiguration : BaseEntityTypeConfiguration<Group>
 {
-    public void Configure(EntityTypeBuilder<Group> builder)
+    public override void Configure(EntityTypeBuilder<Group> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
+        base.Configure(builder);
 
         builder.HasOne<User>(x => x.Admin)
             .WithMany()
@@ -37,13 +32,5 @@ internal class GroupEntityTypeConfiguration : IEntityTypeConfiguration<Group>
         builder.Property(x => x.Referral)
             .HasConversion(x => JsonSerializer.Serialize(x, JsonSerializerOptions.Default),
                 x => JsonSerializer.Deserialize<GroupReferral>(x, JsonSerializerOptions.Default)!);
-        
-        builder.Property<DateTime>("CreatedAt")
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("now()");
-
-        builder.Property<DateTime>("UpdatedAt")
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql("now()");
     }
 }

@@ -10,7 +10,6 @@ public class Dish : Entity
 
     public Dish(string name, decimal price, DishType? type = null)
     {
-        Id = Guid.NewGuid();
         Name = name;
         Price = price;
         Type = type;

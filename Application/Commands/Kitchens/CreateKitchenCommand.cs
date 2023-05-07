@@ -3,6 +3,7 @@ using Contracts.Repositories;
 using Contracts.Security;
 using Domain.Exceptions.AuthExceptions;
 using Domain.Models;
+using Domain.Models.Enums;
 using MediatR;
 using Shared.DataTransferObjects.Kitchen;
 

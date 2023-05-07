@@ -1,12 +1,13 @@
 ﻿using System;
 using Domain.Exceptions;
 using Domain.Models.Base;
+using Domain.Notifications;
 
 namespace Domain.Models;
 
 public class Menu : Entity
 {
-    public DateTime Date { get; }
+    public DateTime CreatedAt { get; }
     public Guid KitchenId { get; }
     public bool IsReported { get; private set; }
     public bool IsPublished { get; private set; }
@@ -22,8 +23,7 @@ public class Menu : Entity
 
     public Menu(Guid kitchenId)
     {
-        Id = Guid.NewGuid();
-        Date = DateTime.UtcNow;
+        CreatedAt = DateTime.UtcNow;
         KitchenId = kitchenId;
         _lunchSets = new List<LunchSet>();
         _options = new List<Option>();
@@ -83,6 +83,7 @@ public class Menu : Entity
     public void Publish()
     {
         IsPublished = true;
+        AddDomainEvent(new MenuPublished());
     }
 
     public void Reported()

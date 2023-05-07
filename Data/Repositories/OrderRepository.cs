@@ -34,7 +34,7 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
     public async Task<List<Order>> GetOrdersByDateAsync(DateTime date, Guid groupId)
     {
         var orders = RepositoryContext.Orders
-            .Where(x => x.CreateAt.Date == date.Date && x.GroupId == groupId)
+            .Where(x => x.CreatedAt.Date == date.Date && x.GroupId == groupId)
             .Include(x => x.Options);
 
         return await orders.ToListAsync();
@@ -44,7 +44,7 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
     {
         var list = await RepositoryContext.Orders
             .Where(x => x.CustomerId.Equals(userId) && x.GroupId.Equals(groupId))
-            .Select(x => new OrdersForUser { Date = x.CreateAt, Id = x.Id })
+            .Select(x => new OrdersForUser { Date = x.CreatedAt, Id = x.Id })
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
             .ToListAsync();
@@ -54,9 +54,9 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
     public async Task<List<OrdersForUser>> GetTodayOrdersByUserAsync(Guid userId, Guid groupId)
     {
         var list = await RepositoryContext.Orders
-            .Where(x => x.CustomerId.Equals(userId) && x.CreateAt.Date == DateTime.UtcNow.Date)
+            .Where(x => x.CustomerId.Equals(userId) && x.CreatedAt.Date == DateTime.UtcNow.Date)
             .Where(x => x.GroupId.Equals(groupId))
-            .Select(x => new OrdersForUser { Date = x.CreateAt, Id = x.Id })
+            .Select(x => new OrdersForUser { Date = x.CreatedAt, Id = x.Id })
             .AsNoTracking()
             .ToListAsync();
 

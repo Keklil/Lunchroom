@@ -5,32 +5,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
 
-internal class KitchenEntityTypeConfiguration : IEntityTypeConfiguration<Kitchen>
+internal class KitchenEntityTypeConfiguration : BaseEntityTypeConfiguration<Kitchen>
 {
-    public void Configure(EntityTypeBuilder<Kitchen> builder)
+    public override void Configure(EntityTypeBuilder<Kitchen> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
-
+        base.Configure(builder);
+        
         builder.OwnsOne(x => x.Contacts, m =>
         {
             m.Property(p => p.Email);
             m.Property(p => p.Phone);
             m.ToTable(nameof(Contacts));
         });
-            
-
+        
         builder.HasMany(x => x.Managers)
             .WithMany();
-        
-        builder.Property<DateTime>("CreatedAt")
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("now()");
-
-        builder.Property<DateTime>("UpdatedAt")
-            .ValueGeneratedOnAddOrUpdate()
-            .HasDefaultValueSql("now()");
     }
 }

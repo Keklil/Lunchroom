@@ -9,7 +9,7 @@ public static class OrderMapper
             Id = source.Id,
             CustomerId = source.CustomerId,
             GroupId = source.GroupId,
-            OrderDate = source.CreateAt,
+            OrderDate = source.CreatedAt,
             LunchSet = source.LunchSet != null
                 ? new OrderLunchSetDto
                 {
