@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace LoggerService;
+namespace Infrastructure.Logging;
 
 public static class LoggerConfigurator
 {

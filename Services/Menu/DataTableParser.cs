@@ -1,19 +1,15 @@
 ﻿using System.Data;
 using Contracts;
-using Contracts.Repositories;
 using Domain.Exceptions;
 using Domain.Models;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
-using Services.OrdersReport;
 using Shared;
 
 namespace Services.Menu;
 
 public class DataTableParser : IDataTableParser
 {
-    private readonly IRepositoryManager _repository;
-
     private ImportReport Report { get; } = new();
 
     public async Task<ImportReport> ImportMenuAsync(Guid kitchenId, IFormFile file)
@@ -23,12 +19,10 @@ public class DataTableParser : IDataTableParser
         
         var table = reader.AsDataSet().Tables[0];
 
-        var menu = new Domain.Models.Menu(kitchenId);
+        Report.Menu = new Domain.Models.Menu(kitchenId);
         
-        await ReadTable(table, menu);
+        await ReadTable(table, Report.Menu);
         
-        _repository.Menu.CreateMenu(menu);
-        await _repository.SaveAsync();
         return Report;
     }
 
@@ -282,11 +276,6 @@ public class DataTableParser : IDataTableParser
         reader = new MergeCellsReader(reader);
         
         return true;
-    }
-
-    public DataTableParser(IRepositoryManager repository)
-    {
-        _repository = repository;
     }
 
     class ParseResult

@@ -88,7 +88,7 @@ public class ReportingKitchenService : BackgroundService
         _configuration = configuration;
 
         kitchenEmail = _configuration.GetSection("MailServer:Sender").Value;
-        hour = _configuration.GetValue<int>("TimeOrdersSendToKitchen:Hour");
-        minute = _configuration.GetValue<int>("TimeOrdersSendToKitchen:Minute");
+        hour = int.Parse(_configuration.GetSection("TimeOrdersSendToKitchen:Hour").Value);
+        minute = int.Parse(_configuration.GetSection("TimeOrdersSendToKitchen:Minute").Value);
     }
 }

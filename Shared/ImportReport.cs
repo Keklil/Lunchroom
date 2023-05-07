@@ -1,7 +1,10 @@
-﻿namespace Shared;
+﻿using Domain.Models;
+
+namespace Shared;
 
 public class ImportReport
 {
+    public Menu Menu { get; set; }
     private string _error;
     private readonly List<BadRow> _errorsInRows = new();
 

@@ -13,7 +13,7 @@ public class RepositoryManager : IRepositoryManager
     private readonly Lazy<ISecurityRepository> _securityRepository;
     private readonly Lazy<IUserRepository> _userRepository;
     private readonly Lazy<IKitchenRepository> _kitchenRepository;
-    
+
     public IUserRepository User => _userRepository.Value;
     public IMenuRepository Menu => _menuRepository.Value;
     public IOrderRepository Order => _orderRepository.Value;

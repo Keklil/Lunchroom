@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -11,17 +12,20 @@ internal sealed class UploadMenuFromFileHandler : INotificationHandler<UploadMen
 {
     private readonly ILogger<UploadMenuFromFileHandler> _logger;
     private readonly IDataTableParser _dataTableParser;
-    private readonly ISender _sender;
+    private readonly IRepositoryManager _repository;
 
     public async Task Handle(UploadMenuFromFile command, CancellationToken token)
     {
         var report = await _dataTableParser.ImportMenuAsync(command.KitchenId, command.Menu);
+        _repository.Menu.CreateMenu(report.Menu);
+        await _repository.SaveAsync(token);
     }
 
-    public UploadMenuFromFileHandler(ILogger<UploadMenuFromFileHandler> logger, ISender sender, IDataTableParser dataTableParser)
+    public UploadMenuFromFileHandler(ILogger<UploadMenuFromFileHandler> logger, IDataTableParser dataTableParser, 
+        IRepositoryManager repository)
     {
         _logger = logger;
-        _sender = sender;
         _dataTableParser = dataTableParser;
+        _repository = repository;
     }
 }

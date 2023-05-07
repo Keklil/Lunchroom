@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Serilog.Events;
 
-namespace LoggerService;
+namespace Infrastructure.Logging;
 
 public class SeqConfig
 {

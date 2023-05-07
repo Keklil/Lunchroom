@@ -2,8 +2,6 @@
 using Contracts.Repositories;
 using Domain.Exceptions;
 using Shared.DataTransferObjects;
-using Domain.Models;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Shared.DataTransferObjects.Order;
 
@@ -13,9 +11,7 @@ public class OrdersReportService : IOrdersReportService
 {
     private readonly IRepositoryManager _repository;
     private readonly ILogger<OrdersReportService> _logger;
-    private IMemoryCache _cache;
-    private MemoryCacheEntryOptions cacheOptions;
-
+    
     public async Task<List<OrderReportDto>> GenerateOrdersReport(DateTime date, Guid groupId,
         bool excludeWithoutConfirmedPayment)
     {
@@ -131,10 +127,5 @@ public class OrdersReportService : IOrdersReportService
     {
         _repository = repository;
         _logger = logger;
-
-        cacheOptions = new MemoryCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(5)
-        };
     }
 }
