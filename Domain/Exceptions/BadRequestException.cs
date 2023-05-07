@@ -1,7 +1,15 @@
-﻿namespace Domain.Exceptions;
+﻿using Domain.Exceptions.Base;
+using Newtonsoft.Json;
 
-public abstract class BadRequestException : Exception
+namespace Domain.Exceptions;
+
+public abstract class BadRequestException : StructuredException
 {
+    protected BadRequestException(string massageTemplate, params object[]? args)
+        : base(massageTemplate, args)
+    {
+    }    
+    
     protected BadRequestException(string massage)
         : base(massage)
     {

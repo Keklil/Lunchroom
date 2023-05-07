@@ -3,12 +3,12 @@
 public sealed class UserNotFoundException : NotFoundException
 {
     public UserNotFoundException(Guid userId)
-        : base($"The user with id: {userId} doesn't exist.")
+        : base("Пользователь с id: {UserId} не существует.", userId)
     {
     }
 
     public UserNotFoundException(string email)
-        : base($"The user with email: {email} doesn't exist.")
+        : base("Пользователь с почтой: {Email} doesn't exist.", email)
     {
     }
 }

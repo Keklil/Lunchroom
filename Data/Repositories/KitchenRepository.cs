@@ -16,7 +16,7 @@ internal class KitchenRepository : RepositoryBase<Kitchen>, IKitchenRepository
             .SingleOrDefaultAsync();
         
         if (kitchen is null)
-            throw new NotFoundException($"Столовая с id {kitchenId} не найдена.");
+            throw new NotFoundException("Столовая с id {KitchenId} не найдена.", kitchenId);
 
         return kitchen;
     }
@@ -27,7 +27,7 @@ internal class KitchenRepository : RepositoryBase<Kitchen>, IKitchenRepository
             .SingleOrDefaultAsync();
         
         if (kitchenSettings is null)
-            throw new NotFoundException($"Столовая с id {kitchenId} не найдена.");
+            throw new NotFoundException("Столовая с id {KitchenId} не найдена.", kitchenId);
         
         return kitchenSettings;
     }

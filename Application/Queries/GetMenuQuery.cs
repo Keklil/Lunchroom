@@ -24,7 +24,7 @@ internal class GetMenuQueryHandler : IRequestHandler<GetMenuQuery, MenuDto>
             case QueryFor.Group:
                 var group = await _repository.Groups.GetGroupAsync(request.TargetId);
                 if (group.SelectedKitchenId is null)
-                    throw new DomainException("Для группы не выбрана столовая");
+                    throw new DomainException("Для группы {GroupId} не выбрана столовая", group.Id);
                 menu = await _repository.Menu.GetMenuByDateAsync(request.Date, group.SelectedKitchenId.Value);
                 break;
             

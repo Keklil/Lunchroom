@@ -37,7 +37,7 @@ public class Menu : Entity
         foreach (var dish in dishes)
         {
             if (!dishIds.Contains(dish.Id))
-                throw new DomainException($"Попытка добавить в меню ланч-сет с блюдом ({dish.Id}), не принадлежащем к меню");
+                throw new DomainException("Попытка добавить в меню ланч-сет с блюдом ({DishId}), не принадлежащем к меню {MenuId}", dish.Id, Id);
         }
             
         if (price < 0)
@@ -51,7 +51,7 @@ public class Menu : Entity
     {
         var dishIds = Dishes.Select(x => x.Id).ToHashSet();
         if (!dishIds.Contains(dish.Id))
-            throw new DomainException($"Попытка добавить в меню опцию с блюдом ({dish.Id}), не принадлежащем к меню");
+            throw new DomainException("Попытка добавить в меню опцию с блюдом ({DishId}), не принадлежащем к меню {MenuId}", dish.Id, Id);
             
         if (price < 0)
             throw new DomainException("Попытка установить отрицательную цену для опции");

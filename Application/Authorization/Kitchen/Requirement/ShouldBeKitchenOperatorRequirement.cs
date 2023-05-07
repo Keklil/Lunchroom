@@ -6,7 +6,7 @@ namespace Application.Authorization.Kitchen.Requirement;
 public class ShouldBeKitchenOperatorRequirement : IAuthorizationRequirement
 {
     public Guid UserId { get; set; } 
-    public Guid GroupId { get; set; }
+    public Guid KitchenId { get; set; }
 
     private class ShouldBeKitchenOperatorHandler : IAuthorizationHandler<ShouldBeKitchenOperatorRequirement>
     {
@@ -17,7 +17,7 @@ public class ShouldBeKitchenOperatorRequirement : IAuthorizationRequirement
             var userId = request.UserId;
             var userGroups = await _repository.User.GetUserGroupIdsAsync(userId);
 
-            if (!userGroups.Contains(request.GroupId))
+            if (!userGroups.Contains(request.KitchenId))
                 return AuthorizationResult.Fail();
 
             return AuthorizationResult.Succeed();

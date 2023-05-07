@@ -1,8 +1,17 @@
-﻿namespace Domain.Exceptions;
+﻿using Domain.Exceptions.Base;
+using Domain.Models;
 
-public class NotFoundException : Exception
+namespace Domain.Exceptions;
+
+public class NotFoundException : StructuredException
 {
-    public NotFoundException(string massage, params string[]? values) : base(massage)
+    public NotFoundException(string massageTemplate, params object[]? values)
+        : base(massageTemplate, values)
+    {
+    }
+    
+    public NotFoundException(string massage)
+        : base(massage)
     {
     }
 }

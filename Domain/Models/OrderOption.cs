@@ -7,16 +7,7 @@ public class OrderOption : Entity
 {
     private Option Option { get; }
     public Guid OptionId { get; }
-    public int OptionUnits { get; private set; }
-
-    public void AddUnits(int units)
-    {
-        if (units < 0)
-        {
-            throw new DomainException("Invalid units");
-        }
-        OptionUnits += units;
-    }
+    public int OptionUnits { get; }
 
     public decimal GetPrice()
     {

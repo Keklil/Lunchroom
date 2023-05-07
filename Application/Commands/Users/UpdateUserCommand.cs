@@ -16,8 +16,6 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
     public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var userEntity = await _repository.User.GetUserAsync(_currentUserService.GetUserId());
-        if (userEntity is null)
-            throw new NotFoundException("User not found");
 
         userEntity.ChangeName(request.User.Surname, request.User.Name, request.User.Patronymic);
         userEntity.ChangePhone(request.User.Phone);

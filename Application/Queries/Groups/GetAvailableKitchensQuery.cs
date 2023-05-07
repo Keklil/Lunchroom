@@ -14,12 +14,12 @@ internal class GetAllowedKitchenQueryHandler : IRequestHandler<GetAvailableKitch
     
     public async Task<List<AvailableKitchensDto>> Handle(GetAvailableKitchensQuery request, CancellationToken cancellationToken)
     {
-        var groupLocation = await _repository.Groups.GetGroupAsync(request.GroupId);
+        var group = await _repository.Groups.GetGroupAsync(request.GroupId);
         
-        if (groupLocation.Settings is null)
-            throw new NotFoundException($"Группа с id {request.GroupId} не найдена.");
+        if (group.Settings is null)
+            throw new DomainException("У группа с id {GroupId} не указанны данные о локации.", group.Id);
         
-        var kitchens = await _repository.Kitchens.GetKitchensByLocationAsync(groupLocation.Settings.Location);
+        var kitchens = await _repository.Kitchens.GetKitchensByLocationAsync(group.Settings.Location);
         
         return kitchens.Select(kitchen => kitchen.MapToAvailableKitchensDto()).ToList();
     }

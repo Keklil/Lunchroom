@@ -23,15 +23,15 @@ internal class GetAllMenusHandler : IRequestHandler<GetAllMenusQuery, List<MenuF
             case QueryFor.Group:
                 var group = await _repository.Groups.GetGroupAsync(request.TargetId);
                 if (group.SelectedKitchenId is null)
-                    throw new DomainException("Для группы не выбрана столовая");
+                    throw new DomainException("Для группы {GroupId} не выбрана столовая", group.Id);
                 menuEntities = await _repository.Menu.GetMenuByGroup(group.SelectedKitchenId.Value);
                 break;
             
             case QueryFor.Kitchen:
                 menuEntities = await _repository.Menu.GetMenuByGroup(request.TargetId);
                 break;
+            
             default:
-                
                 throw new InvalidEnumArgumentException();
         }
         

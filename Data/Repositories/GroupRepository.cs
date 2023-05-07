@@ -17,7 +17,7 @@ internal class GroupRepository : RepositoryBase<Group>, IGroupRepository
             .SingleOrDefaultAsync();
         
         if (group is null)
-            throw new NotFoundException($"Группа с id {groupId} не найдена.");
+            throw new NotFoundException("Группа с id {GroupId} не найдена.", groupId);
 
         return group;
     }

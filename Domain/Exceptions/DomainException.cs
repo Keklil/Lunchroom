@@ -1,7 +1,14 @@
-﻿namespace Domain.Exceptions;
+﻿using Domain.Exceptions.Base;
 
-public class DomainException : Exception
+namespace Domain.Exceptions;
+
+public class DomainException : StructuredException
 {
+    public DomainException(string messageTemplate, params object[]? args)
+        : base(messageTemplate, args)
+    {
+    }
+    
     public DomainException(string message)
         : base(message)
     {

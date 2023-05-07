@@ -22,7 +22,7 @@ public class ShouldBeKitchenOperator<TRequest> : AbstractRequestAuthorizer<TRequ
         UseRequirement(new ShouldBeKitchenOperatorRequirement()
              {
                  UserId = _currentUserService.GetUserId(),
-                 GroupId = request.KitchenId
+                 KitchenId = request.KitchenId
              });
     }
 }

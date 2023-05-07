@@ -15,7 +15,7 @@ internal class MenuRepository : RepositoryBase<Menu>, IMenuRepository
             .SingleOrDefaultAsync();
         
         if (menu is null)
-            throw new NotFoundException($"Меню не найдено для идентификатора: {menuId}");
+            throw new NotFoundException("Меню с id: {MenuId} не найдено.", menuId);
         
         return menu;
     }
@@ -29,7 +29,7 @@ internal class MenuRepository : RepositoryBase<Menu>, IMenuRepository
             .FirstOrDefaultAsync();
 
         if (menu is null)
-            throw new NotFoundException($"Меню не найдено для даты: {date.Date}");
+            throw new NotFoundException("Меню не найдено для даты: {SearchDate}", date);
         
         return menu;
     }

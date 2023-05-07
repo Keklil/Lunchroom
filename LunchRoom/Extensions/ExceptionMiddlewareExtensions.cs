@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel;
+using System.Text.Json;
 using Application.Authorization.Exceptions;
 using Domain.ErrorModel;
 using Domain.Exceptions;
 using Domain.Exceptions.AuthExceptions;
+using Domain.Exceptions.Base;
 using Domain.Exceptions.GroupExceptions;
 using Domain.Exceptions.KitchenExceptions;
 using LunchRoom.Controllers.Infrastructure;
@@ -30,12 +32,22 @@ public static class ExceptionMiddlewareExtensions
                         BadRequestException => StatusCodes.Status400BadRequest,
                         ValidationAppException => StatusCodes.Status400BadRequest,
                         DomainException => StatusCodes.Status400BadRequest,
+                        InvalidEnumArgumentException => StatusCodes.Status400BadRequest,
                         UnauthorizedException => StatusCodes.Status403Forbidden,
                         _ => StatusCodes.Status500InternalServerError
                     };
 
-                    logger.LogError($"{contextFeature.Error}");
-
+                    switch (contextFeature.Error is StructuredException)
+                    {
+                        case true:
+                            var error = contextFeature.Error as StructuredException;
+                            logger.LogError(contextFeature.Error, error.MessageTemplate, error.Args);
+                            break;
+                        case false:
+                            logger.LogError(contextFeature.Error, contextFeature.Error.Message);
+                            break;
+                    }
+                    
                     switch (contextFeature.Error)
                     {
                         case ValidationAppException exception:

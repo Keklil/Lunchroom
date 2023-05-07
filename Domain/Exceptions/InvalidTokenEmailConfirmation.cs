@@ -2,7 +2,7 @@
 
 public class InvalidTokenEmailConfirmation : BadRequestException
 {
-    public InvalidTokenEmailConfirmation() : base("Invalid email confirmation token")
+    public InvalidTokenEmailConfirmation() : base("Неверный токен подтверждения почты")
     {
     }
 }

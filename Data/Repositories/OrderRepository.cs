@@ -16,7 +16,7 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
             .SingleOrDefaultAsync();
         
         if (order is null)
-            throw new NotFoundException("Заказ не найден");
+            throw new NotFoundException("Заказ с id: {OrderId} не найден", orderId);
 
         return order;
     }
