@@ -15,9 +15,9 @@ public class ShouldBeKitchenOperatorRequirement : IAuthorizationRequirement
         public async Task<AuthorizationResult> Handle(ShouldBeKitchenOperatorRequirement request, CancellationToken cancellationToken)
         {
             var userId = request.UserId;
-            var userGroups = await _repository.User.GetUserGroupIdsAsync(userId);
+            var kitchen = await _repository.Kitchens.GetKitchenAsync(request.KitchenId);
 
-            if (!userGroups.Contains(request.KitchenId))
+            if (kitchen.Managers.All(x => x.Id != userId))
                 return AuthorizationResult.Fail();
 
             return AuthorizationResult.Succeed();

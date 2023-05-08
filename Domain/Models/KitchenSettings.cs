@@ -5,9 +5,8 @@ using NetTopologySuite.Geometries;
 
 namespace Domain.Models;
 
-public class KitchenSettings : Entity
+public class KitchenSettings : ValueObject
 {
-    public Guid KitchenId { get; }
     public TimeSpan LimitingTimeForOrder { get; private set; }
     public MenuUpdatePeriod MenuUpdatePeriod { get; private set; }
     public MenuFormat MenuFormat { get; private set; }
@@ -40,17 +39,25 @@ public class KitchenSettings : Entity
     }
 
     public KitchenSettings(
-        Guid kitchenId,
         TimeSpan limitingTimeForOrder,
         MenuUpdatePeriod menuUpdatePeriod, 
         MenuFormat menuFormat)
     {
-        KitchenId = kitchenId;
         LimitingTimeForOrder = limitingTimeForOrder;
         MenuUpdatePeriod = menuUpdatePeriod;
         MenuFormat = menuFormat;
         _shippingAreas = new ();
     }
 
-    private KitchenSettings(){}
+    public KitchenSettings()
+    {
+        _shippingAreas = new ();
+    }
+
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return LimitingTimeForOrder;
+        yield return MenuUpdatePeriod;
+        yield return MenuFormat;
+    }
 }

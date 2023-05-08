@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class RefactoringEntitiesConfigurations : Migration
+    public partial class AddUserDeviceInfo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,15 +61,42 @@ namespace Data.Migrations
                 nullable: false,
                 defaultValueSql: "now()");
 
+            migrationBuilder.CreateTable(
+                name: "UserDeviceInfos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeviceToken = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDeviceInfos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserDeviceInfos_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Menu_CreatedAt",
                 table: "Menu",
                 column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDeviceInfos_UserId",
+                table: "UserDeviceInfos",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "UserDeviceInfos");
+
             migrationBuilder.DropIndex(
                 name: "IX_Menu_CreatedAt",
                 table: "Menu");

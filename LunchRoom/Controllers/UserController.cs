@@ -18,7 +18,8 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> GetUser()
     {
         var user = await _sender.Send(new GetUserQuery());
@@ -27,6 +28,8 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody] UserForCreationDto updatedUser)
     {
         var user = await _sender.Send(new UpdateUserCommand(updatedUser));
@@ -37,12 +40,25 @@ public class UserController : ControllerBase
     [HttpGet]
     [Authorize(Roles = "Admin,Customer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     public async Task<List<UserGroupDto>> GetUserGroup()
     {
         var groups = await _sender.Send(new GetUserGroupsQuery());
 
         return groups;
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> SubscribeToNotifications(string deviceToken)
+    {
+        await _sender.Send(new SubscribeToNotificationsCommand(deviceToken));
+        
+        return Ok();
     }
 
     public UserController(ISender sender)

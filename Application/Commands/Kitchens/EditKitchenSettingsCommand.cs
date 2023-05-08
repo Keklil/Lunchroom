@@ -17,11 +17,8 @@ internal sealed class EditKitchenSettingsHandler : IRequestHandler<EditKitchenSe
     {
         var kitchen = await _repository.Kitchens
             .GetKitchenAsync(request.KitchenId);
-        
-        var kitchenSettings = await _repository.Kitchens
-            .GetKitchenSettingsAsync(request.KitchenId);
-        
-        kitchen.EditSettings(request.Settings.Map(request.KitchenId, kitchenSettings));
+
+        kitchen.ChangeSettings(request.Settings.Map(kitchen.Settings));
         
         _repository.Kitchens.UpdateKitchen(kitchen);
         await _repository.SaveAsync(cancellationToken);

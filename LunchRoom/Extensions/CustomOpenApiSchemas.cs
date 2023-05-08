@@ -26,11 +26,11 @@ public static class CustomOpenApiSchemas
                         {
                             Type = JsonObjectType.Array,
                             MinItems = 3,
+                            Example = new[] { new[] { 70m, 66m }, new[] { 70m, 46m }, new[] { 50m, 46m }, new[] { 50m, 66m }, new[] { 70m, 66m } },
                             Item = new JsonSchemaProperty()
                             {
                                 Type = JsonObjectType.Array,
                                 MinItems = 2,
-                                Example = new[] { 25.1m, 60m },
                                 Item = new JsonSchemaProperty()
                                 {
                                     Type = JsonObjectType.Number,

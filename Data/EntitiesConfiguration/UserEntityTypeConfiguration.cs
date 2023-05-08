@@ -1,4 +1,6 @@
-﻿using Domain.Models;
+﻿using Domain.Infrastructure;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.EntitiesConfiguration;
@@ -11,5 +13,10 @@ internal class UserEntityTypeConfiguration : BaseEntityTypeConfiguration<User>
 
         builder.HasMany(x => x.Groups)
             .WithMany(x => x.Members);
+
+        builder.HasOne<UserDeviceInfo>()
+            .WithOne()
+            .HasForeignKey<UserDeviceInfo>(x => x.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

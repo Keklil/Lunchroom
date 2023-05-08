@@ -11,5 +11,12 @@ internal class MenuEntityTypeConfiguration : BaseEntityTypeConfiguration<Menu>
         base.Configure(builder);
 
         builder.HasIndex(x => x.CreatedAt);
+
+        builder.HasOne<Kitchen>()
+            .WithMany()
+            .HasForeignKey(x => x.KitchenId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasIndex(x => x.KitchenId);
     }
 }

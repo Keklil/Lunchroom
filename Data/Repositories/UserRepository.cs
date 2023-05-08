@@ -1,5 +1,6 @@
 ﻿using Contracts.Repositories;
 using Domain.Exceptions;
+using Domain.Infrastructure;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -73,6 +74,30 @@ internal class UserRepository : RepositoryBase<User>, IUserRepository
             throw new UserNotFoundException(userId);
         
         return user;
+    }
+    
+    public void AddUserDeviceInfo(UserDeviceInfo userDeviceInfo)
+    {
+        RepositoryContext.UserDeviceInfos.Add(userDeviceInfo);
+    }
+
+    public async Task<UserDeviceInfo?> GetUserDeviceInfoAsync(Guid userId)
+    {
+        return await RepositoryContext.UserDeviceInfos.Where(x => x.UserId.Equals(userId)).SingleOrDefaultAsync();
+    }
+
+    public async Task<IReadOnlyList<UserDeviceInfo>> GetUsersDevicesInfoBySelectedKitchenInGroups(Guid kitchenId, bool trackChanges = true)
+    {
+        var users = await RepositoryContext.Groups.Where(x => x.SelectedKitchenId.Equals(kitchenId))
+            .Include(x => x.Members)
+            .SelectMany(x => x.Members.Select(u => u.Id))
+            .ToListAsync();
+        
+        var usersDevicesInfo = await RepositoryContext.UserDeviceInfos
+            .Where(x => users.Contains(x.Id))
+            .ToListAsync();
+        
+        return usersDevicesInfo;
     }
 
     public UserRepository(RepositoryContext repositoryContext)

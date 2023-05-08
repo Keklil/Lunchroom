@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20230507151629_RefactoringEntitiesConfigurations")]
-    partial class RefactoringEntitiesConfigurations
+    [Migration("20230508071438_AddDishToTypeRef")]
+    partial class AddDishToTypeRef
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,27 @@ namespace Data.Migrations
                     b.ToTable("KitchenVerificationStamps");
                 });
 
+            modelBuilder.Entity("Domain.Infrastructure.UserDeviceInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DeviceToken")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserDeviceInfos");
+                });
+
             modelBuilder.Entity("Domain.Models.Dish", b =>
                 {
                     b.Property<Guid>("Id")
@@ -55,13 +76,13 @@ namespace Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
 
-                    b.Property<Guid?>("DishTypeId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("LunchSetId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("MenuId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TypeId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -71,11 +92,11 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DishTypeId");
-
                     b.HasIndex("LunchSetId");
 
                     b.HasIndex("MenuId");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Dishes");
                 });
@@ -203,17 +224,12 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("SettingsId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SettingsId");
 
                     b.ToTable("Kitchens");
                 });
@@ -227,6 +243,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
+
+                    b.Property<Guid>("KitchenId")
+                        .HasColumnType("uuid");
 
                     b.Property<TimeSpan>("LimitingTimeForOrder")
                         .HasColumnType("interval");
@@ -243,6 +262,9 @@ namespace Data.Migrations
                         .HasDefaultValueSql("now()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KitchenId")
+                        .IsUnique();
 
                     b.ToTable("KitchenSettings");
                 });
@@ -288,6 +310,9 @@ namespace Data.Migrations
                     b.Property<bool>("IsReported")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid>("KitchenId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone")
@@ -296,6 +321,8 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("KitchenId");
 
                     b.ToTable("Menu");
                 });
@@ -518,12 +545,17 @@ namespace Data.Migrations
                     b.Navigation("Checker");
                 });
 
+            modelBuilder.Entity("Domain.Infrastructure.UserDeviceInfo", b =>
+                {
+                    b.HasOne("Domain.Models.User", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Infrastructure.UserDeviceInfo", "UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Models.Dish", b =>
                 {
-                    b.HasOne("Domain.Models.DishType", null)
-                        .WithMany("Dishes")
-                        .HasForeignKey("DishTypeId");
-
                     b.HasOne("Domain.Models.LunchSet", null)
                         .WithMany("Dishes")
                         .HasForeignKey("LunchSetId");
@@ -531,6 +563,13 @@ namespace Data.Migrations
                     b.HasOne("Domain.Models.Menu", null)
                         .WithMany("Dishes")
                         .HasForeignKey("MenuId");
+
+                    b.HasOne("Domain.Models.DishType", "Type")
+                        .WithMany("Dishes")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Domain.Models.Group", b =>
@@ -582,10 +621,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Domain.Models.Kitchen", b =>
                 {
-                    b.HasOne("Domain.Models.KitchenSettings", "Settings")
-                        .WithMany()
-                        .HasForeignKey("SettingsId");
-
                     b.OwnsOne("Domain.Models.Contacts", "Contacts", b1 =>
                         {
                             b1.Property<Guid>("KitchenId")
@@ -607,12 +642,16 @@ namespace Data.Migrations
 
                     b.Navigation("Contacts")
                         .IsRequired();
-
-                    b.Navigation("Settings");
                 });
 
             modelBuilder.Entity("Domain.Models.KitchenSettings", b =>
                 {
+                    b.HasOne("Domain.Models.Kitchen", null)
+                        .WithOne("Settings")
+                        .HasForeignKey("Domain.Models.KitchenSettings", "KitchenId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.OwnsMany("Domain.Models.ShippingArea", "ShippingAreas", b1 =>
                         {
                             b1.Property<Guid>("KitchenSettingsId")
@@ -644,6 +683,15 @@ namespace Data.Migrations
                     b.HasOne("Domain.Models.Menu", null)
                         .WithMany("LunchSets")
                         .HasForeignKey("MenuId");
+                });
+
+            modelBuilder.Entity("Domain.Models.Menu", b =>
+                {
+                    b.HasOne("Domain.Models.Kitchen", null)
+                        .WithMany()
+                        .HasForeignKey("KitchenId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.Option", b =>
@@ -722,6 +770,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Domain.Models.DishType", b =>
                 {
                     b.Navigation("Dishes");
+                });
+
+            modelBuilder.Entity("Domain.Models.Kitchen", b =>
+                {
+                    b.Navigation("Settings");
                 });
 
             modelBuilder.Entity("Domain.Models.LunchSet", b =>

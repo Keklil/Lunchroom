@@ -39,7 +39,7 @@ public class Kitchen : Entity
         Contacts = new Contacts(email, phone);
     }
     
-    public void EditSettings(KitchenSettings settings)
+    public void ChangeSettings(KitchenSettings settings)
     {
         Settings = settings;
     }

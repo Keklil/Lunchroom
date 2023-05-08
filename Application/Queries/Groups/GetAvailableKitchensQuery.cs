@@ -17,7 +17,7 @@ internal class GetAllowedKitchenQueryHandler : IRequestHandler<GetAvailableKitch
         var group = await _repository.Groups.GetGroupAsync(request.GroupId);
         
         if (group.Settings is null)
-            throw new DomainException("У группа с id {GroupId} не указанны данные о локации.", group.Id);
+            throw new DomainException("У группы с id {GroupId} не указанны данные о локации.", group.Id);
         
         var kitchens = await _repository.Kitchens.GetKitchensByLocationAsync(group.Settings.Location);
         

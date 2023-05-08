@@ -363,6 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 .env
+firebaseAuthFile.json
 volumes/
 init.sql/
 internal_logs/

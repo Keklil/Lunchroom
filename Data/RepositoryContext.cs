@@ -16,10 +16,10 @@ public class RepositoryContext : DbContext
     public DbSet<EmailValidation> EmailValidations { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Kitchen> Kitchens { get; set; }
-    public DbSet<KitchenSettings> KitchenSettings { get; set; }
     public DbSet<Dish> Dishes { get; set; }
     public DbSet<DishType> DishTypes { get; set; }
     public DbSet<KitchenVerificationStamp> KitchenVerificationStamps { get; set; }
+    public DbSet<UserDeviceInfo> UserDeviceInfos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

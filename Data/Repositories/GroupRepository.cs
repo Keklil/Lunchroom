@@ -1,5 +1,6 @@
 ﻿using Contracts.Repositories;
 using Domain.Exceptions;
+using Domain.Infrastructure;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 

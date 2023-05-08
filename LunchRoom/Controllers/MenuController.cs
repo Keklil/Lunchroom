@@ -102,16 +102,17 @@ public class MenuController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    ///     Опубликовать меню для пользователей.
     /// </summary>
+    /// <param name="kitchenId"></param>
     /// <param name="menuId"></param>
     /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> ActivateMenu(Guid menuId)
+    public async Task<ActionResult> PublishMenu(Guid kitchenId, Guid menuId)
     {
-        await _sender.Send(new PublishMenuCommand(menuId));
+        await _sender.Send(new PublishMenuCommand(kitchenId, menuId));
         
         return Ok();
     }

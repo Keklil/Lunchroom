@@ -1,19 +1,15 @@
-using Application.Services;
 using Application.Services.Auth;
-using Application.Services.Notifications;
 using Application.Services.User;
 using Contracts;
 using Contracts.Security;
 using Data.EntitiesConfiguration;
-using Infrastructure;
+using Infrastructure.Extensions;
 using Infrastructure.Logging;
 using LunchRoom.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
-using Services;
 using Services.Menu;
 using Services.OrdersReport;
-using Sender = Application.Services.Mail.Sender;
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
@@ -29,9 +25,11 @@ builder.Services.ConfigureRepository(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureMediatR();
 //builder.Services.ConfigureInboxIdleClient();
+builder.Services.AddScoped<EventsDispatcher>();
 builder.Services.AddSingleton<IPlainTextParser, PlainTextParser>();
 builder.Services.AddScoped<IOrdersReportService, OrdersReportService>();
-builder.Services.AddScoped<IMailSender, Sender>();
+builder.Services.AddScoped<IMailSender, Application.Services.Mail.Sender>();
+builder.Services.AddScoped<IPushSender, Application.Services.Notifications.Sender>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -40,8 +38,10 @@ builder.Services.AddScoped<DbInitializer>();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureReportingKitchenService();
+builder.Services.ConfigureBackgroundTasksQueue();
 //builder.Services.ConfigureHangfire(builder.Configuration);
 builder.Services.AddControllersCustom();
+ConfigurationExtension.ConfigureFirebaseAdmin();
 
 var app = builder.Build();
 

@@ -6,7 +6,9 @@ using Application.Services.Mail;
 using Contracts;
 using Contracts.Repositories;
 using Data;
+using FirebaseAdmin;
 using FluentValidation;
+using Google.Apis.Auth.OAuth2;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Infrastructure;
@@ -28,7 +30,7 @@ using NSwag.Generation.Processors.Security;
 
 namespace LunchRoom.Extensions;
 
-public static class ServiceExtension
+public static class ConfigurationExtension
 {
     public static void ConfigureCors(this IServiceCollection services)
     {
@@ -39,6 +41,13 @@ public static class ServiceExtension
                     .AllowAnyMethod()
                     .AllowAnyHeader());
         });
+    }
+    
+    public static void ConfigureBackgroundTasksQueue(this IServiceCollection services)
+    {
+        services.AddSingleton<BackgroundNotificationQueue>();
+        services.AddSingleton<NotificationDequeueBackgroundService>();
+        services.AddHostedService(provider => provider.GetRequiredService<NotificationDequeueBackgroundService>());
     }
 
     public static void ConfigureLoggerService(this IServiceCollection services, IConfiguration configuration)
@@ -160,6 +169,14 @@ public static class ServiceExtension
             settings.AddExamples(serviceProvider);
             settings.TypeMappers.Add(CustomOpenApiSchemas.GetPolygonSchema());
             settings.TypeMappers.Add(CustomOpenApiSchemas.GetPointSchema());
+        });
+    }
+
+    public static void ConfigureFirebaseAdmin()
+    {
+        FirebaseApp.Create(new AppOptions()
+        {
+            Credential = GoogleCredential.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "firebaseAuthFile.json")),
         });
     }
 }

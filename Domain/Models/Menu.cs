@@ -1,5 +1,4 @@
-﻿using System;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
 using Domain.Models.Base;
 using Domain.Notifications;
 
@@ -82,8 +81,13 @@ public class Menu : Entity
     
     public void Publish()
     {
+        if (DateTime.UtcNow.Date != CreatedAt.Date)
+            throw new DomainException(
+                "Попытка опубликовать меню с днем загрузки {MenuCreationDate}, не совпадающим с текущей датой {PublishDate}",
+                CreatedAt, DateTime.UtcNow);
+            
         IsPublished = true;
-        AddDomainEvent(new MenuPublished());
+        AddDomainEvent(new MenuPublished(Id, KitchenId));
     }
 
     public void Reported()

@@ -13,6 +13,7 @@ internal class KitchenRepository : RepositoryBase<Kitchen>, IKitchenRepository
     {
         var kitchen = await RepositoryContext.Kitchens.Where(x => x.Id.Equals(kitchenId))
             .Include(x => x.Settings)
+            .Include(x => x.Managers)
             .SingleOrDefaultAsync();
         
         if (kitchen is null)
@@ -23,7 +24,9 @@ internal class KitchenRepository : RepositoryBase<Kitchen>, IKitchenRepository
 
     public async Task<KitchenSettings?> GetKitchenSettingsAsync(Guid kitchenId, bool trackChanges = true)
     {
-        var kitchenSettings = await RepositoryContext.KitchenSettings.Where(x => x.KitchenId.Equals(kitchenId))
+        var kitchenSettings = await RepositoryContext.Kitchens.Where(x => x.Id.Equals(kitchenId))
+            .Include(x => x.Settings!.ShippingAreas)
+            .Select(x => x.Settings)
             .SingleOrDefaultAsync();
         
         if (kitchenSettings is null)

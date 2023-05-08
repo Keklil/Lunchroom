@@ -26,22 +26,20 @@ public static class KitchenMapper
             Settings: kitchen.Settings?.Map());
     }
 
-    public static KitchenSettingsDto Map(this Domain.Models.KitchenSettings kitchen)
+    public static KitchenSettingsDto Map(this Domain.Models.KitchenSettings settings)
     {
         return new KitchenSettingsDto(
-            KitchenId: kitchen.Id, 
-            LimitingTimeForOrder: kitchen.LimitingTimeForOrder, 
-            MenuUpdatePeriod: kitchen.MenuUpdatePeriod, 
-            MenuFormat: kitchen.MenuFormat, 
-            ShippingAreas: kitchen.ShippingAreas.ToList());
+            LimitingTimeForOrder: settings.LimitingTimeForOrder, 
+            MenuUpdatePeriod: settings.MenuUpdatePeriod, 
+            MenuFormat: settings.MenuFormat, 
+            ShippingAreas: settings.ShippingAreas.ToList());
     }
 
-    public static KitchenSettings Map(this KitchenSettingsForEditDto source, Guid kitchenId, KitchenSettings? kitchenSettings)
+    public static KitchenSettings Map(this KitchenSettingsForEditDto source, KitchenSettings? kitchenSettings)
     {
         if (kitchenSettings == null)
         {
             return new KitchenSettings(
-                kitchenId: kitchenId, 
                 limitingTimeForOrder: source.LimitingTimeForOrder, 
                 menuUpdatePeriod: source.MenuUpdatePeriod, 
                 menuFormat: source.MenuFormat);
@@ -59,6 +57,7 @@ public static class KitchenMapper
     {
         return new AvailableKitchensDto
         {
+            KitchenId = kitchen.Id,
             OrganizationName = kitchen.OrganizationName,
             Address = kitchen.Address,
             Contacts = kitchen.Contacts,
