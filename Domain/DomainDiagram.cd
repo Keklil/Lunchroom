@@ -51,7 +51,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>BAAAAAAAAIAIAAAAEAAgAQgAAAACAAACgAAAAEIgACA=</HashCode>
+      <HashCode>BAAAAAAAAIAIAAAAEAAwAQgAAgACAAACgAAAAEIAACA=</HashCode>
       <FileName>Models\Kitchen.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -65,7 +65,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAIFAAAEYAAAAAABAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgAAIFAAAEYAIAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\KitchenSettings.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -98,7 +98,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAABAAEAAQCAAAAAAAQAABCFAAAAACABAAAAAAJAIAA=</HashCode>
+      <HashCode>AAABAIEAAQCAAAAAAGQAABCFAAAAACAAAAAAABJAIAA=</HashCode>
       <FileName>Models\Menu.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -117,7 +117,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAAAAAAAAAAAQAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <HashCode>AAAAIAAAAQAAAAAAAAAAAAQAAAAAAAAAAAAAAGAAAAA=</HashCode>
       <FileName>Models\Option.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -130,7 +130,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>CAAADCAEQAACAAAAAJAAgAAVAAgABDACAAAgAABAAAQ=</HashCode>
+      <HashCode>AAAABAAEQAAAAAAAALAAAAAFAAgABDAAAAAgAABAAAQ=</HashCode>
       <FileName>Models\Order.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -146,7 +146,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAAAAAAAEQAICAAAAAAAAAAIAIAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAEQAACAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
       <FileName>Models\OrderOption.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -165,7 +165,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Domain.Models.User">
-    <Position X="23.75" Y="16.25" Width="1.5" />
+    <Position X="22.75" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABAAAGAQACCAAAAAEAAAAIQABAAAAAACAAAAIEEAAAA=</HashCode>
       <FileName>Models\User.cs</FileName>
@@ -195,11 +195,11 @@
       <FileName>Models\Order.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="Domain.Models.Role">
-    <Position X="23.75" Y="21.5" Width="1.5" />
+  <Enum Name="Domain.Models.Enums.Role">
+    <Position X="24.75" Y="18" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQEAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Role.cs</FileName>
+      <FileName>Models\Enums\Role.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />
