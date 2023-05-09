@@ -100,6 +100,16 @@ internal class UserRepository : RepositoryBase<User>, IUserRepository
         return usersDevicesInfo;
     }
 
+    public async Task<IReadOnlyList<Guid>> GetUserKitchenIdsAsync(Guid userId)
+    {
+        var kitchenIds = await RepositoryContext.Kitchens
+            .Where(x => x.Managers.Any(m => m.Id.Equals(userId)))
+            .Select(x => x.Id)
+            .ToListAsync();
+        
+        return kitchenIds;
+    }
+
     public UserRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)
     {

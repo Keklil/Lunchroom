@@ -5,7 +5,7 @@ using Shared.DataTransferObjects.User;
 
 namespace Application.Queries;
 
-public sealed record GetUserQuery : IRequest<UserDto>;
+public sealed record GetUserQuery(Guid? UserId = null) : IRequest<UserDto>;
 
 internal class GetUserHandler : IRequestHandler<GetUserQuery, UserDto>
 {
@@ -14,9 +14,10 @@ internal class GetUserHandler : IRequestHandler<GetUserQuery, UserDto>
 
     public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var userEntity = await _repository.User.GetUserAsync(_currentUserService.GetUserId());
+        var userEntity = await _repository.User.GetUserAsync(request.UserId ?? _currentUserService.GetUserId());
+        var kitchenIds = await _repository.User.GetUserKitchenIdsAsync(userEntity.Id);
 
-        var user = userEntity.Map();
+        var user = userEntity.Map(kitchenIds);
 
         return user;
     }

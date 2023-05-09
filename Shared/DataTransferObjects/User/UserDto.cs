@@ -11,5 +11,6 @@ public class UserDto
     public bool NameFill { get; init; }
     public string? Phone { get; init; }
 
-    public List<Guid> Groups { get; set; }
+    public IReadOnlyList<Guid> Groups { get; set; }
+    public IReadOnlyList<Guid> Kitchens { get; set; }
 }

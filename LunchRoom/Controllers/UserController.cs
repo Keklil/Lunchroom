@@ -16,13 +16,18 @@ public class UserController : ControllerBase
 {
     private readonly ISender _sender;
 
+    /// <summary>
+    ///     Получить информацию о пользователе.
+    /// </summary>
+    /// <param name="userId">При указании параметра выполняется поиск по заданному id. Иначе возвращается информация об авторизованном пользователе.</param>
+    /// <returns></returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> GetUser()
+    public async Task<ActionResult<UserDto>> GetUser(Guid? userId)
     {
-        var user = await _sender.Send(new GetUserQuery());
+        var user = await _sender.Send(new GetUserQuery(userId));
 
         return Ok(user);
     }

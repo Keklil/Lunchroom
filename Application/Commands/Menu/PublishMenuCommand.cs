@@ -3,7 +3,6 @@ using Contracts.Repositories;
 using Domain.Exceptions;
 using Infrastructure.Extensions;
 using MediatR;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Commands.Menu;

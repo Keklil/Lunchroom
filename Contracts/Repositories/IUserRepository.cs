@@ -16,4 +16,5 @@ public interface IUserRepository : IRepositoryBase<User>
     void AddUserDeviceInfo(UserDeviceInfo userDeviceInfo);
     Task<UserDeviceInfo?> GetUserDeviceInfoAsync(Guid userId);
     Task<IReadOnlyList<UserDeviceInfo>> GetUsersDevicesInfoBySelectedKitchenInGroups(Guid kitchenId, bool trackChanges = true);
+    Task<IReadOnlyList<Guid>> GetUserKitchenIdsAsync(Guid userId);
 }
