@@ -8,6 +8,7 @@ public static class KitchenMapper
     public static KitchenDto Map(this Domain.Models.Kitchen kitchen)
     {
         return new KitchenDto(
+            Id: kitchen.Id,
             OrganizationName: kitchen.OrganizationName, 
             Address: kitchen.Address, 
             Inn: kitchen.Inn, 

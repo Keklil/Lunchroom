@@ -5,6 +5,8 @@ using LunchRoom.Controllers.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetTopologySuite.Geometries;
+using Nominatim.API.Interfaces;
 using Shared.DataTransferObjects.Group;
 
 namespace LunchRoom.Controllers;
@@ -17,6 +19,7 @@ public class GroupController : ControllerBase
 {
     private readonly IPublisher _publisher;
     private readonly ISender _sender;
+    private IForwardGeocoder _geocoder;
 
     /// <summary>
     ///     Создать группу.
@@ -71,7 +74,7 @@ public class GroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-    public async Task ConfigureGroupLocation([FromBody] GroupConfigDto config)
+    public async Task ConfigureGroupLocation([FromBody] GroupConfigByAddressDto config)
     {
         await _sender.Send(new AddLocationInfoToGroupCommand(config));
     }
@@ -120,9 +123,10 @@ public class GroupController : ControllerBase
     }
 
     public GroupController(ISender sender,
-        IPublisher publisher)
+        IPublisher publisher, IForwardGeocoder geocoder)
     {
         _sender = sender;
         _publisher = publisher;
+        _geocoder = geocoder;
     }
 }
