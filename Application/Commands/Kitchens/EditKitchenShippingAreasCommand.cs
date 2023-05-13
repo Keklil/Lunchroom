@@ -1,4 +1,5 @@
-﻿using Contracts.Repositories;
+﻿using Application.Interfaces;
+using Contracts.Repositories;
 using Contracts.Security;
 using Domain.Models;
 using MediatR;
@@ -6,7 +7,7 @@ using NetTopologySuite.Geometries;
 
 namespace Application.Commands.Kitchens;
 
-public record EditKitchenShippingAreasCommand(Guid KitchenId, List<Polygon> Areas) : IRequest;
+public record EditKitchenShippingAreasCommand(Guid KitchenId, List<Polygon> Areas) : IRequest, IKitchenRequest;
 
 internal sealed class EditKitchenShippingAreasHandler : IRequestHandler<EditKitchenShippingAreasCommand>
 {

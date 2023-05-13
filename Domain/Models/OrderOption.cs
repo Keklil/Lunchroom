@@ -3,22 +3,28 @@ using Domain.Models.Base;
 
 namespace Domain.Models;
 
-public class OrderOption : Entity
+public class OrderOption : ValueObject
 {
-    private Option Option { get; }
-    public Guid OptionId { get; }
-    public int OptionUnits { get; }
-
-    public decimal GetPrice()
+    public Guid MenuOptionId { get; }
+    public int Quantity { get; private set; }
+    
+    public void ChangeQuantity(int quantity)
     {
-        return Option.Price;
+        if (quantity < 1)
+            throw new DomainException("Попытка установить недопустимое количесво единиц опции");
+        
+        Quantity = quantity;
     }
     
-    public OrderOption(Option option, int optionUnits)
+    public OrderOption(Guid menuUnitId, int quantity)
     {
-        OptionId = option.Id;
-        Option = option;
-        OptionUnits = optionUnits;
+        MenuOptionId = menuUnitId;
+        Quantity = quantity;
+    }
+    
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return MenuOptionId;
     }
     
     private OrderOption() { }

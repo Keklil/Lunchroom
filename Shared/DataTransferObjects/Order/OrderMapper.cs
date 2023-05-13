@@ -10,23 +10,23 @@ public static class OrderMapper
             CustomerId = source.CustomerId,
             GroupId = source.GroupId,
             OrderDate = source.CreatedAt,
-            LunchSet = source.LunchSet != null
-                ? new OrderLunchSetDto
-                {
-                    Id = source.LunchSet.Id,
-                    Price = source.LunchSet.Price,
-                    // TODO: Переработать под новые требования
-                    LunchSetList = new List<string>(),
-                    LunchSetUnits = source.LunchSetUnits
-                }
-                : null,
-            Options = source.Options.Select(sourceOption => new OrderOptionDto
-            {
-                Id = sourceOption.Id,
-                OptionId = sourceOption.OptionId,
-                OptionUnits = sourceOption.OptionUnits
-            }).ToList(),
-            Payment = source.Payment
+            // LunchSet = source.LunchSet != null
+            //     ? new OrderLunchSetDto
+            //     {
+            //         Id = source.LunchSet.Id,
+            //         Price = source.LunchSet.Price,
+            //         // TODO: Переработать под новые требования
+            //         LunchSetList = new List<string>(),
+            //         LunchSetUnits = source.LunchSetUnits
+            //     }
+            //     : null,
+            // Options = source.Options.Select(sourceOption => new OrderOptionDto
+            // {
+            //     Id = sourceOption.Id,
+            //     OptionId = sourceOption.OptionId,
+            //     OptionUnits = sourceOption.OptionUnits
+            // }).ToList(),
+            // Payment = source.Payment
         };
     }
 }

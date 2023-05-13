@@ -20,19 +20,19 @@ internal sealed class CreateOrderHandler : IRequestHandler<CreateOrderCommand, O
 
         var menu = await _repository.Menu.GetMenuAsync(request.Order.MenuId, false);
 
-        if (request.Order.LunchSetId != default)
-        {
-            var lunchSet = menu.GetLunchSetById(request.Order.LunchSetId);
-            orderEntity.AddLunchSet(lunchSet, request.Order.LunchSetUnits);
-        }
-
-        var orderOptions = request.Order.Options;
-
-        foreach (var item in orderOptions)
-        {
-            var option = menu.Options.SingleOrDefault(x => x.Id == item.OptionId);
-            orderEntity.AddOption(option, item.Units);
-        }
+        // if (request.Order.LunchSetId != default)
+        // {
+        //     var lunchSet = menu.GetLunchSetById(request.Order.LunchSetId);
+        //     orderEntity.AddLunchSet(lunchSet, request.Order.LunchSetUnits);
+        // }
+        //
+        // var orderOptions = request.Order.Options;
+        //
+        // foreach (var item in orderOptions)
+        // {
+        //     var option = menu.Options.SingleOrDefault(x => x.Id == item.OptionId);
+        //     orderEntity.AddOption(option, item.Units);
+        // }
 
         _repository.Order.CreateOrder(orderEntity);
         await _repository.SaveAsync(cancellationToken);

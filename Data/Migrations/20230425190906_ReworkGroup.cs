@@ -51,6 +51,9 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_GroupSettings", x => x.Id);
                 });
+            
+            // Добавлено для соответвия SRID полигона у области доставки кухни
+            migrationBuilder.Sql("SELECT updategeometrysrid('GroupSettings','Location',4326)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_SelectedKitchenId",

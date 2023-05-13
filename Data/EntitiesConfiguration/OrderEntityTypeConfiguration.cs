@@ -23,5 +23,23 @@ internal class OrderEntityTypeConfiguration : BaseEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey(x => x.MenuId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.OwnsMany(x => x.Dishes, d =>
+        {
+            d.Property(x => x.MenuDishId);
+            d.Property(x => x.Quantity);
+        });
+        
+        builder.OwnsMany(x => x.LunchSets, ls =>
+        {
+            ls.Property(p => p.InternalId);
+            ls.Property(p => p.MenuLunchSetId);
+            
+            ls.OwnsMany(o => o.Options, o =>
+            {
+                o.Property(p => p.Quantity);
+                o.Property(p => p.MenuOptionId);
+            });
+        });
     }
 }

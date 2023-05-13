@@ -11,8 +11,8 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
     public async Task<Order> GetOrderAsync(Guid orderId, bool trackChanges = true)
     {
         var order = await FindByCondition(x => x.Id.Equals(orderId), trackChanges)
-            .Include(x => x.Options)
-            .Include(x => x.LunchSet)
+            .Include(x => x.Dishes)
+            .Include(x => x.LunchSets)
             .SingleOrDefaultAsync();
         
         if (order is null)
@@ -35,7 +35,8 @@ internal class OrderRepository : RepositoryBase<Order>, IOrderRepository
     {
         var orders = RepositoryContext.Orders
             .Where(x => x.CreatedAt.Date == date.Date && x.GroupId == groupId)
-            .Include(x => x.Options);
+            .Include(x => x.Dishes)
+            .Include(x => x.LunchSets);
 
         return await orders.ToListAsync();
     }

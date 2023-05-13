@@ -28,51 +28,51 @@ public class OrdersReportService : IOrdersReportService
         if (menu is null)
             return orderReport;
 
-        var result = orders
-            .Join(users,
-                o => o.CustomerId,
-                u => u.Id,
-                (o, u) => new { o, u })
-            .Join(menu.LunchSets,
-                lo => lo.o.LunchSet.Id,
-                ls => ls.Id,
-                (lo, ls) => new { lo.o, lo.u, ls })
-            .OrderBy(c => c.ls.Price);
-
-
-        foreach (var order in result)
-        {
-            var orderOptions = order.o.Options
-                .Join(menu.Options,
-                    ord => ord.OptionId,
-                    o => o.Id,
-                    (ord, o) => new { ord, o })
-                .OrderBy(x => x.o.Price)
-                .ToList();
-
-            var optionsPrice = 0m;
-            var optionsPriceToString = string.Empty;
-            foreach (var option in orderOptions)
-            {
-                optionsPrice += option.o.Price;
-                if (menu.Options.Count(x => x.Price == option.o.Price) > 1)
-                    optionsPriceToString += "+" + option.o.Price + $"({option.o.Name})"; //
-                else
-                    optionsPriceToString += "+" + option.o.Price;
-            }
-
-            var row = new OrderReportDto
-            {
-                LunchSetUnits = order.o.LunchSetUnits,
-                LunchSetPrice = order.ls.Price.ToString(),
-                OptionsPrice = optionsPriceToString.TrimStart('+'),
-                Summary = order.o.Payment ? order.ls.Price + optionsPrice : 0,
-                UserName = order.u.Surname + " " + order.u.Name,
-                Payment = order.o.Payment
-            };
-
-            orderReport.Add(row);
-        }
+        // var result = orders
+        //     .Join(users,
+        //         o => o.CustomerId,
+        //         u => u.Id,
+        //         (o, u) => new { o, u })
+        //     .Join(menu.LunchSets,
+        //         lo => lo.o.LunchSet.Id,
+        //         ls => ls.Id,
+        //         (lo, ls) => new { lo.o, lo.u, ls })
+        //     .OrderBy(c => c.ls.Price);
+        //
+        //
+        // foreach (var order in result)
+        // {
+        //     var orderOptions = order.o.Options
+        //         .Join(menu.Options,
+        //             ord => ord.OptionId,
+        //             o => o.Id,
+        //             (ord, o) => new { ord, o })
+        //         .OrderBy(x => x.o.Price)
+        //         .ToList();
+        //
+        //     var optionsPrice = 0m;
+        //     var optionsPriceToString = string.Empty;
+        //     foreach (var option in orderOptions)
+        //     {
+        //         optionsPrice += option.o.Price;
+        //         if (menu.Options.Count(x => x.Price == option.o.Price) > 1)
+        //             optionsPriceToString += "+" + option.o.Price + $"({option.o.Name})"; //
+        //         else
+        //             optionsPriceToString += "+" + option.o.Price;
+        //     }
+        //
+        //     var row = new OrderReportDto
+        //     {
+        //         LunchSetUnits = order.o.LunchSetUnits,
+        //         LunchSetPrice = order.ls.Price.ToString(),
+        //         OptionsPrice = optionsPriceToString.TrimStart('+'),
+        //         Summary = order.o.Payment ? order.ls.Price + optionsPrice : 0,
+        //         UserName = order.u.Surname + " " + order.u.Name,
+        //         Payment = order.o.Payment
+        //     };
+        //
+        //     orderReport.Add(row);
+        // }
 
         return orderReport;
     }

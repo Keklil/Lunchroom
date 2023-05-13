@@ -12,7 +12,7 @@ namespace LunchRoom.Controllers;
 
 [Route("api/[controller]/[action]")]
 [Produces("application/json")]
-//[Authorize(Roles = "KitchenOperator")]
+[Authorize(Roles = "KitchenOperator")]
 [ApiController]
 public class KitchenController : ControllerBase
 {
