@@ -27,12 +27,13 @@ public static class KitchenMapper
             Settings: kitchen.Settings?.Map());
     }
 
-    public static KitchenSettingsDto Map(this Domain.Models.KitchenSettings settings)
+    private static KitchenSettingsDto Map(this Domain.Models.KitchenSettings settings)
     {
         return new KitchenSettingsDto(
             LimitingTimeForOrder: settings.LimitingTimeForOrder, 
             MenuUpdatePeriod: settings.MenuUpdatePeriod, 
-            MenuFormat: settings.MenuFormat, 
+            MenuFormat: settings.MenuFormat,
+            MinAmountForSharedOrder: settings.MinAmountForSharedOrder,
             ShippingAreas: settings.ShippingAreas.ToList());
     }
 
@@ -43,7 +44,8 @@ public static class KitchenMapper
             return new KitchenSettings(
                 limitingTimeForOrder: source.LimitingTimeForOrder, 
                 menuUpdatePeriod: source.MenuUpdatePeriod, 
-                menuFormat: source.MenuFormat);
+                menuFormat: source.MenuFormat,
+                source.MinAmountForSharedOrder);
         }
         else
         {

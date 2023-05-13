@@ -10,6 +10,7 @@ public class KitchenSettings : ValueObject
     public TimeSpan LimitingTimeForOrder { get; private set; }
     public MenuUpdatePeriod MenuUpdatePeriod { get; private set; }
     public MenuFormat MenuFormat { get; private set; }
+    public decimal? MinAmountForSharedOrder { get; private set; }
     public IReadOnlyList<ShippingArea> ShippingAreas => _shippingAreas;
     private List<ShippingArea> _shippingAreas;
 
@@ -41,11 +42,13 @@ public class KitchenSettings : ValueObject
     public KitchenSettings(
         TimeSpan limitingTimeForOrder,
         MenuUpdatePeriod menuUpdatePeriod, 
-        MenuFormat menuFormat)
+        MenuFormat menuFormat,
+        decimal? minAmountForSharedOrder)
     {
         LimitingTimeForOrder = limitingTimeForOrder;
         MenuUpdatePeriod = menuUpdatePeriod;
         MenuFormat = menuFormat;
+        MinAmountForSharedOrder = minAmountForSharedOrder;
         _shippingAreas = new ();
     }
 

@@ -17,6 +17,7 @@ using LunchRoom.Controllers.Infrastructure.Examples;
 using MediatR;
 using MediatR.Behaviors.Authorization.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -76,6 +77,14 @@ public static class ConfigurationExtension
         });
 
         services.AddScoped<IRepositoryManager, RepositoryManager>();
+    }
+    
+    public static void ConfigureHttpLogging(this IServiceCollection services)
+    {
+        services.AddHttpLogging(options => 
+            options.LoggingFields = options.LoggingFields | 
+                                    HttpLoggingFields.ResponseBody | 
+                                    HttpLoggingFields.RequestBody);
     }
 
     public static void ConfigureMediatR(this IServiceCollection services)

@@ -27,6 +27,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureRepository(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureMediatR();
+builder.Services.ConfigureHttpLogging();
 //builder.Services.ConfigureInboxIdleClient();
 builder.Services.AddScoped<EventsDispatcher>();
 builder.Services.AddSingleton<IPlainTextParser, PlainTextParser>();
@@ -50,6 +51,8 @@ builder.Services.AddControllersCustom();
 ConfigurationExtension.ConfigureFirebaseAdmin();
 
 var app = builder.Build();
+
+app.UseHttpLogging();
 
 var logger = app.Services.GetRequiredService<ILogger<ExceptionHandlerMiddleware>>();
 app.ConfigureExceptionHandler(logger);

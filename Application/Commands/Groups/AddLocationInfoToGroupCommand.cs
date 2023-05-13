@@ -31,7 +31,6 @@ internal sealed class AddLocationInfoToGroupHandler : IRequestHandler<AddLocatio
     {
         var streetAddress = !string.IsNullOrWhiteSpace(dto.Address.Street) ? dto.Address.Street + ", " : "";
         streetAddress += !string.IsNullOrWhiteSpace(dto.Address.Number) ? dto.Address.Number + ", " : "";
-        streetAddress += !string.IsNullOrWhiteSpace(dto.Address.Office) ? dto.Address.Office : "";
         streetAddress = streetAddress.Trim().Trim(',');
 
         var geocodeRequest = new ForwardGeocodeRequest()
@@ -48,7 +47,8 @@ internal sealed class AddLocationInfoToGroupHandler : IRequestHandler<AddLocatio
         var address = !string.IsNullOrWhiteSpace(dto.Address.Country) ? dto.Address.Country + ", " : "";
         address += !string.IsNullOrWhiteSpace(dto.Address.State) ? dto.Address.State + ", " : "";
         address += !string.IsNullOrWhiteSpace(dto.Address.City) ? dto.Address.City + ", " : "";
-        address += streetAddress;
+        address += !string.IsNullOrWhiteSpace(streetAddress) ? streetAddress + ", " : "";
+        address += !string.IsNullOrWhiteSpace(dto.Address.Office) ? dto.Address.Office : "";
         address = address.Trim().Trim(',');
         
         var groupSettings = new GroupSettings(dto.GroupId, 

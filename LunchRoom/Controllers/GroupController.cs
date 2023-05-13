@@ -19,7 +19,6 @@ public class GroupController : ControllerBase
 {
     private readonly IPublisher _publisher;
     private readonly ISender _sender;
-    private IForwardGeocoder _geocoder;
 
     /// <summary>
     ///     Создать группу.
@@ -122,11 +121,9 @@ public class GroupController : ControllerBase
         return groups;
     }
 
-    public GroupController(ISender sender,
-        IPublisher publisher, IForwardGeocoder geocoder)
+    public GroupController(ISender sender, IPublisher publisher)
     {
         _sender = sender;
         _publisher = publisher;
-        _geocoder = geocoder;
     }
 }

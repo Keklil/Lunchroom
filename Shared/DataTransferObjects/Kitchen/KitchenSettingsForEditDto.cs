@@ -6,4 +6,5 @@ namespace Shared.DataTransferObjects.Kitchen;
 public record KitchenSettingsForEditDto(
     TimeSpan LimitingTimeForOrder,
     MenuUpdatePeriod MenuUpdatePeriod,
-    MenuFormat MenuFormat);
+    MenuFormat MenuFormat,
+    decimal MinAmountForSharedOrder);
