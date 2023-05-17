@@ -5,5 +5,5 @@ namespace Contracts;
 
 public interface IDataTableParser
 {
-    public Task<ImportReport> ImportMenuAsync(Guid kitchenId, IFormFile file);
+    public Task<ImportReport> ParseMenuAsync(Guid kitchenId, IFormFile file);
 }

@@ -9,7 +9,7 @@ public abstract class Entity
     private List<DomainNotification>? _domainEvents;
     public IReadOnlyCollection<DomainNotification> DomainEvents => _domainEvents;
 
-    public void AddDomainEvent(DomainNotification eventItem)
+    protected void AddDomainEvent(DomainNotification eventItem)
     {
         _domainEvents = _domainEvents ?? new List<DomainNotification>();
         _domainEvents.Add(eventItem);

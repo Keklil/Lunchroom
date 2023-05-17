@@ -46,7 +46,7 @@ public class Menu : Entity
         _lunchSets.Add(newLunchSet);
     }
 
-    public void AddOption(Dish dish, string? name = null, decimal? price = null)
+    public void AddOption(Dish dish, bool allowMultipleSelection, string? name = null, decimal? price = null)
     {
         var dishIds = Dishes.Select(x => x.Id).ToHashSet();
         if (!dishIds.Contains(dish.Id))
@@ -56,7 +56,7 @@ public class Menu : Entity
             throw new DomainException("Попытка установить отрицательную цену для опции");
 
             
-        var newOption = new Option(dish, name, price);
+        var newOption = new Option(dish, allowMultipleSelection, name, price);
         _options.Add(newOption);
     }
 

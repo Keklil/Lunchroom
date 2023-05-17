@@ -121,6 +121,14 @@ public class Order : Entity
                     "Попытка добавить к заказу опцию {OptionId}, которой нет в меню {MenuId}",
                     option.Key, menu.Id);
             }
+            
+            if (!menuOption.AllowMultipleSelectionInOneLunchSet && option.Value > 1)
+            {
+                throw new DomainException(
+                    "Попытка добавить к заказу опцию {OptionId}, которая не допускает более одной единицы в комбо-обеде, меню {MenuId}",
+                    option.Key, menu.Id);
+            }
+            
             orderLunchSet.AddOption(option.Key, option.Value);
         }
     }
@@ -139,14 +147,15 @@ public class Order : Entity
     }
 
     /// <summary>
-    /// Добавление опций к конкретному комбо-набору.
+    /// Изменение оцпций в конкретном комбо-наборе.
     /// </summary>
+    /// 
     /// <param name="menu"></param>
     /// <param name="menuLunchSetId">Идентификатор комбо-набора из меню</param>
     /// <param name="internalLunchSetId">Внутренний идентификатор комбо-набора</param>
     /// <param name="options">Добавляемые опции к комбо-набору, где Key - id опции из меню, Value - количество единиц опций</param>
     /// <exception cref="DomainException"></exception>
-    public void AddOptionsToLunchSet(Menu menu, Guid menuLunchSetId, int internalLunchSetId, Dictionary<Guid, int> options)
+    public void ChangeOptionsInLunchSet(Menu menu, Guid menuLunchSetId, int internalLunchSetId, Dictionary<Guid, int> options)
     {
         var menuLunchSetExists = menu.LunchSets.Any(x => x.Id == menuLunchSetId);
         if (!menuLunchSetExists)

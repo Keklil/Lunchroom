@@ -16,7 +16,7 @@ internal sealed class UploadMenuFromFileHandler : INotificationHandler<UploadMen
 
     public async Task Handle(UploadMenuFromFile command, CancellationToken token)
     {
-        var report = await _dataTableParser.ImportMenuAsync(command.KitchenId, command.Menu);
+        var report = await _dataTableParser.ParseMenuAsync(command.KitchenId, command.Menu);
         _repository.Menu.CreateMenu(report.Menu);
         await _repository.SaveAsync(token);
     }

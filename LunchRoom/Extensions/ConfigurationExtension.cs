@@ -162,6 +162,8 @@ public static class ConfigurationExtension
         services.AddExampleProviders(typeof(UploadMenuExamples).Assembly);
         services.AddOpenApiDocument((settings, serviceProvider) =>
         {
+            settings.Title = "LunchRoom API";
+            
             settings.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.ApiKey,

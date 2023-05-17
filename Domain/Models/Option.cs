@@ -8,15 +8,27 @@ public class Option : Entity
     private string? _name;
     public decimal Price { get; }
     public Dish Dish { get; }
+    public bool AllowMultipleSelectionInOneLunchSet { get; private set; }
     
     public void ChangeName(string name)
     {
         _name = name;
     }
 
-    public Option(Dish dish, string? name = null, decimal? price = null)
+    public void AllowMultipleSelection()
+    {
+        AllowMultipleSelectionInOneLunchSet = true;
+    }
+    
+    public void DisallowMultipleSelection()
+    {
+        AllowMultipleSelectionInOneLunchSet = false;
+    }
+
+    public Option(Dish dish, bool allowMultipleSelectionInOneLunchSet, string? name = null, decimal? price = null)
     {
         _name = name;
+        AllowMultipleSelectionInOneLunchSet = allowMultipleSelectionInOneLunchSet;
         Price = price ?? dish.Price;
         Dish = dish;
     }

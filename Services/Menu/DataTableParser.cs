@@ -12,12 +12,12 @@ public class DataTableParser : IDataTableParser
 {
     private ImportReport Report { get; } = new();
 
-    public async Task<ImportReport> ImportMenuAsync(Guid kitchenId, IFormFile file)
+    public async Task<ImportReport> ParseMenuAsync(Guid kitchenId, IFormFile file)
     {
         if (!ValidateFile(file, out var reader))
             return Report;
         
-        var table = reader.AsDataSet().Tables[0];
+        using var table = reader.AsDataSet().Tables[0];
 
         Report.Menu = new Domain.Models.Menu(kitchenId);
         
@@ -28,7 +28,18 @@ public class DataTableParser : IDataTableParser
 
     private async Task ReadTable(DataTable table, Domain.Models.Menu menu)
     {
-        var mappedTableColumns = await ResolveColumns(table);
+        TableColumnsMap mappedTableColumns;
+        
+        try
+        {
+            mappedTableColumns = await ResolveColumns(table);
+        }
+        catch (DomainException e)
+        {
+            Report.ErrorsWhileImport = e.Message;
+            return;
+        }
+        
         var parseResults = new List<ParseResult>();
 
         for (var i = mappedTableColumns.TitleRowIndex + 1; i <= table.Rows.Count - 1; i++)
@@ -38,7 +49,7 @@ public class DataTableParser : IDataTableParser
                 if (parsedResult.Type == RowType.Group)
                 {
                     parseResults.Add(parsedResult);
-                    var dishType = new DishType(parsedResult.Name);
+                    var dishType = new DishType(parsedResult.Name!);
                     var j = i + 1;
 
                     while (j <= table.Rows.Count - 2)
@@ -59,7 +70,7 @@ public class DataTableParser : IDataTableParser
                         
                         decimal.TryParse(parsedResultInternal.Price, out var dishPrice);
                         menu.AddDish(
-                            parsedResultInternal.Name,
+                            parsedResultInternal.Name!,
                             dishPrice,
                             dishType);
                         parseResults.Add(parsedResultInternal);
@@ -72,7 +83,7 @@ public class DataTableParser : IDataTableParser
 
                 if (parsedResult.Type == RowType.Dish)
                 {
-                    menu.AddDish(parsedResult.Name, decimal.Parse(parsedResult.Price ?? "0"));
+                    menu.AddDish(parsedResult.Name!, decimal.Parse(parsedResult.Price ?? "0"));
                     parseResults.Add(parsedResult);
                 }
 
@@ -98,9 +109,9 @@ public class DataTableParser : IDataTableParser
                         }
 
                         var parsedDish = parseResults.FirstOrDefault(x => x.VendorCode == parsedResultInternal.VendorCode);
-                        if (parsedDish != null)
+                        if (parsedDish is { Type: RowType.Dish })
                         {
-                            var dishEntity = menu.Dishes.FirstOrDefault(x => x.Name.Contains(parsedDish.Name));
+                            var dishEntity = menu.Dishes.FirstOrDefault(x => x.Name.Contains(parsedDish.Name!));
                             if (dishEntity != null)
                                 lunchSetDishes.Add(dishEntity);
                         }
@@ -124,23 +135,21 @@ public class DataTableParser : IDataTableParser
 
         var positionTypeColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.PositionType];
                 
-        if (positionTypeColumnIndex.IsMapped)
+        if (positionTypeColumnIndex.IsMapped 
+            && TryGetValueFromCellsRange(row, positionTypeColumnIndex, out var typeValue) 
+            && typeValue != null)
         {
-            if (TryGetValueFromCellsRange(row, positionTypeColumnIndex, out var typeValue))
-            {
-                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Dish].Contains(typeValue))
-                    parsedResult.Type = RowType.Dish;
+            if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Dish].Contains(typeValue))
+                parsedResult.Type = RowType.Dish;
                             
-                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Group].Contains(typeValue))
-                    parsedResult.Type = RowType.Group;
+            else if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Group].Contains(typeValue))
+                parsedResult.Type = RowType.Group;
                 
-                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.LunchSet].Contains(typeValue))
-                    parsedResult.Type = RowType.LunchSet;
+            else if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.LunchSet].Contains(typeValue))
+                parsedResult.Type = RowType.LunchSet;
                 
-                if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Option].Contains(typeValue))
-                    parsedResult.Type = RowType.Option;
-            }
-            
+            else if (MenuPositionTypeMap.AllowedTokens[MenuPositionTypeMap.TokenName.Option].Contains(typeValue))
+                parsedResult.Type = RowType.Option;
         }
         else
         {
@@ -154,11 +163,25 @@ public class DataTableParser : IDataTableParser
         #region Поиск названия позиции в записи
 
         var nameColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Name];
-        if (nameColumnIndex.IsMapped)
+        if (nameColumnIndex.IsMapped 
+            && TryGetValueFromCellsRange(row, nameColumnIndex, out var nameValue))
         {
-            if (TryGetValueFromCellsRange(row, nameColumnIndex, out var nameValue))
+            if (parsedResult.Type == RowType.Dish || parsedResult.Type == RowType.Group)
+            {
+                if (nameValue == null)
+                {
+                    badRow.Errors.Add("не задано название позиции в строке");
+                    Report.AddBadRowError(badRow);
+                    return false;
+                }
+                
+                parsedResult.Name = nameValue;
+            }
+            else
+            {
                 if (nameValue != null)
                     parsedResult.Name = nameValue;
+            }
         }
         else
         {
@@ -171,10 +194,10 @@ public class DataTableParser : IDataTableParser
         #region Поиск цены позиции в записи
 
         var priceColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Price];
-        if (priceColumnIndex.IsMapped)
+        if (priceColumnIndex.IsMapped 
+            && TryGetValueFromCellsRange(row, priceColumnIndex, out var priceValue))
         {
-            if (TryGetValueFromCellsRange(row, priceColumnIndex, out var priceValue))
-                    parsedResult.Price = priceValue;
+            parsedResult.Price = priceValue;
         }
         else
         {
@@ -187,11 +210,11 @@ public class DataTableParser : IDataTableParser
         #region Поиск единиц измерения позиции в записи 
 
         var unitColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.Units];
-        if (unitColumnIndex.IsMapped)
+        if (unitColumnIndex.IsMapped 
+            && TryGetValueFromCellsRange(row, unitColumnIndex, out var unitValue))
         {
-            if (TryGetValueFromCellsRange(row, unitColumnIndex, out var unitValue))
-                if (unitValue != null && MenuUnitsMap.AllowedTokens.Contains(unitValue))
-                    parsedResult.Units = unitValue;
+            if (unitValue != null && MenuUnitsMap.AllowedTokens.Contains(unitValue))
+                parsedResult.Units = unitValue;
         }
         else
         {
@@ -204,10 +227,9 @@ public class DataTableParser : IDataTableParser
         #region Поиск артикула позиции в записи
 
         var vendorCodeColumnIndex = mappedTableColumns[TableColumnsMap.ColumnTypes.VendorCode];
-        if (vendorCodeColumnIndex.IsMapped)
+        if (vendorCodeColumnIndex.IsMapped && TryGetValueFromCellsRange(row, vendorCodeColumnIndex, out var articleValue))
         {
-            if (TryGetValueFromCellsRange(row, vendorCodeColumnIndex, out var articleValue))
-                parsedResult.VendorCode = articleValue;
+            parsedResult.VendorCode = articleValue;
         }
         else
         {
@@ -281,7 +303,7 @@ public class DataTableParser : IDataTableParser
     class ParseResult
     {
         public RowType Type { get; set; }
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
         public string? VendorCode { get; set; }
         public string? Price { get; set; }
         public string? Units { get; set; }
@@ -302,7 +324,7 @@ internal static class MenuPositionTypeMap
     {
         { TokenName.Group, new HashSet<string>() { "Группа" } },
         { TokenName.Dish, new HashSet<string>() { "Товар", "Блюдо" } },
-        { TokenName.LunchSet, new HashSet<string>() { "Комбо-набор", "Ланч" } },
+        { TokenName.LunchSet, new HashSet<string>() { "Комбо-набор", "Комбо-обед", "Ланч" } },
         { TokenName.Option, new HashSet<string>() { "Опция" } }
     };
 
