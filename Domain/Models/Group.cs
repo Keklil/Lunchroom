@@ -25,7 +25,7 @@ public class Group : Entity
     public void SetReferralToken(string referToken)
     {
         if (string.IsNullOrWhiteSpace(referToken))
-            throw new AttemptSetNullOrEmptyToken();
+            throw new AttemptSetNullOrEmptyTokenException();
         
         Referral = new(referToken);
     }

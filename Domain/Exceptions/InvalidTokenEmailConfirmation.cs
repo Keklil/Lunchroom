@@ -1,8 +1,8 @@
 ﻿namespace Domain.Exceptions;
 
-public class InvalidTokenEmailConfirmation : BadRequestException
+public class InvalidTokenEmailConfirmationException : BadRequestException
 {
-    public InvalidTokenEmailConfirmation() : base("Неверный токен подтверждения почты")
+    public InvalidTokenEmailConfirmationException() : base("Неверный токен подтверждения почты")
     {
     }
 }

@@ -60,7 +60,7 @@ public class AuthService : IAuthService
         }
         catch
         {
-            throw new InvalidTokenEmailConfirmation();
+            throw new InvalidTokenEmailConfirmationException();
         }
 
         var emailValidation = await _repository.Security.GetEmailValidation(email);

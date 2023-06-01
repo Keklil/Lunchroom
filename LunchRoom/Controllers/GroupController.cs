@@ -5,8 +5,6 @@ using LunchRoom.Controllers.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetTopologySuite.Geometries;
-using Nominatim.API.Interfaces;
 using Shared.DataTransferObjects.Group;
 
 namespace LunchRoom.Controllers;
@@ -17,7 +15,6 @@ namespace LunchRoom.Controllers;
 [ApiController]
 public class GroupController : ControllerBase
 {
-    private readonly IPublisher _publisher;
     private readonly ISender _sender;
 
     /// <summary>
@@ -114,16 +111,15 @@ public class GroupController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-    public async Task<List<AvailableKitchensDto>> GetAllowedKitchens(Guid groupId)
+    public async Task<List<AvailableKitchensDto>> GetAvailableKitchens(Guid groupId)
     {
         var groups = await _sender.Send(new GetAvailableKitchensQuery(groupId));
 
         return groups;
     }
 
-    public GroupController(ISender sender, IPublisher publisher)
+    public GroupController(ISender sender)
     {
         _sender = sender;
-        _publisher = publisher;
     }
 }

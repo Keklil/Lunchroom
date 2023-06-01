@@ -2,8 +2,9 @@
 
 public class OrderLunchSetDto
 {
-    public Guid Id { get; set; }
-    public decimal Price { get; set; }
-    public List<string>? LunchSetList { get; set; }
-    public int LunchSetUnits { get; set; }
+    public Guid Id { get; init; }
+    public decimal Price { get; init; }
+    public int InternalId { get; init; }
+    public List<OrderOptionDto> Options { get; init; } = new();
 }
+

@@ -100,7 +100,7 @@ public static class ExceptionMiddlewareExtensions
                                 }));
                             break;
                         
-                        case AttemptCreateKitchenByNonKitchenOperator attemptCreateKitchenByNonKitchenOperator:
+                        case AttemptCreateKitchenByNonKitchenOperatorException attemptCreateKitchenByNonKitchenOperator:
                             await context.Response
                                 .WriteAsync(JsonSerializer.Serialize(new KitchenErrorResponse()
                                 {

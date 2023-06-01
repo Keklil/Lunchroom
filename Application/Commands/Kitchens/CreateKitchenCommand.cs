@@ -22,7 +22,7 @@ internal sealed class CreateKitchenHandler : IRequestHandler<CreateKitchenComman
         var user = await _repository.User.GetUserAsync(currentUserId);
         
         if (user.Role != Role.KitchenOperator)
-            throw new AttemptCreateKitchenByNonKitchenOperator();
+            throw new AttemptCreateKitchenByNonKitchenOperatorException();
 
         var kitchen = new Kitchen(request.Kitchen.OrganizationName, request.Kitchen.Address, request.Kitchen.Inn, request.Kitchen.Contacts.Email, request.Kitchen.Contacts.Phone);
         kitchen.AddManager(user);

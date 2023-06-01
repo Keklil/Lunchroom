@@ -45,7 +45,7 @@ internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, G
             _logger.LogError(ex.ToString());
             throw;
         }
-        catch (AttemptSetNullOrEmptyToken ex)
+        catch (AttemptSetNullOrEmptyTokenException ex)
         {
             _logger.LogError(ex.ToString());
             throw;

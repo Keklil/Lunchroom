@@ -1,10 +1,9 @@
 ﻿namespace Shared.DataTransferObjects.Order;
 
-public class OrderForCreationDto
+public record OrderForCreationDto
 {
-    public Guid GroupId { get; set; }
-    public Guid MenuId { get; set; }
-    public Guid LunchSetId { get; set; }
-    public int LunchSetUnits { get; set; }
-    public List<OrderOptionForCreationDto> Options { get; set; }
+    public Guid GroupId { get; init; }
+    public Guid MenuId { get; init; }
+    public List<OrderLunchSetForCreation> LunchSets { get; init; } = new();
+    public List<OrderDishForCreation> Dishes { get; init; } = new();
 }

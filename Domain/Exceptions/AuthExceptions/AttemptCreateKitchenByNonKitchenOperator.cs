@@ -1,8 +1,8 @@
 ﻿namespace Domain.Exceptions.AuthExceptions;
 
-public class AttemptCreateKitchenByNonKitchenOperator : BadRequestException
+public class AttemptCreateKitchenByNonKitchenOperatorException : BadRequestException
 {
-    public AttemptCreateKitchenByNonKitchenOperator() 
+    public AttemptCreateKitchenByNonKitchenOperatorException() 
         : base("Попытка создать столовую пользователем не в роли оператара столовой") 
     {
     }

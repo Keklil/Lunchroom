@@ -1,8 +1,8 @@
 ﻿namespace Domain.Exceptions;
 
-public sealed class AttemptSetNullOrEmptyToken : Exception
+public sealed class AttemptSetNullOrEmptyTokenException : Exception
 {
-    public AttemptSetNullOrEmptyToken() : base("Attempt to set null or empty token")
+    public AttemptSetNullOrEmptyTokenException() : base("Attempt to set null or empty token")
     {
     }
 }

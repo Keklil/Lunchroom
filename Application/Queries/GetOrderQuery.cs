@@ -13,8 +13,9 @@ internal class GetOrderHandler : IRequestHandler<GetOrderQuery, OrderDto>
     public async Task<OrderDto> Handle(GetOrderQuery request, CancellationToken cancellationToken)
     {
         var orderEntity = await _repository.Order.GetOrderAsync(request.OrderId, false);
-
-        var order = orderEntity.Map();
+        var menu = await _repository.Menu.GetMenuAsync(orderEntity.MenuId, false);
+        
+        var order = orderEntity.Map(menu);
 
         return order;
     }

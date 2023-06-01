@@ -2,7 +2,7 @@
 
 public static class OrderMapper
 {
-    public static OrderDto Map(this Domain.Models.Order source)
+    public static OrderDto Map(this Domain.Models.Order source, Domain.Models.Menu menu)
     {
         return new OrderDto
         {
@@ -10,23 +10,28 @@ public static class OrderMapper
             CustomerId = source.CustomerId,
             GroupId = source.GroupId,
             OrderDate = source.CreatedAt,
-            // LunchSet = source.LunchSet != null
-            //     ? new OrderLunchSetDto
-            //     {
-            //         Id = source.LunchSet.Id,
-            //         Price = source.LunchSet.Price,
-            //         // TODO: Переработать под новые требования
-            //         LunchSetList = new List<string>(),
-            //         LunchSetUnits = source.LunchSetUnits
-            //     }
-            //     : null,
-            // Options = source.Options.Select(sourceOption => new OrderOptionDto
-            // {
-            //     Id = sourceOption.Id,
-            //     OptionId = sourceOption.OptionId,
-            //     OptionUnits = sourceOption.OptionUnits
-            // }).ToList(),
-            // Payment = source.Payment
+            LunchSets = source.LunchSets.Select(x => new OrderLunchSetDto
+            {
+                Id = x.MenuLunchSetId,
+                Price = menu.LunchSets.First(l => l.Id == x.MenuLunchSetId).Price,
+                InternalId = x.InternalId,
+                Options = x.Options.Select(o => new OrderOptionDto
+                {
+                    Id = o.MenuOptionId,
+                    Quantity = o.Quantity,
+                    Price = menu.Options.First(m => m.Id == o.MenuOptionId).Price,
+                    Name = menu.Options.First(m => m.Id == o.MenuOptionId).Name,
+                    DishId = menu.Options.First(m => m.Id == o.MenuOptionId).Dish.Id,
+                }).ToList()
+            }).ToList(),
+            Dishes = source.Dishes.Select(sourceOption => new OrderDishDto()
+            {
+                Id = sourceOption.MenuDishId,
+                Name = menu.Dishes.First(dish => dish.Id == sourceOption.MenuDishId).Name,
+                Price = menu.Dishes.First(dish => dish.Id == sourceOption.MenuDishId).Price,
+                Quantity = sourceOption.Quantity,
+            }).ToList(),
+            Payment = source.Payment
         };
     }
 }
